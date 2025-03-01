@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DarkGoogle</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: black;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .search-container {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 20px;
+            width: 100%;
+            max-width: 684px;
+        }
+
+        .search-wrapper {
+            position: relative;
+            margin-top: 20px;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 14px 50px;
+            font-size: 16px;
+            border: 1px solid #ff0000;
+            border-radius: 24px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .search-box:hover {
+            background: rgba(0, 0, 0, 0.9);
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.4);
+        }
+
+        .search-box:focus {
+            outline: none;
+            background: rgba(0, 0, 0, 0.95);
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
+        }
+
+        .search-box::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .title {
+            font-size: 90px;
+            margin-bottom: 30px;
+            font-family: 'Product Sans', Arial, sans-serif;
+            letter-spacing: -2px;
+        }
+
+        .title .dark {
+            color: #ffffff;
+        }
+
+        .title .google {
+            color: #ff0000;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ff0000;
+            font-size: 20px;
+        }
+
+        .mic-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ff0000;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .binary-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255, 0, 0, 0.1), rgba(0, 0, 0, 0.3));
+            pointer-events: none;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrix-bg"></canvas>
+    <div class="binary-overlay"></div>
+    <div class="search-container">
+        <h1 class="title"><span class="dark">Dark</span><span class="google">Google</span></h1>
+        <form action="https://www.google.com/search" method="GET" class="search-wrapper">
+            <span class="material-icons search-icon">search</span>
+            <input type="text" name="q" class="search-box" placeholder="Search the dark web..." autocomplete="off">
+            <span class="material-icons mic-icon">mic</span>
+        </form>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('matrix-bg');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const matrix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%";
+        const characters = matrix.split("");
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const drops = [];
+
+        for (let i = 0; i < columns; i++) {
+            drops[i] = 1;
+        }
+
+        function drawMatrix() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = "#ff0000";
+            ctx.font = fontSize + "px monospace";
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = characters[Math.floor(Math.random() * characters.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        setInterval(drawMatrix, 50);
+
+        // Voice Search Functionality
+        const micIcon = document.querySelector('.mic-icon');
+        const searchInput = document.querySelector('.search-box');
+        
+        micIcon.addEventListener('click', function() {
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = 'hi-IN';
+            
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                searchInput.value = transcript;
+                // Auto submit after voice input
+                searchInput.form.submit();
+            };
+            
+            recognition.start();
+        });
+    </script>
+</body>
+</html> 
