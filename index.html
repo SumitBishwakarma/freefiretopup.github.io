@@ -9,7 +9,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            color: #fff;
+            color: #333;
             overflow: hidden;
             position: relative;
         }
@@ -27,41 +27,36 @@
         
         .container {
             max-width: 600px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: rgba(0, 0, 0, 0.7);
+            margin: 15px auto;
+            padding: 15px;
+            background-color: rgba(0, 0, 0, 0.8);
             border-radius: 10px;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
             position: relative;
             z-index: 1;
             border: 1px solid #ff0000;
         }
-        
         .header {
             text-align: center;
             margin-bottom: 15px;
             padding-bottom: 10px;
             border-bottom: 1px solid #ff0000;
         }
-        
         .header h1 {
             color: #ff0000;
             margin: 0;
             font-size: 24px;
-            text-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
+            text-shadow: 0 0 5px #ff0000;
         }
-        
         .input-section {
             margin-bottom: 15px;
         }
-        
         .input-label {
             display: block;
             margin-bottom: 5px;
             font-weight: bold;
             color: #ff0000;
         }
-        
         .period-input {
             width: 100%;
             padding: 10px;
@@ -69,9 +64,8 @@
             border-radius: 5px;
             font-size: 16px;
             background-color: rgba(0, 0, 0, 0.7);
-            color: white;
+            color: #ff0000;
         }
-        
         .prediction-section {
             text-align: center;
             margin: 20px 0;
@@ -81,7 +75,6 @@
             border: 1px dashed #ff0000;
             position: relative;
         }
-        
         .ai-thinking {
             position: absolute;
             top: 0;
@@ -97,16 +90,13 @@
             font-weight: bold;
             border-radius: 8px;
             display: none;
-            text-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
+            text-shadow: 0 0 5px #ff0000;
         }
-        
         .prediction-text {
             font-size: 18px;
             margin-bottom: 8px;
             color: #ff0000;
-            text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
         }
-        
         .prediction-value {
             display: inline-block;
             padding: 10px 20px;
@@ -115,51 +105,46 @@
             font-size: 20px;
             font-weight: bold;
             margin-top: 5px;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
             transition: all 0.5s ease;
         }
-        
         .win-chance {
             font-size: 14px;
-            color: #ff9999;
+            color: #ff0000;
             margin-top: 5px;
         }
-        
         .next-button {
             display: block;
             width: 100%;
             padding: 12px;
             margin: 15px 0;
-            background-color: #ff0000;
-            color: black;
+            background-color: rgba(255, 0, 0, 0.7);
+            color: white;
             border: none;
             border-radius: 8px;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
+            transition: background-color 0.3s;
+            border: 1px solid #ff0000;
+            text-shadow: 0 0 5px #ff0000;
         }
-        
         .next-button:hover {
-            background-color: #cc0000;
-            color: white;
+            background-color: rgba(255, 0, 0, 0.9);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
         }
-        
         .next-button:disabled {
-            background-color: #330000;
-            color: #666;
+            background-color: rgba(70, 70, 70, 0.7);
             cursor: not-allowed;
-            box-shadow: none;
+            border: 1px solid #444;
         }
-        
         .error-message {
-            color: #ff5252;
+            color: #ff0000;
             font-size: 14px;
             margin-top: 5px;
             text-align: center;
             display: none;
-            text-shadow: 0 0 5px rgba(255, 0, 0, 0.7);
+            text-shadow: 0 0 3px #ff0000;
         }
     </style>
 </head>
@@ -179,7 +164,7 @@
         <div class="prediction-section">
             <div class="ai-thinking" id="ai-thinking">AI Analyzing Pattern...</div>
             <div class="prediction-text">Next Color Prediction</div>
-            <div id="prediction-value" class="prediction-value" style="background-color: #ff5252;">RED</div>
+            <div id="prediction-value" class="prediction-value" style="background-color: #ff0000;">RED</div>
             <div id="win-chance" class="win-chance">Win Chance: 78%</div>
         </div>
         
@@ -189,7 +174,7 @@
     </div>
 
     <script>
-        // Matrix Rain Effect
+        // Matrix Rain Animation
         const canvas = document.getElementById('matrix-canvas');
         const ctx = canvas.getContext('2d');
         
@@ -199,19 +184,17 @@
         const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
         const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         const nums = '0123456789';
-        
         const alphabet = katakana + latin + nums;
         
         const fontSize = 16;
         const columns = canvas.width / fontSize;
         
         const rainDrops = [];
-        
         for (let x = 0; x < columns; x++) {
             rainDrops[x] = 1;
         }
         
-        const draw = () => {
+        function drawMatrix() {
             ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
@@ -227,21 +210,15 @@
                 }
                 rainDrops[i]++;
             }
-        };
+        }
         
-        setInterval(draw, 30);
+        setInterval(drawMatrix, 30);
         
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-
         // Track used period numbers and patterns
         const usedPeriods = new Set();
         const colorHistory = [];
         const maxHistory = 10;
         let currentPrediction = "RED";
-        let winChance = 78;
         
         function validatePeriod() {
             const periodInput = document.getElementById('period-input');
@@ -255,34 +232,60 @@
             return isValid ? periodNumber : null;
         }
         
-        // AI-like prediction algorithm
+        // Enhanced AI prediction algorithm with dynamic win chance calculation
         function calculateAIPrediction() {
-            // Simple pattern recognition - if last 3 were same color, predict opposite
-            if (colorHistory.length >= 3) {
-                const lastThree = colorHistory.slice(0, 3);
+            // If no history, start with base probabilities
+            if (colorHistory.length === 0) {
+                const baseWinChance = Math.floor(Math.random() * 21) + 70; // 70-90%
+                return {
+                    prediction: Math.random() < 0.6 ? "RED" : "GREEN",
+                    confidence: baseWinChance
+                };
+            }
+            
+            // Calculate recent patterns (last 5 results)
+            const recentHistory = colorHistory.slice(0, Math.min(5, colorHistory.length));
+            const redCount = recentHistory.filter(c => c === "RED").length;
+            const greenCount = recentHistory.filter(c => c === "GREEN").length;
+            const total = recentHistory.length;
+            
+            // Pattern 1: If last 3 same color, predict opposite with high confidence
+            if (total >= 3) {
+                const lastThree = recentHistory.slice(0, 3);
                 if (lastThree.every(c => c === "RED")) {
-                    return { prediction: "GREEN", confidence: 85 };
+                    return { prediction: "GREEN", confidence: 85 + Math.floor(Math.random() * 6) }; // 85-90%
                 }
                 if (lastThree.every(c => c === "GREEN")) {
-                    return { prediction: "RED", confidence: 85 };
+                    return { prediction: "RED", confidence: 85 + Math.floor(Math.random() * 6) }; // 85-90%
                 }
             }
             
-            // If no clear pattern, use weighted random based on recent history
-            const redCount = colorHistory.filter(c => c === "RED").length;
-            const greenCount = colorHistory.filter(c => c === "GREEN").length;
-            const total = colorHistory.length || 1;
+            // Pattern 2: If alternating pattern detected
+            if (total >= 4) {
+                let isAlternating = true;
+                for (let i = 0; i < recentHistory.length - 1; i++) {
+                    if (recentHistory[i] === recentHistory[i+1]) {
+                        isAlternating = false;
+                        break;
+                    }
+                }
+                if (isAlternating) {
+                    const nextColor = recentHistory[0] === "RED" ? "GREEN" : "RED";
+                    return { prediction: nextColor, confidence: 80 + Math.floor(Math.random() * 11) }; // 80-90%
+                }
+            }
             
-            // Slightly favor the less frequent color
-            const redProb = (greenCount / total) * 0.6;
-            const greenProb = (redCount / total) * 0.6;
+            // Default: Weighted probability based on recent frequency
+            const redProbability = (greenCount / total) * 0.7 + 0.3; // Favor less frequent color
+            const greenProbability = (redCount / total) * 0.7 + 0.3;
             
-            // Add base probability
             const random = Math.random();
-            if (random < redProb) {
-                return { prediction: "RED", confidence: Math.floor(redProb * 100) };
+            if (random < redProbability) {
+                const confidence = Math.floor(70 + (redProbability * 20)); // 70-90%
+                return { prediction: "RED", confidence: confidence };
             } else {
-                return { prediction: "GREEN", confidence: Math.floor(greenProb * 100) };
+                const confidence = Math.floor(70 + (greenProbability * 20)); // 70-90%
+                return { prediction: "GREEN", confidence: confidence };
             }
         }
         
@@ -315,10 +318,10 @@
             usedPeriods.add(periodNumber);
             errorMessage.style.display = "none";
             
-            // Get AI prediction
+            // Get AI prediction with calculated win chance
             const aiResult = calculateAIPrediction();
             currentPrediction = aiResult.prediction;
-            winChance = aiResult.confidence;
+            const winChance = aiResult.confidence;
             
             // Update history
             colorHistory.unshift(currentPrediction);
@@ -331,12 +334,10 @@
             const predictionValue = document.getElementById('prediction-value');
             if (currentPrediction === "RED") {
                 predictionValue.textContent = "RED";
-                predictionValue.style.backgroundColor = "#ff5252";
-                predictionValue.style.boxShadow = "0 0 15px rgba(255, 0, 0, 0.7)";
+                predictionValue.style.backgroundColor = "#ff0000";
             } else {
                 predictionValue.textContent = "GREEN";
-                predictionValue.style.backgroundColor = "#4caf50";
-                predictionValue.style.boxShadow = "0 0 15px rgba(0, 255, 0, 0.7)";
+                predictionValue.style.backgroundColor = "#00aa00";
             }
             
             // Hide AI thinking and reset
@@ -364,6 +365,12 @@
                 if (e.key === 'Enter' && validatePeriod()) {
                     updatePrediction();
                 }
+            });
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
             });
         });
     </script>
