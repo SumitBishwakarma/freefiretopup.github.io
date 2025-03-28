@@ -1,1 +1,1 @@
-# ok.winnextprediction.github.io
+# ok.winnextcolor.github.io
