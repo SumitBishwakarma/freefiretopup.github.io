@@ -245,6 +245,25 @@
             100% { transform: rotate(360deg); }
         }
 
+        .error-message {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ff4444;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 1000;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { transform: translate(-50%, -100%); }
+            to { transform: translate(-50%, 0); }
+        }
+
         @media (max-width: 480px) {
             .container {
                 padding: 1.5rem;
@@ -288,19 +307,27 @@
             <div class="product-grid">
                 <div class="product-card" onclick="selectProduct(this)">
                     <h3>100 Diamonds</h3>
-                    <div class="price-tag">₹80</div>
+                    <div class="price-tag">₹99</div>
                 </div>
                 <div class="product-card" onclick="selectProduct(this)">
                     <h3>310 Diamonds</h3>
-                    <div class="price-tag">₹240</div>
+                    <div class="price-tag">₹299</div>
                 </div>
                 <div class="product-card" onclick="selectProduct(this)">
                     <h3>520 Diamonds</h3>
-                    <div class="price-tag">₹400</div>
+                    <div class="price-tag">₹499</div>
                 </div>
                 <div class="product-card" onclick="selectProduct(this)">
                     <h3>1060 Diamonds</h3>
-                    <div class="price-tag">₹800</div>
+                    <div class="price-tag">₹999</div>
+                </div>
+                <div class="product-card" onclick="selectProduct(this)">
+                    <h3>2180 Diamonds</h3>
+                    <div class="price-tag">₹1999</div>
+                </div>
+                <div class="product-card" onclick="selectProduct(this)">
+                    <h3>5600 Diamonds</h3>
+                    <div class="price-tag">₹4999</div>
                 </div>
             </div>
         </div>
