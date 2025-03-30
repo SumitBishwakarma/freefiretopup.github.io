@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Free Fire Top-Up - Instant Diamond Recharge</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #FF6B00;
@@ -13,6 +14,7 @@
             --dark-gray: #2D2D2D;
             --light: #FFFFFF;
             --success: #00C853;
+            --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
         }
 
         * {
@@ -31,6 +33,9 @@
             align-items: center;
             padding: 1rem;
             line-height: 1.5;
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(255,107,0,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255,159,0,0.1) 0%, transparent 50%);
         }
 
         .container {
@@ -41,6 +46,8 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             transform: translateY(0);
             animation: slideUp 0.6s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         @keyframes slideUp {
@@ -62,22 +69,25 @@
             align-items: center;
             justify-content: center;
             gap: 0.8rem;
+            text-shadow: 0 0 10px rgba(255,107,0,0.3);
         }
 
         .header h1::after {
             content: '';
             width: 60px;
             height: 3px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            background: var(--gradient);
             display: block;
             position: absolute;
             bottom: -15px;
             left: 50%;
             transform: translateX(-50%);
+            border-radius: 3px;
         }
 
         .input-group {
             margin-bottom: 2rem;
+            position: relative;
         }
 
         .input-group label {
@@ -86,6 +96,7 @@
             color: #AAAAAA;
             font-size: 0.95rem;
             font-weight: 300;
+            transition: color 0.3s ease;
         }
 
         .input-field {
@@ -97,12 +108,18 @@
             color: var(--light);
             font-size: 1rem;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(5px);
         }
 
         .input-field:focus {
             border-color: var(--primary);
             box-shadow: 0 0 0 4px rgba(255,107,0,0.2);
             outline: none;
+            background: rgba(255,255,255,0.08);
+        }
+
+        .input-field:focus + label {
+            color: var(--primary);
         }
 
         .product-grid {
@@ -121,6 +138,8 @@
             text-align: center;
             position: relative;
             overflow: hidden;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .product-card::before {
@@ -140,16 +159,30 @@
             animation: shine 1.5s;
         }
 
-        @keyframes shine {
-            0% { transform: rotate(45deg) translate(-50%, -50%); }
-            100% { transform: rotate(45deg) translate(100%, 100%); }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
 
         .product-card.selected {
             background: linear-gradient(135deg, rgba(255,107,0,0.15), rgba(255,159,0,0.1));
             border: 2px solid var(--primary);
-            transform: translateY(-3px);
+            transform: translateY(-5px);
             box-shadow: 0 8px 20px rgba(255,107,0,0.15);
+        }
+
+        .product-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--light);
+        }
+
+        .price-tag {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-top: 0.5rem;
+            text-shadow: 0 0 10px rgba(255,107,0,0.3);
         }
 
         .payment-methods {
@@ -169,6 +202,13 @@
             flex-direction: column;
             align-items: center;
             gap: 0.8rem;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .payment-method:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
         }
 
         .payment-method.selected {
@@ -177,46 +217,58 @@
             box-shadow: 0 8px 20px rgba(255,107,0,0.15);
         }
 
+        .payment-method i {
+            font-size: 2rem;
+            color: var(--primary);
+            transition: transform 0.3s ease;
+        }
+
+        .payment-method:hover i {
+            transform: scale(1.1);
+        }
+
         .checkout-btn {
             width: 100%;
             padding: 1.2rem;
             font-size: 1.1rem;
             border-radius: 12px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: var(--gradient);
             color: var(--light);
             border: none;
             cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 0.8rem;
             position: relative;
             overflow: hidden;
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
-        .checkout-btn::after {
+        .checkout-btn::before {
             content: '';
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
-            transform: rotate(45deg);
-            animation: shine 1.5s infinite;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .checkout-btn:hover::before {
+            left: 100%;
         }
 
         .checkout-btn:hover {
-            transform: scale(1.02);
+            transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(255,107,0,0.3);
         }
 
-        .price-tag {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--primary);
-            margin-top: 0.5rem;
+        .checkout-btn:active {
+            transform: translateY(0);
         }
 
         .loading {
@@ -230,6 +282,7 @@
             justify-content: center;
             align-items: center;
             z-index: 999;
+            backdrop-filter: blur(5px);
         }
 
         .loader {
@@ -239,10 +292,6 @@
             border-radius: 50%;
             border-top-color: transparent;
             animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            100% { transform: rotate(360deg); }
         }
 
         .error-message {
@@ -257,6 +306,13 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             z-index: 1000;
             animation: slideDown 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .error-message i {
+            font-size: 1.2rem;
         }
 
         @keyframes slideDown {
@@ -276,6 +332,10 @@
             
             .payment-methods {
                 grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
             }
         }
     </style>
@@ -336,15 +396,15 @@
             <label>Payment Method</label>
             <div class="payment-methods">
                 <div class="payment-method" onclick="selectPayment(this)">
-                    <i class="fab fa-google-pay fa-2x"></i>
+                    <i class="fab fa-google-pay"></i>
                     <p>Google Pay</p>
                 </div>
                 <div class="payment-method" onclick="selectPayment(this)">
-                    <i class="fas fa-wallet fa-2x"></i>
+                    <i class="fas fa-wallet"></i>
                     <p>Paytm Wallet</p>
                 </div>
                 <div class="payment-method" onclick="selectPayment(this)">
-                    <i class="fas fa-qrcode fa-2x"></i>
+                    <i class="fas fa-qrcode"></i>
                     <p>UPI QR</p>
                 </div>
             </div>
@@ -374,6 +434,11 @@
                 diamonds: element.querySelector('h3').innerText,
                 price: element.querySelector('.price-tag').innerText
             };
+            
+            // Add haptic feedback on mobile
+            if ('vibrate' in navigator) {
+                navigator.vibrate(50);
+            }
         }
 
         function selectPayment(element) {
@@ -382,6 +447,11 @@
             });
             element.classList.add('selected');
             selectedPayment = element.querySelector('p').innerText;
+            
+            // Add haptic feedback on mobile
+            if ('vibrate' in navigator) {
+                navigator.vibrate(50);
+            }
         }
 
         async function processPayment() {
@@ -431,13 +501,34 @@ _This is an automated order confirmation_`;
         function showError(message) {
             const errorBox = document.createElement('div');
             errorBox.className = 'error-message';
-            errorBox.textContent = message;
+            errorBox.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
             document.body.appendChild(errorBox);
             
             setTimeout(() => {
                 errorBox.remove();
             }, 3000);
         }
+
+        // Add smooth scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Add input validation feedback
+        document.querySelectorAll('.input-field').forEach(input => {
+            input.addEventListener('input', function() {
+                if (this.value.trim() !== '') {
+                    this.style.borderColor = 'var(--primary)';
+                } else {
+                    this.style.borderColor = '#444';
+                }
+            });
+        });
     </script>
 </body>
 </html>
