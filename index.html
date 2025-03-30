@@ -2,8 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Free Fire Top-Up - Instant Diamond Recharge</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#FF6B00">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Free Fire Top-Up</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -15,6 +18,8 @@
             --light: #FFFFFF;
             --success: #00C853;
             --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+            --safe-area-inset-top: env(safe-area-inset-top);
+            --safe-area-inset-bottom: env(safe-area-inset-bottom);
         }
 
         * {
@@ -22,72 +27,369 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
         }
 
         body {
             background: var(--dark);
             color: var(--light);
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 1rem;
-            line-height: 1.5;
+            overflow-x: hidden;
             background-image: 
                 radial-gradient(circle at 20% 20%, rgba(255,107,0,0.1) 0%, transparent 50%),
                 radial-gradient(circle at 80% 80%, rgba(255,159,0,0.1) 0%, transparent 50%);
+            overscroll-behavior: none;
         }
 
-        .container {
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            animation: fadeOut 0.5s ease forwards;
+            animation-delay: 1.5s;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 3px solid var(--primary);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeOut {
+            to { opacity: 0; visibility: hidden; }
+        }
+
+        /* Page Styles */
+        .page {
+            display: none;
+            min-height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: var(--dark);
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding-top: calc(1rem + var(--safe-area-inset-top));
+            padding-bottom: calc(1rem + var(--safe-area-inset-bottom));
+            overscroll-behavior: contain;
+        }
+
+        .page.active {
+            display: block;
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .page.exit {
+            transform: translateX(-100%);
+        }
+
+        /* Pull to Refresh */
+        .pull-refresh {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: translateY(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .pull-refresh.active {
+            transform: translateY(0);
+        }
+
+        .pull-refresh i {
+            font-size: 1.5rem;
+            color: var(--primary);
+            animation: spin 1s linear infinite;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--safe-area-inset-top);
+            background: var(--dark);
+            z-index: 1000;
+        }
+
+        /* Landing Page */
+        .landing-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem 1rem;
+            background: linear-gradient(135deg, rgba(255,107,0,0.1), rgba(255,159,0,0.1));
+        }
+
+        .landing-container {
+            max-width: 600px;
+            width: 100%;
+            padding: 2rem;
             background: var(--dark-gray);
             border-radius: 20px;
-            padding: 2rem;
-            width: min(95%, 680px);
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            transform: translateY(0);
-            animation: slideUp 0.6s ease;
-            backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            animation: slideUp 0.6s ease;
+            transform-origin: center;
+            transition: transform 0.3s ease;
         }
 
-        @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+        .landing-container:active {
+            transform: scale(0.98);
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 2.5rem;
-            position: relative;
+        .game-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: var(--light);
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 0 20px rgba(255,107,0,0.3);
+            animation: pulse 2s infinite;
         }
 
-        .header h1 {
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--light);
+            text-shadow: 0 0 10px rgba(255,107,0,0.3);
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p {
+            color: #AAAAAA;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .feature {
+            background: rgba(255,255,255,0.05);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .feature:active {
+            transform: scale(0.95);
+        }
+
+        .feature i {
+            font-size: 1.5rem;
             color: var(--primary);
-            font-size: 2.2rem;
             margin-bottom: 0.5rem;
+        }
+
+        .feature h3 {
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+            color: var(--light);
+        }
+
+        .feature p {
+            font-size: 0.9rem;
+            margin: 0;
+            color: #AAAAAA;
+        }
+
+        .top-up-btn {
+            background: var(--gradient);
+            color: var(--light);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 0.8rem;
-            text-shadow: 0 0 10px rgba(255,107,0,0.3);
+            margin: 0 auto;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            max-width: 300px;
+            box-shadow: 0 4px 15px rgba(255,107,0,0.3);
         }
 
-        .header h1::after {
+        .top-up-btn::after {
             content: '';
-            width: 60px;
-            height: 3px;
-            background: var(--gradient);
-            display: block;
             position: absolute;
-            bottom: -15px;
+            top: 50%;
             left: 50%;
-            transform: translateX(-50%);
-            border-radius: 3px;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.3s ease;
+        }
+
+        .top-up-btn:active {
+            transform: scale(0.95);
+        }
+
+        .top-up-btn:active::after {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        /* App Page */
+        .app-page {
+            background: var(--dark);
+            padding-top: 0;
+        }
+
+        .app-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--dark-gray);
+            padding: 1rem;
+            border-radius: 15px;
+            margin: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            z-index: 100;
+            animation: slideDown 0.5s ease;
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            color: var(--light);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+        }
+
+        .back-button:hover {
+            color: var(--primary);
+            transform: translateX(-3px);
+            background: rgba(255,255,255,0.1);
+        }
+
+        .app-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--light);
+            box-shadow: 0 0 10px rgba(255,107,0,0.3);
+        }
+
+        .app-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--light);
+            flex: 1;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            padding-top: calc(2rem + 60px);
+        }
+
+        .game-info {
+            background: var(--dark-gray);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .game-info:active {
+            transform: scale(0.98);
         }
 
         .input-group {
-            margin-bottom: 2rem;
-            position: relative;
+            background: var(--dark-gray);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .input-group:active {
+            transform: scale(0.98);
         }
 
         .input-group label {
@@ -95,80 +397,70 @@
             margin-bottom: 0.8rem;
             color: #AAAAAA;
             font-size: 0.95rem;
-            font-weight: 300;
-            transition: color 0.3s ease;
         }
 
         .input-field {
             width: 100%;
             padding: 1rem;
+            background: rgba(255,255,255,0.05);
             border: 2px solid #444;
             border-radius: 12px;
-            background: rgba(255,255,255,0.05);
             color: var(--light);
             font-size: 1rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            -webkit-appearance: none;
+            appearance: none;
         }
 
         .input-field:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(255,107,0,0.2);
             outline: none;
-            background: rgba(255,255,255,0.08);
-        }
-
-        .input-field:focus + label {
-            color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(255,107,0,0.2);
         }
 
         .product-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 1rem;
-            margin-bottom: 2rem;
         }
 
         .product-card {
-            padding: 1.5rem;
-            border-radius: 15px;
             background: rgba(255,255,255,0.05);
-            cursor: pointer;
-            transition: all 0.3s ease;
+            border-radius: 12px;
+            padding: 1rem;
             text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255,255,255,0.1);
             position: relative;
             overflow: hidden;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255,255,255,0.1);
+            transform-origin: center;
         }
 
-        .product-card::before {
+        .product-card::after {
             content: '';
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,107,0,0.1), transparent);
-            transform: rotate(45deg);
-            transition: 0.5s;
-            pointer-events: none;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.3s ease;
         }
 
-        .product-card:hover::before {
-            animation: shine 1.5s;
+        .product-card:active {
+            transform: scale(0.95);
         }
 
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        .product-card:active::after {
+            transform: translate(-50%, -50%) scale(1);
         }
 
         .product-card.selected {
             background: linear-gradient(135deg, rgba(255,107,0,0.15), rgba(255,159,0,0.1));
             border: 2px solid var(--primary);
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(255,107,0,0.15);
+            transform: scale(1.05);
         }
 
         .product-card h3 {
@@ -181,117 +473,114 @@
             font-size: 1.2rem;
             font-weight: 600;
             color: var(--primary);
-            margin-top: 0.5rem;
-            text-shadow: 0 0 10px rgba(255,107,0,0.3);
         }
 
         .payment-methods {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 1rem;
-            margin-bottom: 2rem;
         }
 
         .payment-method {
-            padding: 1.2rem;
-            border-radius: 12px;
             background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
             cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.8rem;
-            backdrop-filter: blur(5px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            overflow: hidden;
+            transform-origin: center;
         }
 
-        .payment-method:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+        .payment-method::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.3s ease;
+        }
+
+        .payment-method:active {
+            transform: scale(0.95);
+        }
+
+        .payment-method:active::after {
+            transform: translate(-50%, -50%) scale(1);
         }
 
         .payment-method.selected {
             background: linear-gradient(135deg, rgba(255,107,0,0.15), rgba(255,159,0,0.1));
             border: 2px solid var(--primary);
-            box-shadow: 0 8px 20px rgba(255,107,0,0.15);
+            transform: scale(1.05);
         }
 
         .payment-method i {
-            font-size: 2rem;
+            font-size: 1.8rem;
             color: var(--primary);
-            transition: transform 0.3s ease;
+            margin-bottom: 0.5rem;
         }
 
-        .payment-method:hover i {
-            transform: scale(1.1);
+        .payment-method p {
+            font-size: 0.9rem;
+            color: var(--light);
+            margin: 0;
         }
 
         .checkout-btn {
             width: 100%;
-            padding: 1.2rem;
-            font-size: 1.1rem;
-            border-radius: 12px;
+            padding: 1rem;
             background: var(--gradient);
             color: var(--light);
             border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 0.8rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
-            font-weight: 600;
-            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(255,107,0,0.3);
+            transform-origin: center;
         }
 
-        .checkout-btn::before {
+        .checkout-btn::after {
             content: '';
             position: absolute;
-            top: 0;
-            left: -100%;
+            top: 50%;
+            left: 50%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: 0.5s;
-        }
-
-        .checkout-btn:hover::before {
-            left: 100%;
-        }
-
-        .checkout-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255,107,0,0.3);
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.3s ease;
         }
 
         .checkout-btn:active {
-            transform: translateY(0);
+            transform: scale(0.95);
         }
 
-        .loading {
+        .checkout-btn:active::after {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .checkout-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .checkout-btn:disabled::after {
             display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            justify-content: center;
-            align-items: center;
-            z-index: 999;
-            backdrop-filter: blur(5px);
-        }
-
-        .loader {
-            width: 48px;
-            height: 48px;
-            border: 3px solid var(--light);
-            border-radius: 50%;
-            border-top-color: transparent;
-            animation: spin 1s linear infinite;
         }
 
         .error-message {
@@ -309,122 +598,406 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            backdrop-filter: blur(10px);
         }
 
-        .error-message i {
-            font-size: 1.2rem;
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         @keyframes slideDown {
-            from { transform: translate(-50%, -100%); }
-            to { transform: translate(-50%, 0); }
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
-        @media (max-width: 480px) {
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
             .container {
-                padding: 1.5rem;
-                border-radius: 15px;
+                max-width: 800px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .container {
+                max-width: 700px;
             }
             
             .product-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                max-width: 600px;
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .game-icon {
+                width: 70px;
+                height: 70px;
+                font-size: 2.2rem;
+            }
+
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .payment-methods {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .app-header {
+                padding: 0.8rem;
+                margin: 0.8rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .container {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .game-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 2rem;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            .app-header {
+                padding: 0.8rem;
+                margin: 0.8rem;
+            }
+
+            .game-info {
+                padding: 1rem;
+            }
+
+            .input-group {
+                padding: 1rem;
+            }
+
+            .product-grid {
                 grid-template-columns: 1fr 1fr;
             }
-            
+
             .payment-methods {
                 grid-template-columns: 1fr;
             }
 
-            .header h1 {
+            .product-card h3 {
+                font-size: 1rem;
+            }
+
+            .price-tag {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 375px) {
+            .container {
+                padding: 0.8rem;
+            }
+
+            h1 {
                 font-size: 1.8rem;
+            }
+
+            .game-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 1.8rem;
+            }
+
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .payment-methods {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Fix for iOS Safari */
+        @supports (-webkit-touch-callout: none) {
+            .page {
+                height: -webkit-fill-available;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>
-                <i class="fas fa-fire"></i>
-                Free Fire Top-Up
-            </h1>
-            <p>Instant Delivery • 24/7 Support • Secure Payments</p>
-        </div>
-
-        <div class="input-group">
-            <label>Player ID</label>
-            <input type="text" class="input-field" id="playerId" 
-                   placeholder="Enter your Free Fire ID" required>
-        </div>
-
-        <div class="input-group">
-            <label>Mobile Number</label>
-            <input type="tel" class="input-field" id="phoneNumber" 
-                   placeholder="WhatsApp number for confirmation" required>
-        </div>
-
-        <div class="input-group">
-            <label>Select Diamonds</label>
-            <div class="product-grid">
-                <div class="product-card" onclick="selectProduct(this)">
-                    <h3>100 Diamonds</h3>
-                    <div class="price-tag">₹99</div>
-                </div>
-                <div class="product-card" onclick="selectProduct(this)">
-                    <h3>310 Diamonds</h3>
-                    <div class="price-tag">₹299</div>
-                </div>
-                <div class="product-card" onclick="selectProduct(this)">
-                    <h3>520 Diamonds</h3>
-                    <div class="price-tag">₹499</div>
-                </div>
-                <div class="product-card" onclick="selectProduct(this)">
-                    <h3>1060 Diamonds</h3>
-                    <div class="price-tag">₹999</div>
-                </div>
-                <div class="product-card" onclick="selectProduct(this)">
-                    <h3>2180 Diamonds</h3>
-                    <div class="price-tag">₹1999</div>
-                </div>
-                <div class="product-card" onclick="selectProduct(this)">
-                    <h3>5600 Diamonds</h3>
-                    <div class="price-tag">₹4999</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="input-group">
-            <label>Payment Method</label>
-            <div class="payment-methods">
-                <div class="payment-method" onclick="selectPayment(this)">
-                    <i class="fab fa-google-pay"></i>
-                    <p>Google Pay</p>
-                </div>
-                <div class="payment-method" onclick="selectPayment(this)">
-                    <i class="fas fa-wallet"></i>
-                    <p>Paytm Wallet</p>
-                </div>
-                <div class="payment-method" onclick="selectPayment(this)">
-                    <i class="fas fa-qrcode"></i>
-                    <p>UPI QR</p>
-                </div>
-            </div>
-        </div>
-
-        <button class="checkout-btn" onclick="processPayment()">
-            <i class="fab fa-whatsapp"></i>
-            Complete Purchase
-        </button>
+    <!-- Loading Screen -->
+    <div class="loading-screen">
+        <div class="loading-spinner"></div>
     </div>
 
-    <div class="loading">
-        <div class="loader"></div>
+    <!-- Status Bar -->
+    <div class="status-bar"></div>
+
+    <!-- Landing Page -->
+    <div class="page landing-page active">
+        <div class="pull-refresh">
+            <i class="fas fa-sync-alt"></i>
+        </div>
+        <div class="landing-container">
+            <div class="game-icon">
+                <i class="fas fa-fire"></i>
+            </div>
+            <h1>Free Fire Top-Up</h1>
+            <p>Get instant diamonds for Free Fire with secure payment methods and 24/7 support.</p>
+            
+            <div class="features">
+                <div class="feature">
+                    <i class="fas fa-bolt"></i>
+                    <h3>Instant Delivery</h3>
+                    <p>Get diamonds within minutes</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Secure Payment</h3>
+                    <p>100% safe transactions</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-headset"></i>
+                    <h3>24/7 Support</h3>
+                    <p>Always here to help</p>
+                </div>
+            </div>
+
+            <button class="top-up-btn" onclick="showAppPage()">
+                <i class="fas fa-gamepad"></i>
+                Top Up Now
+            </button>
+        </div>
+    </div>
+
+    <!-- App Page -->
+    <div class="page app-page">
+        <div class="pull-refresh">
+            <i class="fas fa-sync-alt"></i>
+        </div>
+        <div class="app-header">
+            <button class="back-button" onclick="goBack()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="app-icon">
+                <i class="fas fa-fire"></i>
+            </div>
+            <div class="app-title">Free Fire Top-Up</div>
+        </div>
+
+        <div class="container">
+            <div class="game-info">
+                <div class="game-icon">
+                    <i class="fas fa-fire"></i>
+                </div>
+                <div class="game-details">
+                    <h2>Free Fire</h2>
+                    <p>Select your diamond package</p>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Player ID</label>
+                <input type="text" class="input-field" id="playerId" placeholder="Enter your Free Fire ID" required>
+            </div>
+
+            <div class="input-group">
+                <label>Mobile Number</label>
+                <input type="tel" class="input-field" id="phoneNumber" placeholder="WhatsApp number for confirmation" required>
+            </div>
+
+            <div class="input-group">
+                <label>Select Diamonds</label>
+                <div class="product-grid">
+                    <div class="product-card" onclick="selectProduct(this)">
+                        <h3>100 Diamonds</h3>
+                        <div class="price-tag">₹99</div>
+                    </div>
+                    <div class="product-card" onclick="selectProduct(this)">
+                        <h3>310 Diamonds</h3>
+                        <div class="price-tag">₹299</div>
+                    </div>
+                    <div class="product-card" onclick="selectProduct(this)">
+                        <h3>520 Diamonds</h3>
+                        <div class="price-tag">₹499</div>
+                    </div>
+                    <div class="product-card" onclick="selectProduct(this)">
+                        <h3>1060 Diamonds</h3>
+                        <div class="price-tag">₹999</div>
+                    </div>
+                    <div class="product-card" onclick="selectProduct(this)">
+                        <h3>2180 Diamonds</h3>
+                        <div class="price-tag">₹1999</div>
+                    </div>
+                    <div class="product-card" onclick="selectProduct(this)">
+                        <h3>5600 Diamonds</h3>
+                        <div class="price-tag">₹4999</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Payment Method</label>
+                <div class="payment-methods">
+                    <div class="payment-method" onclick="selectPayment(this)">
+                        <i class="fab fa-google-pay"></i>
+                        <p>Google Pay</p>
+                    </div>
+                    <div class="payment-method" onclick="selectPayment(this)">
+                        <i class="fas fa-wallet"></i>
+                        <p>Paytm Wallet</p>
+                    </div>
+                    <div class="payment-method" onclick="selectPayment(this)">
+                        <i class="fas fa-qrcode"></i>
+                        <p>UPI QR</p>
+                    </div>
+                </div>
+            </div>
+
+            <button class="checkout-btn" onclick="processPayment()">
+                <i class="fab fa-whatsapp"></i>
+                Complete Purchase
+            </button>
+        </div>
     </div>
 
     <script>
-        // Enhanced UI Interactions
+        // Initialize variables
         let selectedProduct = null;
         let selectedPayment = null;
+        let touchStartY = 0;
+        let pullRefreshActive = false;
 
+        // Prevent default touch behavior
+        document.addEventListener('touchmove', function(e) {
+            if (e.target.classList.contains('product-card') || 
+                e.target.classList.contains('payment-method') ||
+                e.target.classList.contains('checkout-btn')) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        // Pull to refresh functionality
+        document.addEventListener('touchstart', function(e) {
+            touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+
+        document.addEventListener('touchmove', function(e) {
+            if (!touchStartY) return;
+            
+            const touchY = e.touches[0].clientY;
+            const pullDistance = touchY - touchStartY;
+            
+            if (pullDistance > 0 && window.scrollY === 0) {
+                e.preventDefault();
+                const pullRefresh = document.querySelector('.pull-refresh');
+                pullRefresh.style.transform = `translateY(${Math.min(pullDistance, 60)}px)`;
+                
+                if (pullDistance > 60) {
+                    pullRefresh.classList.add('active');
+                } else {
+                    pullRefresh.classList.remove('active');
+                }
+            }
+        }, { passive: false });
+
+        document.addEventListener('touchend', function() {
+            if (!touchStartY) return;
+            
+            const pullRefresh = document.querySelector('.pull-refresh');
+            if (pullRefresh.classList.contains('active')) {
+                // Refresh the page
+                location.reload();
+            } else {
+                pullRefresh.style.transform = 'translateY(-100%)';
+            }
+            
+            touchStartY = 0;
+            pullRefresh.classList.remove('active');
+        });
+
+        // Show app page
+        function showAppPage() {
+            const landingPage = document.querySelector('.landing-page');
+            const appPage = document.querySelector('.app-page');
+            
+            landingPage.classList.remove('active');
+            landingPage.classList.add('exit');
+            appPage.classList.add('active');
+            
+            // Reset form
+            document.getElementById('playerId').value = '';
+            document.getElementById('phoneNumber').value = '';
+            selectedProduct = null;
+            selectedPayment = null;
+            document.querySelectorAll('.product-card, .payment-method').forEach(el => {
+                el.classList.remove('selected');
+            });
+
+            // Add haptic feedback
+            if ('vibrate' in navigator) {
+                navigator.vibrate(50);
+            }
+        }
+
+        // Go back function
+        function goBack() {
+            const landingPage = document.querySelector('.landing-page');
+            const appPage = document.querySelector('.app-page');
+            
+            appPage.classList.remove('active');
+            appPage.classList.add('exit');
+            landingPage.classList.remove('exit');
+            landingPage.classList.add('active');
+            
+            // Reset form
+            document.getElementById('playerId').value = '';
+            document.getElementById('phoneNumber').value = '';
+            selectedProduct = null;
+            selectedPayment = null;
+            document.querySelectorAll('.product-card, .payment-method').forEach(el => {
+                el.classList.remove('selected');
+            });
+
+            // Add haptic feedback
+            if ('vibrate' in navigator) {
+                navigator.vibrate(50);
+            }
+        }
+
+        // Product selection
         function selectProduct(element) {
             document.querySelectorAll('.product-card').forEach(card => {
                 card.classList.remove('selected');
@@ -441,6 +1014,7 @@
             }
         }
 
+        // Payment method selection
         function selectPayment(element) {
             document.querySelectorAll('.payment-method').forEach(method => {
                 method.classList.remove('selected');
@@ -454,10 +1028,10 @@
             }
         }
 
-        async function processPayment() {
+        // Process payment
+        function processPayment() {
             const playerId = document.getElementById('playerId').value.trim();
             const phoneNumber = document.getElementById('phoneNumber').value.trim();
-            const loading = document.querySelector('.loading');
 
             // Validation
             if (!playerId || !phoneNumber || !selectedProduct || !selectedPayment) {
@@ -475,11 +1049,16 @@
                 return;
             }
 
-            // Show loading animation
-            loading.style.display = 'flex';
-            
-            // Simulate processing delay
-            await new Promise(resolve => setTimeout(resolve, 1500));
+            // Add loading state to button
+            const button = document.querySelector('.checkout-btn');
+            const originalText = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            button.disabled = true;
+
+            // Add haptic feedback
+            if ('vibrate' in navigator) {
+                navigator.vibrate(100);
+            }
 
             // Prepare WhatsApp message
             const message = `🎮 *Free Fire Diamond Purchase* 🔥
@@ -492,32 +1071,30 @@ Payment Method: ${selectedPayment}
 
 _This is an automated order confirmation_`;
 
-            window.open(`https://wa.me/918391900864?text=${encodeURIComponent(message)}`, '_blank');
-            
-            // Hide loading
-            loading.style.display = 'none';
+            // Open WhatsApp after a short delay
+            setTimeout(() => {
+                window.open(`https://wa.me/918391900864?text=${encodeURIComponent(message)}`, '_blank');
+                button.innerHTML = originalText;
+                button.disabled = false;
+            }, 1000);
         }
 
+        // Show error message
         function showError(message) {
             const errorBox = document.createElement('div');
             errorBox.className = 'error-message';
             errorBox.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
             document.body.appendChild(errorBox);
             
+            // Add haptic feedback for error
+            if ('vibrate' in navigator) {
+                navigator.vibrate([50, 30, 50]);
+            }
+            
             setTimeout(() => {
                 errorBox.remove();
             }, 3000);
         }
-
-        // Add smooth scroll behavior
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
 
         // Add input validation feedback
         document.querySelectorAll('.input-field').forEach(input => {
@@ -528,6 +1105,13 @@ _This is an automated order confirmation_`;
                     this.style.borderColor = '#444';
                 }
             });
+        });
+
+        // Handle orientation change
+        window.addEventListener('orientationchange', function() {
+            setTimeout(() => {
+                window.scrollTo(0, 0);
+            }, 100);
         });
     </script>
 </body>
