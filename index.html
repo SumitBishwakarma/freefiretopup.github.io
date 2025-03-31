@@ -2,10 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#FF6B00">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Free Fire Top-Up</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -18,8 +15,6 @@
             --light: #FFFFFF;
             --success: #00C853;
             --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
-            --safe-area-inset-top: env(safe-area-inset-top);
-            --safe-area-inset-bottom: env(safe-area-inset-bottom);
         }
 
         * {
@@ -27,132 +22,37 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            user-select: none;
         }
 
         body {
             background: var(--dark);
             color: var(--light);
             min-height: 100vh;
-            overflow-x: hidden;
             background-image: 
                 radial-gradient(circle at 20% 20%, rgba(255,107,0,0.1) 0%, transparent 50%),
                 radial-gradient(circle at 80% 80%, rgba(255,159,0,0.1) 0%, transparent 50%);
-            overscroll-behavior: none;
         }
 
-        /* Loading Screen */
-        .loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--dark);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            animation: fadeOut 0.5s ease forwards;
-            animation-delay: 1.5s;
-        }
-
-        .loading-spinner {
-            width: 60px;
-            height: 60px;
-            border: 3px solid var(--primary);
-            border-top-color: transparent;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        @keyframes fadeOut {
-            to { opacity: 0; visibility: hidden; }
-        }
-
-        /* Page Styles */
         .page {
             display: none;
             min-height: 100vh;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: var(--dark);
-            opacity: 0;
-            transform: translateX(100%);
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-            padding-top: calc(1rem + var(--safe-area-inset-top));
-            padding-bottom: calc(1rem + var(--safe-area-inset-bottom));
-            overscroll-behavior: contain;
+            padding: 1rem;
         }
 
         .page.active {
             display: block;
-            opacity: 1;
-            transform: translateX(0);
         }
 
-        .page.exit {
-            transform: translateX(-100%);
-        }
-
-        /* Pull to Refresh */
-        .pull-refresh {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transform: translateY(-100%);
-            transition: transform 0.3s ease;
-        }
-
-        .pull-refresh.active {
-            transform: translateY(0);
-        }
-
-        .pull-refresh i {
-            font-size: 1.5rem;
-            color: var(--primary);
-            animation: spin 1s linear infinite;
-        }
-
-        /* Status Bar */
-        .status-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: var(--safe-area-inset-top);
-            background: var(--dark);
-            z-index: 1000;
-        }
-
-        /* Landing Page */
+        /* Landing Page Styles */
         .landing-page {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 2rem 1rem;
-            background: linear-gradient(135deg, rgba(255,107,0,0.1), rgba(255,159,0,0.1));
         }
 
-        .landing-container {
+        .container {
             max-width: 600px;
             width: 100%;
             padding: 2rem;
@@ -162,12 +62,6 @@
             border: 1px solid rgba(255,255,255,0.1);
             backdrop-filter: blur(10px);
             animation: slideUp 0.6s ease;
-            transform-origin: center;
-            transition: transform 0.3s ease;
-        }
-
-        .landing-container:active {
-            transform: scale(0.98);
         }
 
         .game-icon {
@@ -182,13 +76,6 @@
             color: var(--light);
             margin: 0 auto 1.5rem;
             box-shadow: 0 0 20px rgba(255,107,0,0.3);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
         }
 
         h1 {
@@ -196,9 +83,6 @@
             margin-bottom: 1rem;
             color: var(--light);
             text-shadow: 0 0 10px rgba(255,107,0,0.3);
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
         p {
@@ -220,11 +104,6 @@
             padding: 1rem;
             border-radius: 12px;
             border: 1px solid rgba(255,255,255,0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .feature:active {
-            transform: scale(0.95);
         }
 
         .feature i {
@@ -264,44 +143,20 @@
             overflow: hidden;
             width: 100%;
             max-width: 300px;
-            box-shadow: 0 4px 15px rgba(255,107,0,0.3);
         }
 
-        .top-up-btn::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
-            transform: translate(-50%, -50%) scale(0);
-            transition: transform 0.3s ease;
-        }
-
-        .top-up-btn:active {
-            transform: scale(0.95);
-        }
-
-        .top-up-btn:active::after {
-            transform: translate(-50%, -50%) scale(1);
-        }
-
-        /* App Page */
+        /* App Page Styles */
         .app-page {
-            background: var(--dark);
-            padding-top: 0;
+            display: none;
         }
 
         .app-header {
-            position: fixed;
+            position: sticky;
             top: 0;
-            left: 0;
-            right: 0;
             background: var(--dark-gray);
             padding: 1rem;
             border-radius: 15px;
-            margin: 1rem;
+            margin-bottom: 1.5rem;
             display: flex;
             align-items: center;
             gap: 1rem;
@@ -309,29 +164,6 @@
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.1);
             z-index: 100;
-            animation: slideDown 0.5s ease;
-        }
-
-        .back-button {
-            background: none;
-            border: none;
-            color: var(--light);
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 0.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-        }
-
-        .back-button:hover {
-            color: var(--primary);
-            transform: translateX(-3px);
-            background: rgba(255,255,255,0.1);
         }
 
         .app-icon {
@@ -344,21 +176,12 @@
             justify-content: center;
             font-size: 1.2rem;
             color: var(--light);
-            box-shadow: 0 0 10px rgba(255,107,0,0.3);
         }
 
         .app-title {
             font-size: 1.2rem;
             font-weight: 600;
             color: var(--light);
-            flex: 1;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 2rem 1rem;
-            padding-top: calc(2rem + 60px);
         }
 
         .game-info {
@@ -371,11 +194,6 @@
             gap: 1rem;
             box-shadow: 0 4px 20px rgba(0,0,0,0.2);
             border: 1px solid rgba(255,255,255,0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .game-info:active {
-            transform: scale(0.98);
         }
 
         .input-group {
@@ -385,11 +203,6 @@
             margin-bottom: 1.5rem;
             box-shadow: 0 4px 20px rgba(0,0,0,0.2);
             border: 1px solid rgba(255,255,255,0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .input-group:active {
-            transform: scale(0.98);
         }
 
         .input-group label {
@@ -408,8 +221,6 @@
             color: var(--light);
             font-size: 1rem;
             transition: all 0.3s ease;
-            -webkit-appearance: none;
-            appearance: none;
         }
 
         .input-field:focus {
@@ -430,37 +241,18 @@
             padding: 1rem;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
             border: 1px solid rgba(255,255,255,0.1);
-            position: relative;
-            overflow: hidden;
-            transform-origin: center;
         }
 
-        .product-card::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            transform: translate(-50%, -50%) scale(0);
-            transition: transform 0.3s ease;
-        }
-
-        .product-card:active {
-            transform: scale(0.95);
-        }
-
-        .product-card:active::after {
-            transform: translate(-50%, -50%) scale(1);
+        .product-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
         }
 
         .product-card.selected {
             background: linear-gradient(135deg, rgba(255,107,0,0.15), rgba(255,159,0,0.1));
             border: 2px solid var(--primary);
-            transform: scale(1.05);
         }
 
         .product-card h3 {
@@ -487,37 +279,18 @@
             padding: 1rem;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
             border: 1px solid rgba(255,255,255,0.1);
-            position: relative;
-            overflow: hidden;
-            transform-origin: center;
         }
 
-        .payment-method::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            transform: translate(-50%, -50%) scale(0);
-            transition: transform 0.3s ease;
-        }
-
-        .payment-method:active {
-            transform: scale(0.95);
-        }
-
-        .payment-method:active::after {
-            transform: translate(-50%, -50%) scale(1);
+        .payment-method:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
         }
 
         .payment-method.selected {
             background: linear-gradient(135deg, rgba(255,107,0,0.15), rgba(255,159,0,0.1));
             border: 2px solid var(--primary);
-            transform: scale(1.05);
         }
 
         .payment-method i {
@@ -546,41 +319,16 @@
             align-items: center;
             justify-content: center;
             gap: 0.8rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(255,107,0,0.3);
-            transform-origin: center;
+            transition: all 0.3s ease;
         }
 
-        .checkout-btn::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
-            transform: translate(-50%, -50%) scale(0);
-            transition: transform 0.3s ease;
+        .checkout-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255,107,0,0.3);
         }
 
         .checkout-btn:active {
-            transform: scale(0.95);
-        }
-
-        .checkout-btn:active::after {
-            transform: translate(-50%, -50%) scale(1);
-        }
-
-        .checkout-btn:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .checkout-btn:disabled::after {
-            display: none;
+            transform: translateY(0);
         }
 
         .error-message {
@@ -598,7 +346,6 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            backdrop-filter: blur(10px);
         }
 
         @keyframes slideUp {
@@ -607,77 +354,13 @@
         }
 
         @keyframes slideDown {
-            from {
-                transform: translateY(-100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            from { transform: translate(-50%, -100%); }
+            to { transform: translate(-50%, 0); }
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Responsive Design */
-        @media (max-width: 1200px) {
+        @media (max-width: 480px) {
             .container {
-                max-width: 800px;
-            }
-        }
-
-        @media (max-width: 992px) {
-            .container {
-                max-width: 700px;
-            }
-            
-            .product-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                max-width: 600px;
                 padding: 1.5rem;
-            }
-
-            h1 {
-                font-size: 2.2rem;
-            }
-
-            .game-icon {
-                width: 70px;
-                height: 70px;
-                font-size: 2.2rem;
-            }
-
-            .product-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .payment-methods {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .app-header {
-                padding: 0.8rem;
-                margin: 0.8rem;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .container {
-                padding: 1rem;
             }
 
             h1 {
@@ -696,7 +379,6 @@
 
             .app-header {
                 padding: 0.8rem;
-                margin: 0.8rem;
             }
 
             .game-info {
@@ -714,63 +396,13 @@
             .payment-methods {
                 grid-template-columns: 1fr;
             }
-
-            .product-card h3 {
-                font-size: 1rem;
-            }
-
-            .price-tag {
-                font-size: 1.1rem;
-            }
-        }
-
-        @media (max-width: 375px) {
-            .container {
-                padding: 0.8rem;
-            }
-
-            h1 {
-                font-size: 1.8rem;
-            }
-
-            .game-icon {
-                width: 50px;
-                height: 50px;
-                font-size: 1.8rem;
-            }
-
-            .product-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .payment-methods {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Fix for iOS Safari */
-        @supports (-webkit-touch-callout: none) {
-            .page {
-                height: -webkit-fill-available;
-            }
         }
     </style>
 </head>
 <body>
-    <!-- Loading Screen -->
-    <div class="loading-screen">
-        <div class="loading-spinner"></div>
-    </div>
-
-    <!-- Status Bar -->
-    <div class="status-bar"></div>
-
     <!-- Landing Page -->
     <div class="page landing-page active">
-        <div class="pull-refresh">
-            <i class="fas fa-sync-alt"></i>
-        </div>
-        <div class="landing-container">
+        <div class="container">
             <div class="game-icon">
                 <i class="fas fa-fire"></i>
             </div>
@@ -804,13 +436,7 @@
 
     <!-- App Page -->
     <div class="page app-page">
-        <div class="pull-refresh">
-            <i class="fas fa-sync-alt"></i>
-        </div>
         <div class="app-header">
-            <button class="back-button" onclick="goBack()">
-                <i class="fas fa-arrow-left"></i>
-            </button>
             <div class="app-icon">
                 <i class="fas fa-fire"></i>
             </div>
@@ -894,110 +520,14 @@
     </div>
 
     <script>
-        // Initialize variables
         let selectedProduct = null;
         let selectedPayment = null;
-        let touchStartY = 0;
-        let pullRefreshActive = false;
 
-        // Prevent default touch behavior
-        document.addEventListener('touchmove', function(e) {
-            if (e.target.classList.contains('product-card') || 
-                e.target.classList.contains('payment-method') ||
-                e.target.classList.contains('checkout-btn')) {
-                e.preventDefault();
-            }
-        }, { passive: false });
-
-        // Pull to refresh functionality
-        document.addEventListener('touchstart', function(e) {
-            touchStartY = e.touches[0].clientY;
-        }, { passive: true });
-
-        document.addEventListener('touchmove', function(e) {
-            if (!touchStartY) return;
-            
-            const touchY = e.touches[0].clientY;
-            const pullDistance = touchY - touchStartY;
-            
-            if (pullDistance > 0 && window.scrollY === 0) {
-                e.preventDefault();
-                const pullRefresh = document.querySelector('.pull-refresh');
-                pullRefresh.style.transform = `translateY(${Math.min(pullDistance, 60)}px)`;
-                
-                if (pullDistance > 60) {
-                    pullRefresh.classList.add('active');
-                } else {
-                    pullRefresh.classList.remove('active');
-                }
-            }
-        }, { passive: false });
-
-        document.addEventListener('touchend', function() {
-            if (!touchStartY) return;
-            
-            const pullRefresh = document.querySelector('.pull-refresh');
-            if (pullRefresh.classList.contains('active')) {
-                // Refresh the page
-                location.reload();
-            } else {
-                pullRefresh.style.transform = 'translateY(-100%)';
-            }
-            
-            touchStartY = 0;
-            pullRefresh.classList.remove('active');
-        });
-
-        // Show app page
         function showAppPage() {
-            const landingPage = document.querySelector('.landing-page');
-            const appPage = document.querySelector('.app-page');
-            
-            landingPage.classList.remove('active');
-            landingPage.classList.add('exit');
-            appPage.classList.add('active');
-            
-            // Reset form
-            document.getElementById('playerId').value = '';
-            document.getElementById('phoneNumber').value = '';
-            selectedProduct = null;
-            selectedPayment = null;
-            document.querySelectorAll('.product-card, .payment-method').forEach(el => {
-                el.classList.remove('selected');
-            });
-
-            // Add haptic feedback
-            if ('vibrate' in navigator) {
-                navigator.vibrate(50);
-            }
+            document.querySelector('.landing-page').classList.remove('active');
+            document.querySelector('.app-page').classList.add('active');
         }
 
-        // Go back function
-        function goBack() {
-            const landingPage = document.querySelector('.landing-page');
-            const appPage = document.querySelector('.app-page');
-            
-            appPage.classList.remove('active');
-            appPage.classList.add('exit');
-            landingPage.classList.remove('exit');
-            landingPage.classList.add('active');
-            
-            // Reset form
-            document.getElementById('playerId').value = '';
-            document.getElementById('phoneNumber').value = '';
-            selectedProduct = null;
-            selectedPayment = null;
-            document.querySelectorAll('.product-card, .payment-method').forEach(el => {
-                el.classList.remove('selected');
-            });
-
-            // Add haptic feedback
-            if ('vibrate' in navigator) {
-                navigator.vibrate(50);
-            }
-        }
-
-        // Product selection
         function selectProduct(element) {
             document.querySelectorAll('.product-card').forEach(card => {
                 card.classList.remove('selected');
@@ -1014,7 +544,6 @@
             }
         }
 
-        // Payment method selection
         function selectPayment(element) {
             document.querySelectorAll('.payment-method').forEach(method => {
                 method.classList.remove('selected');
@@ -1028,7 +557,6 @@
             }
         }
 
-        // Process payment
         function processPayment() {
             const playerId = document.getElementById('playerId').value.trim();
             const phoneNumber = document.getElementById('phoneNumber').value.trim();
@@ -1049,17 +577,6 @@
                 return;
             }
 
-            // Add loading state to button
-            const button = document.querySelector('.checkout-btn');
-            const originalText = button.innerHTML;
-            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-            button.disabled = true;
-
-            // Add haptic feedback
-            if ('vibrate' in navigator) {
-                navigator.vibrate(100);
-            }
-
             // Prepare WhatsApp message
             const message = `🎮 *Free Fire Diamond Purchase* 🔥
             
@@ -1071,25 +588,14 @@ Payment Method: ${selectedPayment}
 
 _This is an automated order confirmation_`;
 
-            // Open WhatsApp after a short delay
-            setTimeout(() => {
-                window.open(`https://wa.me/918391900864?text=${encodeURIComponent(message)}`, '_blank');
-                button.innerHTML = originalText;
-                button.disabled = false;
-            }, 1000);
+            window.open(`https://wa.me/918391900864?text=${encodeURIComponent(message)}`, '_blank');
         }
 
-        // Show error message
         function showError(message) {
             const errorBox = document.createElement('div');
             errorBox.className = 'error-message';
             errorBox.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
             document.body.appendChild(errorBox);
-            
-            // Add haptic feedback for error
-            if ('vibrate' in navigator) {
-                navigator.vibrate([50, 30, 50]);
-            }
             
             setTimeout(() => {
                 errorBox.remove();
@@ -1105,13 +611,6 @@ _This is an automated order confirmation_`;
                     this.style.borderColor = '#444';
                 }
             });
-        });
-
-        // Handle orientation change
-        window.addEventListener('orientationchange', function() {
-            setTimeout(() => {
-                window.scrollTo(0, 0);
-            }, 100);
         });
     </script>
 </body>
