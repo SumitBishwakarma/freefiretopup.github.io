@@ -3,1518 +3,1528 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wingo Color Prediction</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>Quick Notes - Your Digital Notebook</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            /* Theme Variables */
+            --font-primary: 'Poppins', sans-serif;
+            --font-secondary: 'Roboto', sans-serif;
+            --font-size-base: 16px;
+            --font-size-small: 14px;
+            --font-size-large: 18px;
+            --font-weight-normal: 400;
+            --font-weight-medium: 500;
+            --font-weight-bold: 700;
+            
+            /* Dark Theme Colors (Default) */
+            --bg-primary: #121212;
+            --bg-secondary: #1e1e1e;
+            --bg-card: #252525;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --text-muted: #757575;
+            --primary-color: #7c4dff;
+            --primary-dark: #6200ea;
+            --accent-color: #ff6b6b;
+            --favorite-color: #ffb74d;
+            --favorite-dark: #ff9800;
+            --border-color: #333333;
+            --success-color: #51cf66;
+            --error-color: #fa5252;
+            --shadow-color: rgba(0, 0, 0, 0.5);
+        }
+        
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Orbitron', sans-serif;
+            font-family: var(--font-primary);
         }
-
+        
         body {
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            perspective: 1000px;
-            overflow-x: hidden;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+            font-size: var(--font-size-base);
         }
-
+        
+        /* Theme Classes */
+        body.light-theme {
+            --bg-primary: #f8f9fa;
+            --bg-secondary: #e9ecef;
+            --bg-card: #ffffff;
+            --text-primary: #212529;
+            --text-secondary: #495057;
+            --text-muted: #6c757d;
+            --border-color: #dee2e6;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+        
+        body.purple-theme {
+            --primary-color: #9c27b0;
+            --primary-dark: #7b1fa2;
+            --accent-color: #ff4081;
+        }
+        
+        body.green-theme {
+            --primary-color: #4caf50;
+            --primary-dark: #388e3c;
+            --accent-color: #ff9800;
+        }
+        
+        body.blue-theme {
+            --primary-color: #2196f3;
+            --primary-dark: #1976d2;
+            --accent-color: #ff5722;
+        }
+        
+        body.large-text {
+            --font-size-base: 18px;
+            --font-size-small: 16px;
+            --font-size-large: 20px;
+        }
+        
+        body.small-text {
+            --font-size-base: 14px;
+            --font-size-small: 12px;
+            --font-size-large: 16px;
+        }
+        
         .container {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 2rem;
-            border-radius: 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
-                        inset 0 0 20px rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            max-width: 1200px;
-            width: 95%;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transform-style: preserve-3d;
-            transition: transform 0.5s;
-            margin: 1rem;
-            position: relative;
-            overflow: hidden;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
         }
-
-        .container::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: rotate 20s linear infinite;
-            z-index: -1;
+        
+        header {
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            padding: 20px 0;
+            box-shadow: 0 2px 10px var(--shadow-color);
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 1.5rem;
-                margin: 0.5rem;
-            }
-        }
-
-        .container:hover {
-            transform: rotateX(2deg) rotateY(2deg);
-        }
-
-        h1 {
+        
+        header h1 {
             text-align: center;
-            margin-bottom: 2rem;
-            color: #fff;
-            font-size: clamp(2.5rem, 6vw, 4rem);
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5),
-                         0 0 40px rgba(255, 255, 255, 0.3),
-                         0 0 60px rgba(255, 255, 255, 0.2);
-            letter-spacing: 3px;
-            position: relative;
-            background: linear-gradient(45deg, #ff0000, #00ff00, #8000ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-size: 200% 200%;
-            animation: gradient 3s ease infinite;
-            transition: all 0.3s ease;
-            transform-origin: center;
-            transform: scale(1);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--primary-color);
         }
-
-        h1:hover {
-            transform: scale(1.05);
-            text-shadow: 0 0 30px rgba(255, 255, 255, 0.7),
-                         0 0 50px rgba(255, 255, 255, 0.5),
-                         0 0 70px rgba(255, 255, 255, 0.3);
-            background-size: 300% 300%;
-        }
-
-        @keyframes gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        @keyframes titleGlow {
-            0%, 100% { text-shadow: 0 0 20px rgba(255, 255, 255, 0.5), 0 0 40px rgba(255, 255, 255, 0.3); }
-            50% { text-shadow: 0 0 30px rgba(255, 255, 255, 0.7), 0 0 60px rgba(255, 255, 255, 0.5); }
-        }
-
-        .game-info {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 1.5rem;
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .game-header {
+        
+        .search-sort-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            width: 100%;
+            margin-bottom: 15px;
+            flex-wrap: nowrap;
+            gap: 15px;
         }
-
-        .balance {
-            font-size: clamp(1.2rem, 3vw, 1.8rem);
-            font-weight: bold;
-            color: #4CAF50;
-            text-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
-            animation: balancePulse 2s infinite;
-        }
-
-        .timer-container {
+        
+        .search-container {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 0.8rem 1.5rem;
-            border-radius: 10px;
-            min-width: 120px;
+            flex: 1;
+            max-width: 400px;
         }
-
-        .timer-label {
+        
+        .search-container input {
+            flex: 1;
+            padding: 8px 12px;
+            border-radius: 4px 0 0 4px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+        }
+        
+        .search-container button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .search-container button:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .sort-container {
+            display: flex;
+            gap: 8px;
+            position: relative;
+        }
+        
+        .sort-btn {
+            background-color: var(--bg-card);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            padding: 8px 14px;
+            border-radius: 20px;
+            cursor: pointer;
             font-size: 0.9rem;
-            color: #fff;
-            text-align: center;
-            opacity: 0.8;
-        }
-
-        .timer {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #4CAF50;
-            text-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
-            animation: timerPulse 1s infinite;
-            text-align: center;
-        }
-
-        .bet-controls {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            width: 100%;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 1.5rem;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .bet-amount {
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 1.5rem;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 1rem;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .bet-amount label {
-            font-size: clamp(1rem, 2vw, 1.3rem);
-            color: #fff;
-            font-weight: bold;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-        }
-
-        .bet-amount input {
-            width: 150px;
-            padding: 0.8rem;
-            border: none;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            font-size: clamp(1rem, 2vw, 1.2rem);
-            text-align: center;
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .bet-amount input:focus {
-            outline: none;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .quick-bets {
-            display: flex;
-            gap: 1rem;
-            justify-content: space-between;
-            flex-wrap: wrap;
-        }
-
-        .quick-bet-btn {
-            flex: 1;
-            min-width: 80px;
-            padding: 0.8rem;
-            border: none;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: bold;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .quick-bet-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .quick-bet-btn:active {
-            transform: translateY(0);
-        }
-
-        .color-options {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .color-btn {
-            flex: 1;
-            min-width: 200px;
-            padding: 1.5rem;
-            border: none;
-            border-radius: 15px;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: clamp(1rem, 2vw, 1.4rem);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            gap: 5px;
             position: relative;
             overflow: hidden;
-            transform-style: preserve-3d;
+            z-index: 1;
         }
-
-        .color-btn::before {
+        
+        .sort-btn::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transform: translateZ(5px);
-            transition: all 0.3s ease;
+            background: var(--primary-color);
+            z-index: -1;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s ease;
         }
-
-        .color-btn:hover {
-            transform: translateY(-10px) rotateX(5deg);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
-        }
-
-        .color-btn:hover::before {
-            transform: translateZ(10px) rotate(45deg);
-        }
-
-        .red {
-            background: linear-gradient(45deg, #ff0000, #ff4444);
-        }
-
-        .green {
-            background: linear-gradient(45deg, #00ff00, #44ff44);
-        }
-
-        .violet {
-            background: linear-gradient(45deg, #8000ff, #8844ff);
-        }
-
-        .result {
-            text-align: center;
-            margin-bottom: 2rem;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 2rem;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
-            transform-style: preserve-3d;
-        }
-
-        .result-color {
-            width: clamp(150px, 30vw, 250px);
-            height: clamp(150px, 30vw, 250px);
-            margin: 0 auto 1.5rem;
-            border-radius: 50%;
-            border: 4px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.4),
-                       inset 0 0 20px rgba(255, 255, 255, 0.1);
-            transition: all 0.5s ease;
-            transform-style: preserve-3d;
-        }
-
-        .result-message {
-            font-size: clamp(1.2rem, 3vw, 2rem);
-            font-weight: bold;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-            letter-spacing: 2px;
-        }
-
-        .game-history {
-            margin-top: 2rem;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 1.5rem;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
-        }
-
-        .history-tabs {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 1rem;
-        }
-
-        .history-tab {
-            background: rgba(255, 255, 255, 0.05);
-            border: none;
-            border-radius: 8px;
-            padding: 0.8rem 1.5rem;
+        
+        .sort-btn.active {
+            background-color: var(--primary-color);
             color: white;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .history-tab:hover {
-            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary-color);
+            box-shadow: 0 2px 8px rgba(124, 77, 255, 0.4);
             transform: translateY(-2px);
         }
-
-        .history-tab.active {
-            background: linear-gradient(45deg, #4CAF50, #2196F3);
-            box-shadow: 0 0 15px rgba(76, 175, 80, 0.5);
+        
+        .sort-btn.active::before {
+            transform: scaleX(1);
+            transform-origin: left;
         }
-
-        .history-panel {
-            display: none;
-            position: relative;
-            height: 400px;
+        
+        .sort-btn:hover:not(.active) {
+            background-color: var(--bg-secondary);
+            transform: translateY(-2px);
+        }
+        
+        .sort-btn i {
+            font-size: 0.9rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .sort-btn:hover i {
+            transform: translateY(-2px);
+        }
+        
+        .tabs {
+            display: flex;
+            background-color: var(--bg-secondary);
+            margin-bottom: 20px;
+            border-radius: 8px;
             overflow: hidden;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 15px;
-            padding: 1.5rem;
-            margin-top: 1rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 1px 5px var(--shadow-color);
         }
-
-        .history-panel.active {
+        
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            position: relative;
+        }
+        
+        .tab.active {
+            color: var(--primary-color);
+            background-color: rgba(77, 171, 247, 0.1);
+        }
+        
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background-color: var(--primary-color);
+        }
+        
+        .tab-icon {
+            margin-right: 8px;
+            font-size: 1.1em;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes slideInRight {
+            from { transform: translateX(30px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes sortAnimation {
+            0% { transform: translateY(0); opacity: 1; }
+            20% { transform: translateY(-10px); opacity: 0.8; }
+            40% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+            20%, 40%, 60%, 80% { transform: translateX(2px); }
+        }
+        
+        .tab-content.active {
             display: block;
         }
-
-        .history-panel::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .history-panel::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-        }
-
-        .history-panel::-webkit-scrollbar-thumb {
-            background: linear-gradient(45deg, #4CAF50, #2196F3);
-            border-radius: 10px;
-        }
-
-        .charts-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 1.5rem;
-            height: 350px;
-            overflow: hidden;
-        }
-
-        .chart-wrapper {
-            background: rgba(0, 0, 0, 0.2);
-            padding: 1.5rem;
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            height: 100%;
+        
+        .card {
+            background-color: var(--bg-card);
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 12px var(--shadow-color);
             position: relative;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--primary-color);
+            animation: slideInRight 0.4s ease;
             overflow: hidden;
         }
-
-        .chart-wrapper canvas {
-            width: 100% !important;
-            height: 100% !important;
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, transparent 70%, rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 0 0 0 100%;
+            pointer-events: none;
         }
-
-        .game-results {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--shadow-color);
         }
-
-        .result-item {
-            width: 80px;
-            height: 80px;
+        
+        .card.deleting {
+            animation: shake 0.5s ease;
+            opacity: 0.8;
+        }
+        
+        .expense-card {
+            border-left: 4px solid var(--accent-color);
+        }
+        
+        .favorite-card {
+            border-left: 4px solid var(--favorite-color);
+        }
+        
+        .card-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+            word-break: break-word;
+        }
+        
+        .card-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            word-break: break-word;
+        }
+        
+        .card-timestamp {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .card-timestamp svg {
+            margin-right: 5px;
+            height: 14px;
+            width: 14px;
+        }
+        
+        .card-actions {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            display: flex;
+            gap: 8px;
+        }
+        
+        .action-btn {
+            background-color: transparent;
+            color: var(--text-muted);
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        
+        .delete-btn:hover {
+            background-color: var(--error-color);
+            color: white;
+        }
+        
+        .favorite-btn:hover {
+            background-color: var(--favorite-color);
+            color: white;
+        }
+        
+        .favorite-btn.active {
+            background-color: var(--favorite-color);
+            color: white;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 0;
+            color: var(--text-muted);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary-color);
+            color: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-            font-size: 1.2rem;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 3px 15px var(--primary-color);
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
             transition: all 0.3s ease;
+            z-index: 100;
+            animation: pulse 2s infinite ease-in-out;
+            overflow: hidden;
         }
-
-        .result-item:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        
+        .fab::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
-
-        .result-item.red {
-            background: linear-gradient(45deg, #ff0000, #ff4444);
+        
+        .fab:hover {
+            background-color: var(--primary-dark);
+            transform: scale(1.05);
+            animation: none;
         }
-
-        .result-item.green {
-            background: linear-gradient(45deg, #00ff00, #44ff44);
+        
+        .fab:hover::before {
+            opacity: 1;
         }
-
-        .result-item.violet {
-            background: linear-gradient(45deg, #8000ff, #8844ff);
+        
+        .fab:active {
+            transform: scale(0.95);
         }
-
-        .my-history-list {
-            max-height: 400px;
-            overflow-y: auto;
-            padding-right: 15px;
-        }
-
-        .my-history-list::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .my-history-list::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-        }
-
-        .my-history-list::-webkit-scrollbar-thumb {
-            background: linear-gradient(45deg, #4CAF50, #2196F3);
-            border-radius: 10px;
-        }
-
-        .my-history-item {
-            padding: 1rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.05);
-            margin-bottom: 10px;
-            border-radius: 10px;
-            transform: translateX(0);
-        }
-
-        .my-history-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateX(10px);
-        }
-
-        .my-history-item .date {
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .my-history-item .bet-details {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-        }
-
-        .my-history-item .bet-amount {
-            font-weight: bold;
-        }
-
-        .my-history-item .bet-result {
-            font-size: 0.9rem;
-        }
-
-        .my-history-item.win .bet-result {
-            color: #4CAF50;
-        }
-
-        .my-history-item.lose .bet-result {
-            color: #f44336;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1) rotateY(0deg); }
-            50% { transform: scale(1.1) rotateY(180deg); }
-            100% { transform: scale(1) rotateY(360deg); }
-        }
-
-        .win-animation {
-            animation: pulse 1s ease;
-        }
-
-        @keyframes glow {
-            0% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.3); }
-            50% { box-shadow: 0 0 40px rgba(255, 255, 255, 0.5); }
-            100% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.3); }
-        }
-
-        .glow {
-            animation: glow 2s infinite;
-        }
-
-        @keyframes buttonPress {
-            0% { transform: scale(1); }
-            50% { transform: scale(0.95); }
-            100% { transform: scale(1); }
-        }
-
-        .button-press {
-            animation: buttonPress 0.2s ease;
-        }
-
-        /* New Statistics Dashboard Styles */
-        .stats-dashboard {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 1.5rem;
-            border-radius: 15px;
-            margin-bottom: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-        }
-
-        .stat-item {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 1rem;
-            border-radius: 10px;
-            text-align: center;
-        }
-
-        .stat-label {
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-value {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #fff;
-        }
-
-        .win-rate {
-            color: #4CAF50;
-        }
-
-        .best-streak {
-            color: #2196F3;
-        }
-
-        .total-profit {
-            color: #FFC107;
-        }
-
-        /* Settings Panel Styles */
-        .settings-panel {
-            background: rgba(0, 0, 0, 0.95);
-            padding: 1.5rem;
-            border-radius: 15px;
-            margin-bottom: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        
+        /* Modal Styles */
+        .modal {
             display: none;
             position: fixed;
             top: 0;
-            right: 0;
-            width: 300px;
-            height: 100vh;
-            z-index: 1000;
-            overflow-y: auto;
-            transition: all 0.3s ease;
-        }
-
-        .settings-panel.active {
-            display: block;
-        }
-
-        .settings-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .settings-title {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #fff;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-        }
-
-        .settings-close {
-            background: none;
-            border: none;
-            color: #fff;
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 0.5rem;
-            border-radius: 50%;
-            transition: all 0.3s ease;
-        }
-
-        .settings-close:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: rotate(90deg);
-        }
-
-        .settings-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .settings-group-title {
-            font-size: 1.1rem;
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 1rem;
-            padding-left: 1rem;
-            border-left: 3px solid #4CAF50;
-        }
-
-        .settings-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            margin-bottom: 0.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .settings-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateX(5px);
-        }
-
-        .settings-label {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .settings-icon {
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            padding: 0.5rem;
-        }
-
-        .settings-text {
-            font-size: 1rem;
-            color: #fff;
-        }
-
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 24px;
-        }
-
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .toggle-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(255, 255, 255, 0.1);
-            transition: .4s;
-            border-radius: 24px;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            overflow: auto;
+            animation: fadeIn 0.3s ease;
         }
-
-        .toggle-slider:before {
+        
+        .modal-content {
+            background-color: var(--bg-secondary);
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 500px;
+            box-shadow: 0 5px 15px var(--shadow-color);
+            position: relative;
+            animation: fadeIn 0.4s ease;
+            transform-origin: center top;
+        }
+        
+        .close-modal {
             position: absolute;
-            content: "";
-            height: 16px;
-            width: 16px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
+            top: 15px;
+            right: 20px;
+            font-size: 24px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: color 0.2s ease;
         }
-
-        input:checked + .toggle-slider {
-            background-color: #4CAF50;
+        
+        .close-modal:hover {
+            color: var(--error-color);
         }
-
-        input:checked + .toggle-slider:before {
-            transform: translateX(26px);
+        
+        .modal h2 {
+            margin-bottom: 20px;
+            color: var(--primary-color);
         }
-
-        .settings-button {
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--text-secondary);
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 16px;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(77, 171, 247, 0.2);
+            animation: pulse 1s ease;
+        }
+        
+        input, textarea {
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        
+        .btn-primary::after {
+            content: '';
             position: absolute;
-            top: 2rem;
-            right: 2rem;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+        
+        .btn-primary:focus:not(:active)::after {
+            animation: ripple 1s ease-out;
+        }
+        
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(20, 20);
+                opacity: 0;
+            }
+        }
+        
+        /* Customization Panel */
+        .settings-btn {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
             width: 50px;
             height: 50px;
+            background-color: var(--bg-secondary);
+            color: var(--primary-color);
             border-radius: 50%;
-            background: linear-gradient(45deg, #2196F3, #1976D2);
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(33, 150, 243, 0.4);
-            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 101;
+            box-shadow: 0 3px 12px var(--shadow-color);
+            border: 2px solid var(--primary-color);
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 100;
         }
-
-        .settings-button:hover {
-            transform: rotate(90deg) scale(1.1);
-            box-shadow: 0 6px 20px rgba(33, 150, 243, 0.6);
+        
+        .settings-btn:hover {
+            transform: rotate(30deg);
         }
-
+        
+        .customization-panel {
+            position: fixed;
+            left: -300px;
+            top: 0;
+            width: 300px;
+            height: 100%;
+            background-color: var(--bg-secondary);
+            box-shadow: 2px 0 10px var(--shadow-color);
+            z-index: 1001;
+            transition: left 0.3s ease;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .customization-panel.open {
+            left: 0;
+        }
+        
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .panel-header h3 {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin: 0;
+        }
+        
+        .close-panel {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 20px;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+        
+        .close-panel:hover {
+            color: var(--error-color);
+        }
+        
+        .panel-section {
+            margin-bottom: 20px;
+        }
+        
+        .panel-section h4 {
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            font-size: 1rem;
+            font-weight: var(--font-weight-medium);
+        }
+        
+        .theme-options, .color-options, .font-size-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .theme-option, .color-option, .font-size-option {
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+            background-color: var(--bg-card);
+            color: var(--text-secondary);
+        }
+        
+        .theme-option.active, .color-option.active, .font-size-option.active {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .theme-option:hover, .color-option:hover, .font-size-option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px var(--shadow-color);
+        }
+        
+        .color-preview {
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+        
+        .purple-preview { background-color: #9c27b0; }
+        .green-preview { background-color: #4caf50; }
+        .blue-preview { background-color: #2196f3; }
+        .default-preview { background-color: #7c4dff; }
+        
+        /* Responsive Styles */
         @media (max-width: 768px) {
-            .settings-panel {
-                width: 100%;
-                height: 100vh;
-                border-radius: 0;
-                padding: 2rem 1.5rem;
-                background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            .container {
+                padding: 15px;
             }
-
-            .settings-header {
-                position: sticky;
-                top: 0;
-                background: rgba(0, 0, 0, 0.2);
-                padding: 1rem;
-                margin: -1rem 0 -1rem 0;
-                z-index: 1;
+            
+            .modal-content {
+                margin: 15% auto;
+                width: 90%;
             }
-
-            .settings-group {
-                margin-bottom: 2rem;
+            
+            .tab {
+                padding: 12px 8px;
+                font-size: 0.9rem;
             }
-
-            .settings-item {
-                padding: 1.2rem;
-                margin-bottom: 0.8rem;
+            
+            .fab {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
             }
-
-            .settings-text {
-                font-size: 1.1rem;
+            
+            .settings-btn {
+                bottom: 20px;
+                left: 20px;
+                width: 45px;
+                height: 45px;
             }
-
-            .settings-icon {
-                width: 32px;
-                height: 32px;
-                font-size: 1.2rem;
+            
+            .customization-panel {
+                width: 280px;
+            }
+            
+            .search-sort-container {
+                flex-direction: row;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 10px;
+            }
+            
+            .search-container {
+                flex: 1;
+                min-width: 200px;
+                margin-bottom: 0;
+            }
+            
+            .sort-container {
+                display: flex;
+                gap: 8px;
             }
         }
-
-        @keyframes timerPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        .timer.warning {
-            color: #f44336;
-            text-shadow: 0 0 10px rgba(244, 67, 54, 0.5);
+        
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.3rem;
+            }
+            
+            .tab {
+                padding: 10px 5px;
+                font-size: 0.8rem;
+            }
+            
+            .tab-icon {
+                margin-right: 4px;
+            }
+            
+            .card {
+                padding: 12px;
+            }
+            
+            .customization-panel {
+                width: 260px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Wingo Color Prediction</h1>
+    <header>
+        <div class="container">
+            <h1><i class="fas fa-sticky-note"></i> Quick Notes</h1>
+            <div class="search-sort-container">
+                <div class="search-container">
+                    <input type="text" id="search-input" placeholder="Search notes...">
+                    <button id="search-btn"><i class="fas fa-search"></i></button>
+                </div>
+                <div class="sort-container">
+                    <button id="sort-newest" class="sort-btn active"><i class="fas fa-clock"></i> Newest</button>
+                    <button id="sort-oldest" class="sort-btn"><i class="fas fa-history"></i> Oldest</button>
+                </div>
+            </div>
+            <div class="tabs">
+                <div class="tab active" data-tab="notes">
+                    <i class="fas fa-sticky-note tab-icon"></i>Notes
+                </div>
+                <div class="tab" data-tab="favorites">
+                    <i class="fas fa-star tab-icon"></i>Favorites
+                </div>
+                <div class="tab" data-tab="expenses">
+                    <i class="fas fa-receipt tab-icon"></i>Expenses
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Notes Tab Content -->
+        <div class="tab-content active" id="notes-content">
+            <div id="notes-container">
+                <!-- Notes will be dynamically added here -->
+                <div class="empty-state" id="notes-empty-state">
+                    <i class="fas fa-sticky-note fa-3x"></i>
+                    <p>No notes yet. Add your first note!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Favorites Tab Content -->
+        <div class="tab-content" id="favorites-content">
+            <div id="favorites-container">
+                <!-- Favorite notes will be dynamically added here -->
+                <div class="empty-state" id="favorites-empty-state">
+                    <i class="fas fa-star fa-3x"></i>
+                    <p>No favorite notes yet. Mark notes as favorites to see them here!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Expenses Tab Content -->
+        <div class="tab-content" id="expenses-content">
+            <div id="expenses-container">
+                <!-- Expenses will be dynamically added here -->
+                <div class="empty-state" id="expenses-empty-state">
+                    <i class="fas fa-receipt fa-3x"></i>
+                    <p>No expenses yet. Add your first expense!</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add Note Modal -->
+    <div class="modal" id="add-note-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Add Note</h2>
+            <form id="add-note-form">
+                <div class="form-group">
+                    <label for="note-title">Title</label>
+                    <input type="text" id="note-title" required>
+                </div>
+                <div class="form-group">
+                    <label for="note-content">Description</label>
+                    <textarea id="note-content" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn-primary">Save Note</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Expense Modal -->
+    <div class="modal" id="add-expense-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Add Expense</h2>
+            <form id="add-expense-form">
+                <div class="form-group">
+                    <label for="expense-title">Title</label>
+                    <input type="text" id="expense-title" required>
+                </div>
+                <div class="form-group">
+                    <label for="expense-amount">Amount</label>
+                    <input type="number" id="expense-amount" min="0" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="expense-date">Date</label>
+                    <input type="date" id="expense-date" required>
+                </div>
+                <button type="submit" class="btn-primary">Save Expense</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Floating Action Button -->
+    <button class="fab" id="add-fab">
+        <i class="fas fa-plus"></i>
+    </button>
+    
+    <!-- Settings Button -->
+    <button class="settings-btn" id="settings-btn">
+        <i class="fas fa-cog"></i>
+    </button>
+    
+    <!-- Customization Panel -->
+    <div class="customization-panel" id="customization-panel">
+        <div class="panel-header">
+            <h3>Customize</h3>
+            <button class="close-panel" id="close-panel">&times;</button>
+        </div>
         
-        <!-- Settings Button -->
-        <button class="settings-button" id="settings-button">⚙️</button>
+        <div class="panel-section">
+            <h4>Theme</h4>
+            <div class="theme-options">
+                <div class="theme-option active" data-theme="dark">Dark</div>
+                <div class="theme-option" data-theme="light">Light</div>
+            </div>
+        </div>
         
-        <!-- Settings Panel -->
-        <div class="settings-panel" id="settings-panel">
-            <div class="settings-header">
-                <h2 class="settings-title">Settings</h2>
-                <button class="settings-close" id="settings-close">×</button>
-            </div>
-            
-            <!-- Settings content removed as requested -->
-        </div>
-
-        <!-- Statistics Dashboard -->
-        <div class="stats-dashboard">
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="stat-label">Total Wins</div>
-                    <div class="stat-value" id="total-wins">0</div>
+        <div class="panel-section">
+            <h4>Color</h4>
+            <div class="color-options">
+                <div class="color-option active" data-color="default">
+                    <span class="color-preview default-preview"></span>Default
                 </div>
-                <div class="stat-item">
-                    <div class="stat-label">Total Losses</div>
-                    <div class="stat-value" id="total-losses">0</div>
+                <div class="color-option" data-color="purple">
+                    <span class="color-preview purple-preview"></span>Purple
                 </div>
-                <div class="stat-item">
-                    <div class="stat-label">Win Rate</div>
-                    <div class="stat-value win-rate" id="win-rate">0%</div>
+                <div class="color-option" data-color="green">
+                    <span class="color-preview green-preview"></span>Green
                 </div>
-                <div class="stat-item">
-                    <div class="stat-label">Best Streak</div>
-                    <div class="stat-value best-streak" id="best-streak">0</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-label">Total Profit</div>
-                    <div class="stat-value total-profit" id="total-profit">$0</div>
+                <div class="color-option" data-color="blue">
+                    <span class="color-preview blue-preview"></span>Blue
                 </div>
             </div>
         </div>
-
-        <div class="game-info">
-            <div class="game-header">
-                <div class="balance">Balance: $<span id="balance">1000</span></div>
-                <div class="timer-container">
-                    <div class="timer-label">Next Round:</div>
-                    <div class="timer" id="timer">60</div>
-                </div>
-            </div>
-            <div class="bet-controls">
-                <div class="bet-amount">
-                    <label for="bet">Bet Amount:</label>
-                    <input type="number" id="bet" min="1" value="100">
-                </div>
-                <div class="quick-bets">
-                    <button class="quick-bet-btn" data-amount="100">100</button>
-                    <button class="quick-bet-btn" data-amount="500">500</button>
-                    <button class="quick-bet-btn" data-amount="1000">1000</button>
-                    <button class="quick-bet-btn" data-amount="5000">5000</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="color-options">
-            <button class="color-btn red" data-color="red">Red (2x)</button>
-            <button class="color-btn green" data-color="green">Green (3x)</button>
-            <button class="color-btn violet" data-color="violet">Violet (4x)</button>
-        </div>
-
-        <div class="result">
-            <div class="result-color" id="result-color"></div>
-            <div class="result-message" id="result-message"></div>
-        </div>
-
-        <!-- Replace the history section with a more comprehensive game history -->
-        <div class="game-history">
-            <div class="history-tabs">
-                <button class="history-tab active" data-tab="game-history">Game History</button>
-                <button class="history-tab" data-tab="charts">Charts</button>
-                <button class="history-tab" data-tab="my-history">My History</button>
-            </div>
-            
-            <div class="history-content">
-                <div class="history-panel active" id="game-history-panel">
-                    <h2>Recent Game Results</h2>
-                    <div class="game-results" id="game-results"></div>
-                </div>
-                
-                <div class="history-panel" id="charts-panel">
-                    <h2>Performance Charts</h2>
-                    <div class="charts-container">
-                        <div class="chart-wrapper">
-                            <h3>Win/Loss Ratio</h3>
-                            <canvas id="win-loss-chart"></canvas>
-                        </div>
-                        <div class="chart-wrapper">
-                            <h3>Profit/Loss Over Time</h3>
-                            <canvas id="profit-chart"></canvas>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="history-panel" id="my-history-panel">
-                    <h2>My Betting History</h2>
-                    <div class="my-history-list" id="my-history-list"></div>
-                </div>
+        
+        <div class="panel-section">
+            <h4>Font Size</h4>
+            <div class="font-size-options">
+                <div class="font-size-option" data-size="small">Small</div>
+                <div class="font-size-option active" data-size="normal">Normal</div>
+                <div class="font-size-option" data-size="large">Large</div>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Game state
-        let balance = 1000;
-        let betAmount = 100;
-        const colors = ['red', 'green', 'violet'];
-        const multipliers = {
-            red: 2,
-            green: 3,
-            violet: 4
-        };
-
-        // Statistics
-        let totalWins = 0;
-        let totalLosses = 0;
-        let currentStreak = 0;
-        let bestStreak = 0;
-        let totalProfit = 0;
-
-        // Sound effects
-        const sounds = {
-            win: new Audio('https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3'),
-            lose: new Audio('https://assets.mixkit.co/active_storage/sfx/1436/1436-preview.mp3'),
-            click: new Audio('https://assets.mixkit.co/active_storage/sfx/1437/1437-preview.mp3')
-        };
-
-        // DOM elements
-        const balanceElement = document.getElementById('balance');
-        const betInput = document.getElementById('bet');
-        const resultColor = document.getElementById('result-color');
-        const resultMessage = document.getElementById('result-message');
-
-        // Statistics elements
-        const totalWinsElement = document.getElementById('total-wins');
-        const totalLossesElement = document.getElementById('total-losses');
-        const winRateElement = document.getElementById('win-rate');
-        const bestStreakElement = document.getElementById('best-streak');
-        const totalProfitElement = document.getElementById('total-profit');
-
-        // Settings state
-        let settings = {
-            sound: true,
-            darkTheme: true,
-            notifications: true
-        };
-
-        // Settings elements
-        const settingsPanel = document.getElementById('settings-panel');
-        const settingsButton = document.getElementById('settings-button');
-        const settingsClose = document.getElementById('settings-close');
-
-        // Add these variables in the script section
-        let timer = 60;
-        let timerInterval;
-        let currentRound = 0;
-        let pendingBets = [];
-        const timerElement = document.getElementById('timer');
-
-        // Add these variables to the script section
-        let gameResults = [];
-        let myHistory = [];
-        let profitHistory = [];
-        let winLossData = { wins: 0, losses: 0 };
-        let winLossChart, profitChart;
-
-        // Initialize game
-        function init() {
-            updateBalance();
+        // DOM Elements
+        const notesContainer = document.getElementById('notes-container');
+        const favoritesContainer = document.getElementById('favorites-container');
+        const expensesContainer = document.getElementById('expenses-container');
+        const notesEmptyState = document.getElementById('notes-empty-state');
+        const favoritesEmptyState = document.getElementById('favorites-empty-state');
+        const expensesEmptyState = document.getElementById('expenses-empty-state');
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const addFab = document.getElementById('add-fab');
+        const addNoteModal = document.getElementById('add-note-modal');
+        const addExpenseModal = document.getElementById('add-expense-modal');
+        const closeModalButtons = document.querySelectorAll('.close-modal');
+        const addNoteForm = document.getElementById('add-note-form');
+        const addExpenseForm = document.getElementById('add-expense-form');
+        const searchInput = document.getElementById('search-input');
+        const searchBtn = document.getElementById('search-btn');
+        const sortNewestBtn = document.getElementById('sort-newest');
+        const sortOldestBtn = document.getElementById('sort-oldest');
+        const settingsBtn = document.getElementById('settings-btn');
+        const customizationPanel = document.getElementById('customization-panel');
+        const closePanel = document.getElementById('close-panel');
+        const themeOptions = document.querySelectorAll('.theme-option');
+        const colorOptions = document.querySelectorAll('.color-option');
+        const fontSizeOptions = document.querySelectorAll('.font-size-option');
+        
+        // Data Storage
+        let notes = JSON.parse(localStorage.getItem('quickNotes')) || [];
+        let expenses = JSON.parse(localStorage.getItem('quickExpenses')) || [];
+        let currentTab = 'notes';
+        let sortOrder = 'newest';
+        let searchQuery = '';
+        
+        // Initialize App
+        function initApp() {
+            renderNotes();
+            renderExpenses();
+            loadUserPreferences();
             setupEventListeners();
-            updateStatistics();
-            
-            // Initialize charts after a short delay to ensure DOM is fully loaded
-            setTimeout(() => {
-                setupCharts();
-                startTimer();
-            }, 500);
         }
-
-        // Setup charts
-        function setupCharts() {
-            try {
-                // Win/Loss Chart
-                const winLossCtx = document.getElementById('win-loss-chart');
-                if (!winLossCtx) {
-                    console.error("Win/Loss chart canvas not found");
-                    return;
-                }
-                
-                winLossChart = new Chart(winLossCtx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['Wins', 'Losses'],
-                        datasets: [{
-                            data: [totalWins, totalLosses],
-                            backgroundColor: ['#4CAF50', '#f44336'],
-                            borderWidth: 0
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: {
-                                    color: 'white',
-                                    font: {
-                                        family: "'Orbitron', sans-serif"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
-
-                // Profit Chart
-                const profitCtx = document.getElementById('profit-chart');
-                if (!profitCtx) {
-                    console.error("Profit chart canvas not found");
-                    return;
-                }
-                
-                profitChart = new Chart(profitCtx, {
-                    type: 'line',
-                    data: {
-                        labels: [],
-                        datasets: [{
-                            label: 'Profit/Loss',
-                            data: [],
-                            borderColor: '#4CAF50',
-                            backgroundColor: 'rgba(76, 175, 80, 0.1)',
-                            borderWidth: 2,
-                            tension: 0.4,
-                            fill: true
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: false
-                            }
-                        },
-                        scales: {
-                            y: {
-                                grid: {
-                                    color: 'rgba(255, 255, 255, 0.1)'
-                                },
-                                ticks: {
-                                    color: 'white',
-                                    font: {
-                                        family: "'Orbitron', sans-serif"
-                                    }
-                                }
-                            },
-                            x: {
-                                grid: {
-                                    color: 'rgba(255, 255, 255, 0.1)'
-                                },
-                                ticks: {
-                                    color: 'white',
-                                    font: {
-                                        family: "'Orbitron', sans-serif"
-                                    },
-                                    maxRotation: 45,
-                                    minRotation: 45
-                                }
-                            }
-                        }
-                    }
-                });
-                
-                console.log("Charts initialized successfully");
-            } catch (error) {
-                console.error("Error setting up charts:", error);
-            }
-        }
-
-        // Update statistics
-        function updateStatistics() {
-            totalWinsElement.textContent = totalWins;
-            totalLossesElement.textContent = totalLosses;
-            const winRate = totalWins + totalLosses > 0 ? 
-                Math.round((totalWins / (totalWins + totalLosses)) * 100) : 0;
-            winRateElement.textContent = `${winRate}%`;
-            bestStreakElement.textContent = bestStreak;
-            totalProfitElement.textContent = `$${totalProfit}`;
-        }
-
-        // Play sound effect
-        function playSound(soundName) {
-            if (settings.sound) {
-                if (sounds[soundName]) {
-                    sounds[soundName].currentTime = 0;
-                    sounds[soundName].play().catch(e => console.log("Sound play error:", e));
-                }
-            }
-        }
-
-        // Setup event listeners
+        
+        // Setup Event Listeners
         function setupEventListeners() {
-            // Color buttons
-            document.querySelectorAll('.color-btn').forEach(button => {
-                button.addEventListener('click', () => {
-                    playSound('click');
-                    const selectedColor = button.dataset.color;
-                    playGame(selectedColor);
+            // Tab Navigation
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.getAttribute('data-tab');
+                    switchTab(tabId);
                 });
             });
-
-            // Quick bet buttons
-            document.querySelectorAll('.quick-bet-btn').forEach(button => {
+            
+            // Add Button
+            addFab.addEventListener('click', () => {
+                if (currentTab === 'expenses') {
+                    addExpenseModal.style.display = 'block';
+                } else {
+                    addNoteModal.style.display = 'block';
+                }
+            });
+            
+            // Close Modals
+            closeModalButtons.forEach(button => {
                 button.addEventListener('click', () => {
-                    playSound('click');
-                    const amount = parseInt(button.dataset.amount);
-                    betAmount = amount;
-                    betInput.value = amount;
-                    button.classList.add('button-press');
-                    setTimeout(() => button.classList.remove('button-press'), 200);
+                    addNoteModal.style.display = 'none';
+                    addExpenseModal.style.display = 'none';
                 });
             });
-
-            // Bet amount input
-            betInput.addEventListener('change', () => {
-                betAmount = parseInt(betInput.value);
-                if (betAmount < 1) {
-                    betAmount = 1;
-                    betInput.value = 1;
+            
+            // Submit Forms
+            addNoteForm.addEventListener('submit', handleAddNote);
+            addExpenseForm.addEventListener('submit', handleAddExpense);
+            
+            // Search
+            searchBtn.addEventListener('click', handleSearch);
+            searchInput.addEventListener('keyup', (e) => {
+                if (e.key === 'Enter') {
+                    handleSearch();
                 }
             });
-
-            // Settings event listeners
-            settingsButton.addEventListener('click', () => {
-                settingsPanel.classList.add('active');
-                document.body.style.overflow = 'hidden'; // Prevent scrolling when settings is open
+            
+            // Sort
+            sortNewestBtn.addEventListener('click', () => handleSort('newest'));
+            sortOldestBtn.addEventListener('click', () => handleSort('oldest'));
+            
+            // Customization Panel
+            settingsBtn.addEventListener('click', toggleCustomizationPanel);
+            closePanel.addEventListener('click', toggleCustomizationPanel);
+            
+            // Theme Options
+            themeOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    const theme = option.getAttribute('data-theme');
+                    setTheme(theme);
+                    updateActiveOption(themeOptions, option);
+                    saveUserPreferences();
+                });
             });
-
-            settingsClose.addEventListener('click', () => {
-                settingsPanel.classList.remove('active');
-                document.body.style.overflow = ''; // Restore scrolling
+            
+            // Color Options
+            colorOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    const color = option.getAttribute('data-color');
+                    setColor(color);
+                    updateActiveOption(colorOptions, option);
+                    saveUserPreferences();
+                });
             });
-
-            // Close settings when clicking outside on mobile
-            document.addEventListener('click', (e) => {
-                if (window.innerWidth <= 768 && 
-                    settingsPanel.classList.contains('active') && 
-                    !settingsPanel.contains(e.target) && 
-                    e.target !== settingsButton) {
-                    settingsPanel.classList.remove('active');
-                    document.body.style.overflow = '';
-                }
+            
+            // Font Size Options
+            fontSizeOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    const size = option.getAttribute('data-size');
+                    setFontSize(size);
+                    updateActiveOption(fontSizeOptions, option);
+                    saveUserPreferences();
+                });
             });
-
-            // History tab switching
-            document.querySelectorAll('.history-tab').forEach(tab => {
-                tab.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    
-                    // Remove active class from all tabs and panels
-                    document.querySelectorAll('.history-tab').forEach(t => t.classList.remove('active'));
-                    document.querySelectorAll('.history-panel').forEach(p => p.classList.remove('active'));
-                    
-                    // Add active class to clicked tab and corresponding panel
+        }
+        
+        // Switch Tab
+        function switchTab(tabId) {
+            currentTab = tabId;
+            
+            // Update active tab
+            tabs.forEach(tab => {
+                if (tab.getAttribute('data-tab') === tabId) {
                     tab.classList.add('active');
-                    const panelId = tab.dataset.tab + '-panel';
-                    const panel = document.getElementById(panelId);
-                    panel.classList.add('active');
-
-                    // Only update charts when switching to charts tab
-                    if (tab.dataset.tab === 'charts') {
-                        setTimeout(() => {
-                            if (winLossChart && profitChart) {
-                                winLossChart.resize();
-                                profitChart.resize();
-                                updateCharts(true); // Show complete data when switching to charts tab
-                            }
-                        }, 100);
-                    }
-                });
-            });
-        }
-
-        // Play game
-        function playGame(selectedColor) {
-            // Check if timer is in last 5 seconds
-            if (timer <= 5) {
-                resultMessage.textContent = 'No more bets allowed! Round ending soon...';
-                resultMessage.classList.add('lose');
-                return;
-            }
-
-            // Check if player has enough balance
-            if (betAmount > balance) {
-                resultMessage.textContent = 'Insufficient balance!';
-                return;
-            }
-
-            // Deduct bet amount from balance immediately
-            balance -= betAmount;
-            updateBalance();
-
-            // Add bet to pending bets
-            pendingBets.push({
-                color: selectedColor,
-                amount: betAmount
-            });
-
-            // Update result message
-            resultMessage.textContent = `Bet placed on ${selectedColor}! You can bet on any color multiple times until last 5 seconds.`;
-            resultMessage.classList.add('win');
-            
-            // Highlight the selected color button
-            document.querySelectorAll('.color-btn').forEach(btn => {
-                if (btn.dataset.color === selectedColor) {
-                    btn.style.transform = 'scale(1.05)';
-                    btn.style.boxShadow = '0 0 20px rgba(255, 255, 255, 0.3)';
+                } else {
+                    tab.classList.remove('active');
                 }
             });
-
-            // Show current bets summary
-            const currentBets = pendingBets.reduce((acc, bet) => {
-                acc[bet.color] = (acc[bet.color] || 0) + bet.amount;
-                return acc;
-            }, {});
-
-            let betsSummary = 'Current bets: ';
-            for (const color in currentBets) {
-                betsSummary += `${color}: $${currentBets[color]} | `;
-            }
-            resultMessage.textContent += '\n' + betsSummary.slice(0, -3);
-
-            // Update charts in real-time
-            updateCharts(false);
-        }
-
-        // Add result to game history
-        function addToGameHistory(resultColor) {
-            // Add to game results array
-            gameResults.unshift(resultColor);
-            if (gameResults.length > 20) {
-                gameResults.pop();
-            }
             
-            // Update game results display
-            updateGameResultsDisplay();
-        }
-
-        // Update game results display
-        function updateGameResultsDisplay() {
-            const gameResultsContainer = document.getElementById('game-results');
-            gameResultsContainer.innerHTML = '';
-            
-            gameResults.forEach(color => {
-                const resultItem = document.createElement('div');
-                resultItem.className = `result-item ${color}`;
-                resultItem.textContent = color.charAt(0).toUpperCase();
-                gameResultsContainer.appendChild(resultItem);
+            // Update active content
+            tabContents.forEach(content => {
+                if (content.id === `${tabId}-content`) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
             });
+            
+            // Update FAB visibility
+            addFab.style.display = tabId === 'favorites' ? 'none' : 'flex';
         }
-
-        // Add to my history
-        function addToMyHistory(selectedColor, resultColor, won, amount) {
-            const date = new Date().toLocaleTimeString();
-            const historyItem = {
-                date,
-                selectedColor,
-                resultColor,
-                won,
-                amount,
-                winnings: won ? amount * multipliers[selectedColor] : 0
+        
+        // Handle Add Note
+        function handleAddNote(e) {
+            e.preventDefault();
+            
+            const titleInput = document.getElementById('note-title');
+            const contentInput = document.getElementById('note-content');
+            
+            const newNote = {
+                id: Date.now(),
+                title: titleInput.value.trim(),
+                content: contentInput.value.trim(),
+                timestamp: new Date().toISOString(),
+                isFavorite: false
             };
             
-            myHistory.unshift(historyItem);
-            if (myHistory.length > 50) {
-                myHistory.pop();
-            }
+            notes.unshift(newNote);
+            saveNotes();
+            renderNotes();
             
-            // Update profit history
-            profitHistory.push({
-                time: date,
-                profit: totalProfit
-            });
-            
-            // Update charts immediately
-            updateCharts(false);
-            
-            // Update my history display
-            updateMyHistoryDisplay();
+            // Reset form and close modal
+            addNoteForm.reset();
+            addNoteModal.style.display = 'none';
         }
-
-        // Update my history display
-        function updateMyHistoryDisplay() {
-            const myHistoryList = document.getElementById('my-history-list');
-            myHistoryList.innerHTML = '';
+        
+        // Handle Add Expense
+        function handleAddExpense(e) {
+            e.preventDefault();
             
-            myHistory.forEach(item => {
-                const historyItem = document.createElement('div');
-                historyItem.className = `my-history-item ${item.won ? 'win' : 'lose'}`;
-                
-                historyItem.innerHTML = `
-                    <div class="date">${item.date}</div>
-                    <div class="bet-details">
-                        <div class="bet-amount">$${item.amount} on ${item.selectedColor}</div>
-                        <div class="bet-result">
-                            ${item.won ? 
-                                `Won $${item.winnings} (${item.selectedColor})` : 
-                                `Lost $${item.amount} (${item.selectedColor} → ${item.resultColor})`}
-                        </div>
-                    </div>
-                `;
-                
-                myHistoryList.appendChild(historyItem);
-            });
+            const titleInput = document.getElementById('expense-title');
+            const amountInput = document.getElementById('expense-amount');
+            const dateInput = document.getElementById('expense-date');
+            
+            const newExpense = {
+                id: Date.now(),
+                title: titleInput.value.trim(),
+                amount: parseFloat(amountInput.value),
+                date: dateInput.value,
+                timestamp: new Date().toISOString()
+            };
+            
+            expenses.unshift(newExpense);
+            saveExpenses();
+            renderExpenses();
+            
+            // Reset form and close modal
+            addExpenseForm.reset();
+            addExpenseModal.style.display = 'none';
         }
-
-        // Update charts
-        function updateCharts(isRoundEnd = false) {
-            try {
-                if (!winLossChart || !profitChart) {
-                    console.error("Charts not initialized");
-                    return;
-                }
-                
-                // Update win/loss chart
-                winLossChart.data.datasets[0].data = [totalWins, totalLosses];
-                winLossChart.update('none'); // Use 'none' mode for better performance
-                
-                // Update profit chart
-                const labels = profitHistory.map(item => item.time);
-                const data = profitHistory.map(item => item.profit);
-                
-                // Show all data points when round ends or switching to charts tab
-                const maxDataPoints = isRoundEnd ? data.length : 20;
-                const recentLabels = labels.slice(0, maxDataPoints);
-                const recentData = data.slice(0, maxDataPoints);
-                
-                profitChart.data.labels = recentLabels;
-                profitChart.data.datasets[0].data = recentData;
-                
-                // Adjust chart options based on whether it's round end
-                if (isRoundEnd) {
-                    profitChart.options.scales.x.ticks.maxRotation = 45;
-                    profitChart.options.scales.x.ticks.minRotation = 45;
-                } else {
-                    profitChart.options.scales.x.ticks.maxRotation = 0;
-                    profitChart.options.scales.x.ticks.minRotation = 0;
-                }
-                
-                profitChart.update('none'); // Use 'none' mode for better performance
-                
-                console.log("Charts updated successfully");
-            } catch (error) {
-                console.error("Error updating charts:", error);
+        
+        // Toggle Favorite
+        function toggleFavorite(id) {
+            const noteIndex = notes.findIndex(note => note.id === id);
+            if (noteIndex !== -1) {
+                notes[noteIndex].isFavorite = !notes[noteIndex].isFavorite;
+                saveNotes();
+                renderNotes();
             }
         }
-
-        // Update balance display
-        function updateBalance() {
-            balanceElement.textContent = balance;
-            if (balance > 0) {
-                balanceElement.classList.add('glow');
-            } else {
-                balanceElement.classList.remove('glow');
-            }
-        }
-
-        // Add this function to handle the timer
-        function startTimer() {
-            // Clear any existing timer
-            if (timerInterval) {
-                clearInterval(timerInterval);
-            }
+        
+        // Delete Note
+        function deleteNote(id) {
+            const noteElement = document.querySelector(`[data-note-id="${id}"]`);
+            noteElement.classList.add('deleting');
             
-            timer = 60;
-            timerElement.textContent = timer;
-            timerElement.classList.remove('warning');
-            
-            // Reset color buttons
-            document.querySelectorAll('.color-btn').forEach(btn => {
-                btn.style.transform = '';
-                btn.style.boxShadow = '';
-                btn.disabled = false;
-                btn.style.opacity = '1';
-                btn.style.cursor = 'pointer';
-            });
-            
-            // Update result message
-            resultMessage.textContent = 'Place your bets! You can bet on any color multiple times.';
-            resultMessage.classList.remove('win', 'lose');
-            
-            timerInterval = setInterval(() => {
-                timer--;
-                timerElement.textContent = timer;
-                
-                if (timer <= 10) {
-                    timerElement.classList.add('warning');
-                    playSound('click');
-                    resultMessage.textContent = `Last ${timer} seconds to place your bets! You can still bet on any color.`;
-                }
-                
-                if (timer <= 5) {
-                    // Disable color buttons in last 5 seconds
-                    document.querySelectorAll('.color-btn').forEach(btn => {
-                        btn.disabled = true;
-                        btn.style.opacity = '0.5';
-                        btn.style.cursor = 'not-allowed';
-                    });
-                    resultMessage.textContent = 'No more bets allowed! Round ending soon...';
-                    resultMessage.classList.add('lose');
-                }
-                
-                if (timer <= 0) {
-                    clearInterval(timerInterval);
-                    endRound();
-                }
-            }, 1000);
-        }
-
-        // Add this function to handle round end
-        function endRound() {
-            const randomColor = colors[Math.floor(Math.random() * colors.length)];
-            
-            // Update result message before color change
-            resultMessage.textContent = 'Round ended! Revealing result...';
-            
-            // Add a small delay before showing the result
             setTimeout(() => {
-                resultColor.style.backgroundColor = randomColor;
-                resultColor.classList.add('win-animation');
+                notes = notes.filter(note => note.id !== id);
+                saveNotes();
+                renderNotes();
+            }, 300);
+        }
+        
+        // Delete Expense
+        function deleteExpense(id) {
+            const expenseElement = document.querySelector(`[data-expense-id="${id}"]`);
+            expenseElement.classList.add('deleting');
+            
+            setTimeout(() => {
+                expenses = expenses.filter(expense => expense.id !== id);
+                saveExpenses();
+                renderExpenses();
+            }, 300);
+        }
+        
+        // Render Notes
+        function renderNotes() {
+            const filteredNotes = filterNotes();
+            const sortedNotes = sortNotes(filteredNotes);
+            
+            // Render all notes
+            renderNotesList(sortedNotes, notesContainer, notesEmptyState);
+            
+            // Render favorite notes
+            const favoriteNotes = sortedNotes.filter(note => note.isFavorite);
+            renderNotesList(favoriteNotes, favoritesContainer, favoritesEmptyState);
+        }
+        
+        // Render Notes List
+        function renderNotesList(notesList, container, emptyState) {
+            // Show or hide empty state
+            if (notesList.length === 0) {
+                emptyState.style.display = 'flex';
                 
-                // Add to game history
-                addToGameHistory(randomColor);
+                // Clear container except empty state
+                while (container.firstChild && container.firstChild !== emptyState) {
+                    container.removeChild(container.firstChild);
+                }
+                return;
+            } else {
+                emptyState.style.display = 'none';
+            }
+            
+            // Get existing note elements
+            const existingNotes = {};
+            container.querySelectorAll('.card').forEach(el => {
+                const id = parseInt(el.getAttribute('data-note-id'));
+                if (id) existingNotes[id] = el;
+            });
+            
+            // Create fragment for new notes
+            const fragment = document.createDocumentFragment();
+            
+            // Add notes to fragment
+            notesList.forEach((note, index) => {
+                const existingElement = existingNotes[note.id];
+                delete existingNotes[note.id]; // Remove from tracking object
                 
-                // Process all pending bets
-                pendingBets.forEach(bet => {
-                    if (bet.color === randomColor) {
-                        const winnings = bet.amount * multipliers[bet.color];
-                        balance += winnings;
-                        totalWins++;
-                        currentStreak++;
-                        if (currentStreak > bestStreak) {
-                            bestStreak = currentStreak;
-                        }
-                        totalProfit += winnings;
-                        addToMyHistory(bet.color, randomColor, true, bet.amount);
-                        playSound('win');
-                    } else {
-                        totalLosses++;
-                        currentStreak = 0;
-                        totalProfit -= bet.amount;
-                        addToMyHistory(bet.color, randomColor, false, bet.amount);
-                        playSound('lose');
+                if (existingElement) {
+                    // Update existing element if needed
+                    const isFavoriteChanged = 
+                        (existingElement.classList.contains('favorite-card') && !note.isFavorite) ||
+                        (!existingElement.classList.contains('favorite-card') && note.isFavorite);
+                    
+                    if (isFavoriteChanged) {
+                        existingElement.classList.toggle('favorite-card', note.isFavorite);
+                        const favBtn = existingElement.querySelector('.favorite-btn');
+                        favBtn.classList.toggle('active', note.isFavorite);
+                        favBtn.innerHTML = `<i class="${note.isFavorite ? 'fas' : 'far'} fa-star"></i>`;
+                    }
+                    
+                    // Animate position change
+                    const currentIndex = Array.from(container.children).indexOf(existingElement);
+                    if (currentIndex !== index && currentIndex !== -1) {
+                        // Add animation class
+                        existingElement.style.animation = 'none';
+                        existingElement.offsetHeight; // Force reflow
+                        existingElement.style.animation = 'slideInRight 0.4s ease';
+                    }
+                    
+                    fragment.appendChild(existingElement);
+                } else {
+                    // Create new element
+                    const noteElement = createNoteElement(note);
+                    fragment.appendChild(noteElement);
+                }
+            });
+            
+            // Remove notes that are no longer in the list with animation
+            Object.values(existingNotes).forEach(el => {
+                el.classList.add('deleting');
+                setTimeout(() => {
+                    if (el.parentNode === container) {
+                        container.removeChild(el);
+                    }
+                }, 300);
+            });
+            
+            // Clear container except empty state and append fragment
+            while (container.firstChild && container.firstChild !== emptyState) {
+                container.removeChild(container.firstChild);
+            }
+            
+            container.insertBefore(fragment, emptyState);
+        }
+        
+        // Create Note Element
+        function createNoteElement(note) {
+            const noteElement = document.createElement('div');
+            noteElement.className = `card ${note.isFavorite ? 'favorite-card' : ''}`;
+            noteElement.setAttribute('data-note-id', note.id);
+            
+            const formattedDate = formatDate(new Date(note.timestamp));
+            
+            noteElement.innerHTML = `
+                <h3 class="card-title">${note.title}</h3>
+                <p class="card-subtitle">${note.content}</p>
+                <div class="card-timestamp">
+                    <i class="far fa-clock"></i> ${formattedDate}
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn favorite-btn ${note.isFavorite ? 'active' : ''}" onclick="toggleFavorite(${note.id})">
+                        <i class="${note.isFavorite ? 'fas' : 'far'} fa-star"></i>
+                    </button>
+                    <button class="action-btn delete-btn" onclick="deleteNote(${note.id})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `;
+            
+            return noteElement;
+        }
+        
+        // Render Expenses
+        function renderExpenses() {
+            // Clear container except empty state
+            while (expensesContainer.firstChild && expensesContainer.firstChild !== expensesEmptyState) {
+                expensesContainer.removeChild(expensesContainer.firstChild);
+            }
+            
+            // Show or hide empty state
+            if (expenses.length === 0) {
+                expensesEmptyState.style.display = 'flex';
+                return;
+            } else {
+                expensesEmptyState.style.display = 'none';
+            }
+            
+            // Sort expenses
+            const sortedExpenses = sortExpenses();
+            
+            // Add expenses to container
+            sortedExpenses.forEach(expense => {
+                const expenseElement = createExpenseElement(expense);
+                expensesContainer.insertBefore(expenseElement, expensesEmptyState);
+            });
+        }
+        
+        // Create Expense Element
+        function createExpenseElement(expense) {
+            const expenseElement = document.createElement('div');
+            expenseElement.className = 'card expense-card';
+            expenseElement.setAttribute('data-expense-id', expense.id);
+            
+            const formattedDate = formatDate(new Date(expense.timestamp));
+            const formattedAmount = new Intl.NumberFormat('en-IN', {
+                style: 'currency',
+                currency: 'INR'
+            }).format(expense.amount);
+            
+            expenseElement.innerHTML = `
+                <h3 class="card-title">${expense.title}</h3>
+                <p class="card-subtitle">${formattedAmount} - ${expense.date}</p>
+                <div class="card-timestamp">
+                    <i class="far fa-clock"></i> ${formattedDate}
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn delete-btn" onclick="deleteExpense(${expense.id})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `;
+            
+            return expenseElement;
+        }
+        
+        // Filter Notes
+        function filterNotes() {
+            if (!searchQuery) return notes;
+            
+            return notes.filter(note => {
+                const titleMatch = note.title.toLowerCase().includes(searchQuery.toLowerCase());
+                const contentMatch = note.content.toLowerCase().includes(searchQuery.toLowerCase());
+                return titleMatch || contentMatch;
+            });
+        }
+        
+        // Sort Notes
+        function sortNotes(notesList) {
+            return [...notesList].sort((a, b) => {
+                const dateA = new Date(a.timestamp);
+                const dateB = new Date(b.timestamp);
+                
+                if (sortOrder === 'newest') {
+                    return dateB - dateA;
+                } else {
+                    return dateA - dateB;
+                }
+            });
+        }
+        
+        // Sort Expenses
+        function sortExpenses() {
+            return [...expenses].sort((a, b) => {
+                const dateA = new Date(a.timestamp);
+                const dateB = new Date(b.timestamp);
+                
+                if (sortOrder === 'newest') {
+                    return dateB - dateA;
+                } else {
+                    return dateA - dateB;
+                }
+            });
+        }
+        
+        // Handle Search
+        function handleSearch() {
+            searchQuery = searchInput.value.trim();
+            renderNotes();
+        }
+        
+        // Handle Sort
+        function handleSort(order) {
+            if (sortOrder === order) return; // No change needed
+            
+            sortOrder = order;
+            
+            // Update active button
+            if (order === 'newest') {
+                sortNewestBtn.classList.add('active');
+                sortOldestBtn.classList.remove('active');
+            } else {
+                sortNewestBtn.classList.remove('active');
+                sortOldestBtn.classList.add('active');
+            }
+            
+            // Add animation to cards before re-sorting
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.style.animation = 'sortAnimation 0.5s ease';
+            });
+            
+            // Render after a short delay to allow animation to be visible
+            setTimeout(() => {
+                renderNotes();
+                renderExpenses();
+            }, 300);
+        }
+        
+        // Toggle Customization Panel
+        function toggleCustomizationPanel() {
+            customizationPanel.classList.toggle('open');
+        }
+        
+        // Set Theme
+        function setTheme(theme) {
+            document.body.classList.remove('light-theme', 'dark-theme');
+            if (theme === 'light') {
+                document.body.classList.add('light-theme');
+            }
+        }
+        
+        // Set Color
+        function setColor(color) {
+            document.body.classList.remove('purple-theme', 'green-theme', 'blue-theme');
+            if (color !== 'default') {
+                document.body.classList.add(`${color}-theme`);
+            }
+        }
+        
+        // Set Font Size
+        function setFontSize(size) {
+            document.body.classList.remove('small-text', 'large-text');
+            if (size !== 'normal') {
+                document.body.classList.add(`${size}-text`);
+            }
+        }
+        
+        // Update Active Option
+        function updateActiveOption(options, activeOption) {
+            options.forEach(option => {
+                option.classList.remove('active');
+            });
+            activeOption.classList.add('active');
+        }
+        
+        // Save Notes to Local Storage
+        function saveNotes() {
+            localStorage.setItem('quickNotes', JSON.stringify(notes));
+        }
+        
+        // Save Expenses to Local Storage
+        function saveExpenses() {
+            localStorage.setItem('quickExpenses', JSON.stringify(expenses));
+        }
+        
+        // Save User Preferences
+        function saveUserPreferences() {
+            const activeTheme = document.querySelector('.theme-option.active').getAttribute('data-theme');
+            const activeColor = document.querySelector('.color-option.active').getAttribute('data-color');
+            const activeFontSize = document.querySelector('.font-size-option.active').getAttribute('data-size');
+            
+            const preferences = {
+                theme: activeTheme,
+                color: activeColor,
+                fontSize: activeFontSize
+            };
+            
+            localStorage.setItem('quickNotesPreferences', JSON.stringify(preferences));
+        }
+        
+        // Load User Preferences
+        function loadUserPreferences() {
+            const preferences = JSON.parse(localStorage.getItem('quickNotesPreferences'));
+            
+            if (preferences) {
+                // Set theme
+                setTheme(preferences.theme);
+                document.querySelector(`.theme-option[data-theme="${preferences.theme}"]`).classList.add('active');
+                document.querySelector(`.theme-option[data-theme="${preferences.theme === 'light' ? 'dark' : 'light'}"]`).classList.remove('active');
+                
+                // Set color
+                setColor(preferences.color);
+                document.querySelectorAll('.color-option').forEach(option => {
+                    option.classList.remove('active');
+                    if (option.getAttribute('data-color') === preferences.color) {
+                        option.classList.add('active');
                     }
                 });
                 
-                // Update displays
-                updateBalance();
-                updateStatistics();
-                
-                // Update charts with complete data
-                updateCharts(true);
-                
-                // Clear pending bets
-                pendingBets = [];
-                
-                // Start next round after showing results
-                setTimeout(() => {
-                    resultColor.classList.remove('win-animation');
-                    resultColor.style.backgroundColor = '';
-                    startTimer();
-                }, 3000);
-            }, 1000);
+                // Set font size
+                setFontSize(preferences.fontSize);
+                document.querySelectorAll('.font-size-option').forEach(option => {
+                    option.classList.remove('active');
+                    if (option.getAttribute('data-size') === preferences.fontSize) {
+                        option.classList.add('active');
+                    }
+                });
+            }
         }
-
-        // Start the game
-        init();
-    </script>
-</body>
-</html>
+        
+        // Format Date
+        function formatDate(date) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            return date.toLocaleDateString('en-IN', options);
+        }
+        
+        // Initialize App
+        window.onload = initApp;
+        
+        // Make functions available globally
+        window.toggleFavorite = toggleFavorite;
+        window.deleteNote = deleteNote;
+        window.deleteExpense = deleteExpense;
+                        </script>
