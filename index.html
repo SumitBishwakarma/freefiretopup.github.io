@@ -131,29 +131,59 @@
             display: flex;
             flex: 1;
             max-width: 400px;
+            position: relative;
+            background-color: var(--bg-card);
+            border-radius: 25px;
+            box-shadow: 0 2px 8px var(--shadow-color);
+            transition: all 0.3s ease;
+        }
+        
+        .search-container:focus-within {
+            box-shadow: 0 4px 12px var(--shadow-color);
+            transform: translateY(-2px);
         }
         
         .search-container input {
             flex: 1;
-            padding: 8px 12px;
-            border-radius: 4px 0 0 4px;
-            border: 1px solid var(--border-color);
-            background-color: var(--bg-primary);
+            padding: 12px 20px;
+            border: none;
+            border-radius: 25px;
+            background-color: transparent;
             color: var(--text-primary);
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .search-container input::placeholder {
+            color: var(--text-muted);
         }
         
         .search-container button {
-            background-color: var(--primary-color);
-            color: white;
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: transparent;
+            color: var(--text-muted);
             border: none;
-            padding: 8px 12px;
-            border-radius: 0 4px 4px 0;
+            padding: 8px;
+            border-radius: 50%;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .search-container button:hover {
-            background-color: var(--primary-dark);
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .search-container button i {
+            font-size: 1.1rem;
         }
         
         .sort-container {
@@ -310,6 +340,7 @@
             border-left: 4px solid var(--primary-color);
             animation: slideInRight 0.4s ease;
             overflow: hidden;
+            padding-top: 35px;
         }
         
         .card::before {
@@ -351,9 +382,10 @@
         }
         
         .card-subtitle {
-            color: var(--text-secondary);
-            margin-bottom: 12px;
+            white-space: pre-wrap;
             word-break: break-word;
+            line-height: 1.5;
+            margin-bottom: 12px;
         }
         
         .card-timestamp {
@@ -789,6 +821,69 @@
                 width: 260px;
             }
         }
+
+        /* Add these new styles */
+        .card-category {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .category-general { border-left-color: var(--primary-color); }
+        .category-work { border-left-color: #2196f3; }
+        .category-personal { border-left-color: #4caf50; }
+        .category-ideas { border-left-color: #ff9800; }
+        .category-todo { border-left-color: #f44336; }
+
+        .edit-btn {
+            color: var(--text-muted);
+        }
+
+        .edit-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(77, 171, 247, 0.2);
+        }
+
+        /* Add search results count */
+        .search-results-count {
+            position: absolute;
+            right: 50px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            padding: 2px 8px;
+            background-color: var(--bg-secondary);
+            border-radius: 12px;
+            display: none;
+        }
+
+        .search-container.has-results .search-results-count {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -796,9 +891,12 @@
         <div class="container">
             <h1><i class="fas fa-sticky-note"></i> Quick Notes</h1>
             <div class="search-sort-container">
-                <div class="search-container">
+                <div class="search-container" id="search-container">
                     <input type="text" id="search-input" placeholder="Search notes...">
-                    <button id="search-btn"><i class="fas fa-search"></i></button>
+                    <span class="search-results-count" id="search-results-count"></span>
+                    <button id="search-btn" title="Search">
+                        <i class="fas fa-search"></i>
+                    </button>
                 </div>
                 <div class="sort-container">
                     <button id="sort-newest" class="sort-btn active"><i class="fas fa-clock"></i> Newest</button>
@@ -865,10 +963,50 @@
                     <input type="text" id="note-title" required>
                 </div>
                 <div class="form-group">
+                    <label for="note-category">Category</label>
+                    <select id="note-category" required>
+                        <option value="general">General</option>
+                        <option value="work">Work</option>
+                        <option value="personal">Personal</option>
+                        <option value="ideas">Ideas</option>
+                        <option value="todo">To-Do</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label for="note-content">Description</label>
                     <textarea id="note-content" rows="4" required></textarea>
                 </div>
                 <button type="submit" class="btn-primary">Save Note</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Note Modal -->
+    <div class="modal" id="edit-note-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Edit Note</h2>
+            <form id="edit-note-form">
+                <input type="hidden" id="edit-note-id">
+                <div class="form-group">
+                    <label for="edit-note-title">Title</label>
+                    <input type="text" id="edit-note-title" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-note-category">Category</label>
+                    <select id="edit-note-category" required>
+                        <option value="general">General</option>
+                        <option value="work">Work</option>
+                        <option value="personal">Personal</option>
+                        <option value="ideas">Ideas</option>
+                        <option value="todo">To-Do</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="edit-note-content">Description</label>
+                    <textarea id="edit-note-content" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn-primary">Update Note</button>
             </form>
         </div>
     </div>
@@ -983,6 +1121,14 @@
         let sortOrder = 'newest';
         let searchQuery = '';
         
+        // Add these new variables at the top with other DOM elements
+        const editNoteModal = document.getElementById('edit-note-modal');
+        const editNoteForm = document.getElementById('edit-note-form');
+        const editNoteId = document.getElementById('edit-note-id');
+        const editNoteTitle = document.getElementById('edit-note-title');
+        const editNoteCategory = document.getElementById('edit-note-category');
+        const editNoteContent = document.getElementById('edit-note-content');
+        
         // Initialize App
         function initApp() {
             renderNotes();
@@ -1024,10 +1170,8 @@
             
             // Search
             searchBtn.addEventListener('click', handleSearch);
-            searchInput.addEventListener('keyup', (e) => {
-                if (e.key === 'Enter') {
-                    handleSearch();
-                }
+            searchInput.addEventListener('input', () => {
+                handleSearch();
             });
             
             // Sort
@@ -1067,6 +1211,9 @@
                     saveUserPreferences();
                 });
             });
+            
+            // Edit Note
+            editNoteForm.addEventListener('submit', handleEditNote);
         }
         
         // Switch Tab
@@ -1100,12 +1247,14 @@
             e.preventDefault();
             
             const titleInput = document.getElementById('note-title');
+            const categoryInput = document.getElementById('note-category');
             const contentInput = document.getElementById('note-content');
             
             const newNote = {
                 id: Date.now(),
-                title: titleInput.value.trim(),
-                content: contentInput.value.trim(),
+                title: sanitizeText(titleInput.value.trim()),
+                category: categoryInput.value,
+                content: sanitizeText(contentInput.value.trim()),
                 timestamp: new Date().toISOString(),
                 isFavorite: false
             };
@@ -1114,7 +1263,6 @@
             saveNotes();
             renderNotes();
             
-            // Reset form and close modal
             addNoteForm.reset();
             addNoteModal.style.display = 'none';
         }
@@ -1272,18 +1420,22 @@
         // Create Note Element
         function createNoteElement(note) {
             const noteElement = document.createElement('div');
-            noteElement.className = `card ${note.isFavorite ? 'favorite-card' : ''}`;
+            noteElement.className = `card ${note.isFavorite ? 'favorite-card' : ''} category-${note.category}`;
             noteElement.setAttribute('data-note-id', note.id);
             
             const formattedDate = formatDate(new Date(note.timestamp));
             
             noteElement.innerHTML = `
+                <div class="card-category">${note.category}</div>
                 <h3 class="card-title">${note.title}</h3>
-                <p class="card-subtitle">${note.content}</p>
+                <div class="card-subtitle">${note.content}</div>
                 <div class="card-timestamp">
                     <i class="far fa-clock"></i> ${formattedDate}
                 </div>
                 <div class="card-actions">
+                    <button class="action-btn edit-btn" onclick="editNote(${note.id})">
+                        <i class="fas fa-edit"></i>
+                    </button>
                     <button class="action-btn favorite-btn ${note.isFavorite ? 'active' : ''}" onclick="toggleFavorite(${note.id})">
                         <i class="${note.isFavorite ? 'fas' : 'far'} fa-star"></i>
                     </button>
@@ -1391,6 +1543,22 @@
         // Handle Search
         function handleSearch() {
             searchQuery = searchInput.value.trim();
+            const filteredNotes = filterNotes();
+            
+            // Update search results count
+            const resultsCount = document.getElementById('search-results-count');
+            const searchContainer = document.getElementById('search-container');
+            
+            if (searchQuery && filteredNotes.length > 0) {
+                resultsCount.textContent = `${filteredNotes.length} results`;
+                searchContainer.classList.add('has-results');
+            } else if (searchQuery && filteredNotes.length === 0) {
+                resultsCount.textContent = 'No results';
+                searchContainer.classList.add('has-results');
+            } else {
+                searchContainer.classList.remove('has-results');
+            }
+            
             renderNotes();
         }
         
@@ -1520,6 +1688,52 @@
             return date.toLocaleDateString('en-IN', options);
         }
         
+        // Edit Note
+        function editNote(id) {
+            const note = notes.find(note => note.id === id);
+            if (note) {
+                editNoteId.value = note.id;
+                editNoteTitle.value = note.title;
+                editNoteCategory.value = note.category;
+                editNoteContent.value = note.content;
+                editNoteModal.style.display = 'block';
+            }
+        }
+        
+        function handleEditNote(e) {
+            e.preventDefault();
+            
+            const id = parseInt(editNoteId.value);
+            const noteIndex = notes.findIndex(note => note.id === id);
+            
+            if (noteIndex !== -1) {
+                notes[noteIndex] = {
+                    ...notes[noteIndex],
+                    title: sanitizeText(editNoteTitle.value.trim()),
+                    category: editNoteCategory.value,
+                    content: sanitizeText(editNoteContent.value.trim()),
+                    timestamp: new Date().toISOString()
+                };
+                
+                saveNotes();
+                renderNotes();
+                
+                editNoteForm.reset();
+                editNoteModal.style.display = 'none';
+            }
+        }
+        
+        // Add this function for text sanitization
+        function sanitizeText(text) {
+            return text
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;')
+                .replace(/\n/g, '<br>');
+        }
+        
         // Initialize App
         window.onload = initApp;
         
@@ -1527,4 +1741,7 @@
         window.toggleFavorite = toggleFavorite;
         window.deleteNote = deleteNote;
         window.deleteExpense = deleteExpense;
-                        </script>
+        window.editNote = editNote;
+    </script>
+</body>
+</html>
