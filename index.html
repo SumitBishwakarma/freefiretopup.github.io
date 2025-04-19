@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QuickNotes Pro - Clean & Refined</title>
+    <title>Finote Pro - Clean & Refined</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -40,10 +40,11 @@
             --scrollbar-thumb: #4b5563;
             --scrollbar-track: var(--bg-primary);
 
+            /* Default Accent Color (Purple) */
             --primary-color: #8b5cf6;
             --primary-dark: #7c3aed;
             --primary-light: rgba(139, 92, 246, 0.1);
-            --accent-color: #ec4899;
+            --accent-color: #ec4899; /* Still used for Expense border maybe */
             --favorite-color: #f59e0b;
             --success-color: #22c55e;
             --error-color: #ef4444;
@@ -66,12 +67,13 @@
             --focus-ring-color: rgba(139, 92, 246, 0.3);
         }
 
-        /* Other Themes (keep structure) */
+        /* Other Themes (CSS remains, but controls are removed) */
         body.green-theme { --primary-color: #22c55e; --primary-dark: #16a34a; --accent-color: #f97316; --primary-light: rgba(34, 197, 94, 0.1); --focus-ring-color: rgba(34, 197, 94, 0.4); }
         body.blue-theme { --primary-color: #3b82f6; --primary-dark: #2563eb; --accent-color: #f43f5e; --primary-light: rgba(59, 130, 246, 0.1); --focus-ring-color: rgba(59, 130, 246, 0.4); }
 
-        /* Font Size Themes (unchanged) */
-        body.large-text { /* ... */ } body.small-text { /* ... */ }
+        /* Font Size Themes (CSS remains, but controls are removed) */
+        body.large-text { /* ... (Assuming styles exist elsewhere or just override --font-size-base etc.) ... */ }
+        body.small-text { /* ... (Assuming styles exist elsewhere or just override --font-size-base etc.) ... */ }
 
         /* --- General Styles --- */
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-primary); -webkit-tap-highlight-color: transparent; }
@@ -82,7 +84,7 @@
 
         /* --- Header --- */
         header {
-            background-color: var(--bg-secondary); /* Back to solid color */
+            background-color: var(--bg-secondary);
             color: var(--text-primary);
             padding: 20px 0;
             box-shadow: 0 4px 15px -5px var(--shadow-color);
@@ -90,6 +92,7 @@
             border-bottom: 1px solid var(--border-color);
             transition: background-color var(--transition-std), border-color var(--transition-std);
         }
+        /* Changed H1 text (indirectly via HTML) */
         header h1 { text-align: center; font-size: var(--font-size-xl); margin-bottom: 25px; color: var(--primary-color); font-weight: var(--font-bold); letter-spacing: -0.5px; transition: color var(--transition-std); }
         .header-controls { display: flex; flex-wrap: wrap; gap: 20px; align-items: center; margin-bottom: 20px; }
 
@@ -184,7 +187,7 @@
         @keyframes popIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
         .card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px -6px var(--shadow-color); background-color: var(--bg-hover); }
-        .expense-card { border-left: 4px solid var(--accent-color); }
+        .expense-card { border-left: 4px solid var(--accent-color); } /* Still uses accent-color */
         .favorite-card { border-left: 4px solid var(--favorite-color); }
 
         .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; gap: 10px; }
@@ -206,12 +209,12 @@
         /* Category back to simple icon + text */
         .card-category-info { display: flex; align-items: center; gap: 6px; font-size: var(--font-size-xs); color: var(--text-muted); font-weight: var(--font-medium); text-transform: capitalize; }
         .card-category-info i { font-size: .9em; color: var(--primary-color); transition: color var(--transition-std); }
+        /* Keep category specific colors if desired, they are independent of the main theme accent */
         .category-work i { color: #3b82f6; }
         .category-personal i { color: #16a34a; }
         .category-ideas i { color: #f59e0b; }
         .category-todo i { color: #ef4444; }
         .category-general i { color: var(--primary-color); }
-
 
         .card-timestamp { font-size: var(--font-size-xs); color: var(--text-muted); display: flex; align-items: center; white-space: nowrap; }
         .card-timestamp i { margin-right: 5px; font-size: .9em; }
@@ -286,7 +289,7 @@
         .btn-danger { background-color: var(--error-color); color: #fff; }
         .btn-danger:hover { background-color: #dc2626; transform: translateY(-1px); }
 
-        /* --- Customization Panel (Simple) --- */
+        /* --- Customization Panel (Simplified) --- */
         .customization-panel { position: fixed; left: -350px; top: 0; width: 320px; height: 100%; background-color: var(--bg-secondary); box-shadow: 4px 0 20px -5px var(--shadow-color); z-index: 1001; transition: left .4s cubic-bezier(.25, .8, .25, 1), background-color var(--transition-std), border-color var(--transition-std); padding: 25px; overflow: hidden; border-right: 1px solid var(--border-color); display: flex; flex-direction: column; }
         .customization-panel.open { left: 0; }
         .panel-scroll-content { flex-grow: 1; overflow-y: auto; margin-right: -15px; padding-right: 15px; }
@@ -349,7 +352,7 @@
 <body>
     <header>
         <div class="container">
-            <h1><i class="fas fa-bolt"></i> QuickNotes Pro</h1>
+            <h1><i class="fas fa-bolt"></i> Finote Pro</h1>
             <div class="header-controls">
                 <div class="search-container" id="search-container">
                      <i class="fas fa-search search-icon"></i>
@@ -430,9 +433,7 @@
              <div class="panel-section">
                 <h4>Appearance</h4>
                  <label style="font-size: var(--font-size-xs); margin-bottom: 10px;">Theme</label><div class="options-grid theme-options"><button class="option-btn active" data-theme="dark"><i class="fas fa-moon"></i> Dark</button><button class="option-btn" data-theme="light"><i class="fas fa-sun"></i> Light</button></div>
-                 <label style="font-size: var(--font-size-xs); margin-top: 15px; margin-bottom: 10px;">Accent Color</label><div class="options-grid color-options"><button class="option-btn active" data-color="default"><span class="color-preview" style="background-color: #8b5cf6;"></span>Default</button><button class="option-btn" data-color="green"><span class="color-preview" style="background-color: #22c55e;"></span>Green</button><button class="option-btn" data-color="blue"><span class="color-preview" style="background-color: #3b82f6;"></span>Blue</button></div>
-                 <label style="font-size: var(--font-size-xs); margin-top: 15px; margin-bottom: 10px;">Font Size</label><div class="options-grid font-size-options"><button class="option-btn" data-size="small">Small</button><button class="option-btn active" data-size="normal">Normal</button><button class="option-btn" data-size="large">Large</button></div>
-             </div>
+                 </div>
              <div class="panel-section">
                  <h4>Data Management</h4>
                 <div class="data-actions"><input type="file" id="import-file-input" accept=".json"><button class="btn btn-secondary" id="import-btn" title="Import notes and expenses from a JSON file"><i class="fas fa-upload"></i> Import Data</button><button class="btn btn-secondary" id="export-btn" title="Export all notes and expenses to a JSON file"><i class="fas fa-download"></i> Export Data</button></div>
@@ -441,12 +442,13 @@
      </div>
 
     <script defer>
-        // --- JavaScript (Cleaned & Refined) ---
+        // --- JavaScript (Cleaned & Refined with modifications) ---
 
         // --- Constants & Global State ---
-        const NOTES_KEY = 'quickNotesData_v6'; // Incremented version
-        const EXPENSES_KEY = 'quickExpensesData_v6';
-        const PREFS_KEY = 'quickNotesPrefs_v6';
+        // Changed Keys slightly to avoid conflicts with old version if needed
+        const NOTES_KEY = 'finoteNotesData_v7';
+        const EXPENSES_KEY = 'finoteExpensesData_v7';
+        const PREFS_KEY = 'finotePrefs_v7'; // Only theme, tab, sort order now
         const CATEGORY_ICONS = { general: 'fa-solid fa-lightbulb', work: 'fa-solid fa-briefcase', personal: 'fa-solid fa-user', ideas: 'fa-solid fa-wand-magic-sparkles', todo: 'fa-solid fa-list-check' };
 
         let notes = []; let expenses = []; let currentTab = 'notes'; let sortOrder = 'newest'; let searchQuery = '';
@@ -465,21 +467,23 @@
              addExpenseForm: document.getElementById('add-expense-form'), expenseModalTitle: document.getElementById('expense-modal-title'), expenseTitleInput: document.getElementById('expense-title'), expenseAmountInput: document.getElementById('expense-amount'), expenseDateInput: document.getElementById('expense-date'),
              addFab: document.getElementById('add-fab'), settingsBtn: document.getElementById('settings-btn'),
              customizationPanel: document.getElementById('customization-panel'), closePanel: document.getElementById('close-panel'),
-             themeOptions: document.querySelectorAll('.theme-options .option-btn'), colorOptions: document.querySelectorAll('.color-options .option-btn'), fontSizeOptions: document.querySelectorAll('.font-size-options .option-btn'),
+             themeOptions: document.querySelectorAll('.theme-options .option-btn'), // Keep theme options
+             // Removed colorOptions and fontSizeOptions from cache
              importBtn: document.getElementById('import-btn'), exportBtn: document.getElementById('export-btn'), importFileInput: document.getElementById('import-file-input'),
              totalExpensesContainer: document.getElementById('total-expenses-container'), totalExpensesDisplay: document.querySelector('.total-expenses-display'), totalExpensesAmount: document.getElementById('total-expenses-amount'),
              // Error message placeholders (optional)
              titleError: document.getElementById('title-error'), contentError: document.getElementById('content-error'), categoryError: document.getElementById('category-error'),
              exTitleError: document.getElementById('ex-title-error'), exAmountError: document.getElementById('ex-amount-error'), exDateError: document.getElementById('ex-date-error'),
-             // clearAllDataBtn: document.getElementById('clear-all-data-btn') // Optional
          };
 
         // --- Initialization ---
          function initApp() {
-             console.log("🚀 QuickNotes Pro Clean Initializing...");
+             // Changed App Name in Log
+             console.log("🚀 Finote Pro Clean Initializing...");
              loadUserPreferences(); loadData(); setupEventListeners();
              switchTab(currentTab, true); renderAll(); updateSelectArrows();
-             console.log("👍 QuickNotes Pro Clean Ready!");
+             // Changed App Name in Log
+             console.log("👍 Finote Pro Clean Ready!");
          }
 
         // --- Data Handling (Robust) ---
@@ -488,24 +492,40 @@
         function getDataFromLocalStorage(key, defaultValue) { try { const d = localStorage.getItem(key); return d ? JSON.parse(d) : defaultValue; } catch(e) { console.error("LS Read Error:", key, e); return defaultValue; } }
         function saveDataToLocalStorage(key, data) { try { localStorage.setItem(key, JSON.stringify(data)); } catch(e) { console.error("LS Write Error:", key, e); showErrorToast("Could not save data."); } }
 
-        // --- Preferences (Robust) ---
+        // --- Preferences (Simplified) ---
         function loadUserPreferences() {
-            const prefs = getDataFromLocalStorage(PREFS_KEY, { theme: 'dark', color: 'default', size: 'normal', currentTab: 'notes', sortOrder: 'newest' });
-            setTheme(prefs.theme); setColor(prefs.color); setFontSize(prefs.size);
-            currentTab = prefs.currentTab || 'notes'; sortOrder = prefs.sortOrder || 'newest';
+            // Only load theme, tab, sortOrder
+            const prefs = getDataFromLocalStorage(PREFS_KEY, { theme: 'dark', currentTab: 'notes', sortOrder: 'newest' });
+            setTheme(prefs.theme);
+            currentTab = prefs.currentTab || 'notes';
+            sortOrder = prefs.sortOrder || 'newest';
             updateActiveOption(Elements.themeOptions, document.querySelector(`.theme-options .option-btn[data-theme="${prefs.theme}"]`));
-            updateActiveOption(Elements.colorOptions, document.querySelector(`.color-options .option-btn[data-color="${prefs.color}"]`));
-            updateActiveOption(Elements.fontSizeOptions, document.querySelector(`.font-size-options .option-btn[data-size="${prefs.size}"]`));
-            Elements.sortNewestBtn.classList.toggle('active', sortOrder === 'newest'); Elements.sortOldestBtn.classList.toggle('active', sortOrder === 'oldest');
+            // Removed color and font size loading
+            Elements.sortNewestBtn.classList.toggle('active', sortOrder === 'newest');
+            Elements.sortOldestBtn.classList.toggle('active', sortOrder === 'oldest');
         }
         function saveUserPreferences() {
-             const currentPrefs = { theme: document.body.classList.contains('light-theme') ? 'light' : 'dark', color: document.body.className.match(/(purple|green|blue)-theme/)?.[1] || 'default', size: document.body.className.match(/(small|large)-text/)?.[1] || 'normal', currentTab: currentTab, sortOrder: sortOrder };
+             // Only save theme, tab, sortOrder
+             const currentPrefs = {
+                 theme: document.body.classList.contains('light-theme') ? 'light' : 'dark',
+                 currentTab: currentTab,
+                 sortOrder: sortOrder
+             };
              saveDataToLocalStorage(PREFS_KEY, currentPrefs);
         }
-        function setTheme(theme) { document.body.classList.toggle('light-theme', theme === 'light'); updateSelectArrows(); }
-        function setColor(color) { document.body.classList.remove('purple-theme', 'green-theme', 'blue-theme'); if (color !== 'default') document.body.classList.add(`${color}-theme`); updateSelectArrows(); }
-        function setFontSize(size) { document.body.classList.remove('small-text', 'large-text'); if (size !== 'normal') document.body.classList.add(`${size}-text`); }
-        function updateActiveOption(optionsNodeList, activeOptionElement) { if (!activeOptionElement) return; optionsNodeList.forEach(o => o.classList.remove('active')); activeOptionElement.classList.add('active'); }
+        function setTheme(theme) {
+            document.body.classList.toggle('light-theme', theme === 'light');
+            // Ensure other theme classes are removed if necessary (though controls are gone)
+            document.body.classList.remove('green-theme', 'blue-theme');
+            updateSelectArrows();
+        }
+        // Removed setColor and setFontSize functions entirely
+
+        function updateActiveOption(optionsNodeList, activeOptionElement) {
+            if (!activeOptionElement || !optionsNodeList) return;
+            optionsNodeList.forEach(o => o.classList.remove('active'));
+            activeOptionElement.classList.add('active');
+        }
         function updateSelectArrows() { const mc=getComputedStyle(document.body).getPropertyValue('--text-muted').trim(); const sc=encodeURIComponent(mc); const si=`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='${sc}'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>`; const bu=`url("data:image/svg+xml,${si}")`; document.querySelectorAll('select').forEach(sel=>{sel.style.backgroundImage=bu;sel.style.transition='background-image var(--transition-fast), border-color var(--transition-fast), background-color var(--transition-fast), box-shadow var(--transition-fast)';}); }
 
         // --- Event Listener Setup ---
@@ -519,17 +539,24 @@
              Elements.searchInput.addEventListener('input', debounce(performSearch, 300)); Elements.searchClearBtn.addEventListener('click', clearSearch);
              Elements.sortNewestBtn.addEventListener('click', () => handleSort('newest')); Elements.sortOldestBtn.addEventListener('click', () => handleSort('oldest'));
              Elements.settingsBtn.addEventListener('click', toggleCustomizationPanel); Elements.closePanel.addEventListener('click', toggleCustomizationPanel);
-             Elements.themeOptions.forEach(o => o.addEventListener('click', () => handlePreferenceChange(o, Elements.themeOptions, setTheme, 'theme'))); Elements.colorOptions.forEach(o => o.addEventListener('click', () => handlePreferenceChange(o, Elements.colorOptions, setColor, 'color'))); Elements.fontSizeOptions.forEach(o => o.addEventListener('click', () => handlePreferenceChange(o, Elements.fontSizeOptions, setFontSize, 'size')));
+             // Only setup listener for theme options
+             Elements.themeOptions.forEach(o => o.addEventListener('click', () => handlePreferenceChange(o, Elements.themeOptions, setTheme, 'theme')));
+             // Removed listeners for color and font size options
              Elements.importBtn.addEventListener('click', () => Elements.importFileInput.click()); Elements.importFileInput.addEventListener('change', handleImportData); Elements.exportBtn.addEventListener('click', handleExportData);
              document.body.addEventListener('click', handleCardActionDelegation);
              document.addEventListener('keydown', handleGlobalKeydown);
-             // Optional: if (Elements.clearAllDataBtn) Elements.clearAllDataBtn.addEventListener('click', handleClearAllData);
-         }
+        }
 
         // --- Event Handlers ---
         function handleGlobalKeydown(e) { if (e.key === 'Escape') { const om = document.querySelector('.modal.open'); if (om) closeModal(om); else if (Elements.customizationPanel.classList.contains('open')) toggleCustomizationPanel(); } }
         function handleAddButtonClick(e) { elementThatTriggeredModal = e.currentTarget; if (currentTab === 'expenses') openExpenseModal(); else openNoteModal(); }
-        function handlePreferenceChange(clickedOption, allOptions, setterFunction, dataType) { const v = clickedOption.dataset[dataType]; setterFunction(v); updateActiveOption(allOptions, clickedOption); saveUserPreferences(); }
+        // Simplified preference change handler (only for theme now)
+        function handlePreferenceChange(clickedOption, allOptions, setterFunction, dataType) {
+            const v = clickedOption.dataset[dataType];
+            setterFunction(v); // Calls setTheme
+            updateActiveOption(allOptions, clickedOption);
+            saveUserPreferences();
+        }
         function handleCardActionDelegation(e) {
             const targetButton = e.target.closest('.action-btn'); if (!targetButton) return;
             const card = targetButton.closest('.card'); if (!card) return;
@@ -556,18 +583,18 @@
         function validateExpenseForm() { const title = Elements.expenseTitleInput.value.trim(); const amount = Elements.expenseAmountInput.value; const date = Elements.expenseDateInput.value; if (!title || !amount || isNaN(parseFloat(amount)) || parseFloat(amount) <= 0 || !date) { showErrorToast("Please fill all expense fields with valid data.", 3000); return false; } return true; }
 
         // --- Core Logic: Notes ---
-        function openNoteModal(id = null) { /* ... (same as 'Enhanced' version, reset form) ... */ if (id) { const note = notes.find(n => n.id === id); if (!note) { showErrorToast("Note not found."); return; } Elements.noteModalTitle.textContent = "Edit Note"; Elements.noteIdInput.value = note.id; Elements.noteTitleInput.value = decodeSanitizedText(note.title); Elements.noteCategoryInput.value = note.category; Elements.noteContentInput.value = decodeSanitizedText(note.content); Elements.noteModal.querySelector('.btn-primary').innerHTML = '<i class="fas fa-save"></i> Update Note'; } else { Elements.noteModalTitle.textContent = "Add Note"; Elements.noteIdInput.value = ''; Elements.noteForm.reset(); Elements.noteModal.querySelector('.btn-primary').innerHTML = '<i class="fas fa-save"></i> Save Note'; } openModal(Elements.noteModal, Elements.noteTitleInput); }
+        function openNoteModal(id = null) { /* ... (logic remains the same) ... */ if (id) { const note = notes.find(n => n.id === id); if (!note) { showErrorToast("Note not found."); return; } Elements.noteModalTitle.textContent = "Edit Note"; Elements.noteIdInput.value = note.id; Elements.noteTitleInput.value = decodeSanitizedText(note.title); Elements.noteCategoryInput.value = note.category; Elements.noteContentInput.value = decodeSanitizedText(note.content); Elements.noteModal.querySelector('.btn-primary').innerHTML = '<i class="fas fa-save"></i> Update Note'; } else { Elements.noteModalTitle.textContent = "Add Note"; Elements.noteIdInput.value = ''; Elements.noteForm.reset(); Elements.noteModal.querySelector('.btn-primary').innerHTML = '<i class="fas fa-save"></i> Save Note'; } openModal(Elements.noteModal, Elements.noteTitleInput); }
         function handleSaveNote(e) { e.preventDefault(); if (!validateNoteForm()) return; const id = parseInt(Elements.noteIdInput.value); const title = sanitizeText(Elements.noteTitleInput.value.trim()); const category = Elements.noteCategoryInput.value; const content = sanitizeText(Elements.noteContentInput.value.trim()); const timestamp = new Date().toISOString(); let isNew = false; let affectedNoteTitle = title; if (id) { const index = notes.findIndex(n => n.id === id); if (index > -1) { notes[index] = { ...notes[index], title, category, content, timestamp }; affectedNoteTitle = notes[index].title; } else { showErrorToast("Error updating note."); return; } } else { const newNote = { id: Date.now(), title, category, content, timestamp, isFavorite: false }; notes.unshift(newNote); isNew = true; } saveData(); closeModal(Elements.noteModal); renderNotes(); showToast(`Note "${decodeSanitizedText(affectedNoteTitle) || 'Untitled'}" ${isNew ? 'added' : 'updated'}.`); }
         function toggleFavorite(id, iconElement) { const index = notes.findIndex(note => note.id === id); if (index > -1) { notes[index].isFavorite = !notes[index].isFavorite; if (iconElement) { iconElement.className = `fa-${notes[index].isFavorite ? 'solid' : 'regular'} fa-star`; const btn = iconElement.closest('.favorite-btn'); if(btn) btn.classList.toggle('active', notes[index].isFavorite); const card = iconElement.closest('.card'); if(card) card.classList.toggle('favorite-card', notes[index].isFavorite); } saveData(); renderNotes(); } } // Re-render needed for both tabs
         function deleteNote(id, cardElement) { const noteIndex = notes.findIndex(n => n.id === id); if (noteIndex === -1) return; const deletedTitle = notes[noteIndex].title; cardElement.classList.add('deleting'); setTimeout(() => { notes = notes.filter(note => note.id !== id); saveData(); renderNotes(); showToast(`Note "${decodeSanitizedText(deletedTitle) || 'Untitled'}" deleted.`); }, 500); } // Match animation duration
 
         // --- Core Logic: Expenses ---
-        function openExpenseModal() { /* ... (same as 'Enhanced' version, reset form) ... */ Elements.expenseModalTitle.textContent = "Add Expense"; Elements.addExpenseForm.reset(); Elements.expenseDateInput.valueAsDate = new Date(); openModal(Elements.addExpenseModal, Elements.expenseTitleInput); }
+        function openExpenseModal() { /* ... (logic remains the same) ... */ Elements.expenseModalTitle.textContent = "Add Expense"; Elements.addExpenseForm.reset(); Elements.expenseDateInput.valueAsDate = new Date(); openModal(Elements.addExpenseModal, Elements.expenseTitleInput); }
         function handleAddExpense(e) { e.preventDefault(); if (!validateExpenseForm()) return; const title = Elements.expenseTitleInput.value.trim(); const amount = parseFloat(Elements.expenseAmountInput.value); const date = Elements.expenseDateInput.value; const timestamp = new Date().toISOString(); const newExpense = { id: Date.now(), title, amount, date, timestamp }; expenses.unshift(newExpense); saveData(); closeModal(Elements.addExpenseModal); renderExpenses(); showToast(`Expense "${title || 'Untitled'}" added.`); }
         function deleteExpense(id, cardElement) { const expenseIndex = expenses.findIndex(ex => ex.id === id); if (expenseIndex === -1) return; const deletedTitle = expenses[expenseIndex].title; cardElement.classList.add('deleting'); setTimeout(() => { expenses = expenses.filter(ex => ex.id !== id); saveData(); renderExpenses(); showToast(`Expense "${deletedTitle || 'Untitled'}" deleted.`); }, 500); } // Match animation duration
 
         // --- Search & Sort ---
-        function performSearch() { searchQuery = Elements.searchInput.value.trim().toLowerCase(); Elements.searchContainer.classList.toggle('has-text', searchQuery.length > 0); if (currentTab === 'notes' || currentTab === 'favorites') { renderNotes(); } else if (currentTab === 'expenses') { renderExpenses(); /* Add expense filtering if needed */ } }
+        function performSearch() { searchQuery = Elements.searchInput.value.trim().toLowerCase(); Elements.searchContainer.classList.toggle('has-text', searchQuery.length > 0); if (currentTab === 'notes' || currentTab === 'favorites') { renderNotes(); } else if (currentTab === 'expenses') { renderExpenses(); /* Expense filtering remains basic */ } }
         function clearSearch() { Elements.searchInput.value = ''; performSearch(); Elements.searchInput.focus(); }
         function handleSort(order) { if (sortOrder === order) return; sortOrder = order; Elements.sortNewestBtn.classList.toggle('active', order === 'newest'); Elements.sortOldestBtn.classList.toggle('active', order === 'oldest'); saveUserPreferences(); renderAll(); }
 
@@ -595,7 +622,7 @@
 
         // --- Tab Switching (Simple) ---
         function switchTab(tabId, isInitialLoad = false) {
-            if (!tabId) return; currentTab = tabId; saveUserPreferences();
+            if (!tabId) return; currentTab = tabId; saveUserPreferences(); // Save pref on switch
             Elements.tabs.forEach(tab => { const selected = tab.dataset.tab === tabId; tab.classList.toggle('active', selected); tab.setAttribute('aria-selected', selected); });
             Elements.tabContents.forEach(content => { const active = content.id === `${tabId}-content`; content.classList.toggle('active', active); });
             Elements.totalExpensesContainer.style.display = (tabId === 'expenses') ? 'block' : 'none';
@@ -604,10 +631,83 @@
             if (!isInitialLoad && searchQuery) { performSearch(); } // Re-filter if needed
         }
 
-        // --- Data Management (Import/Export - Same logic) ---
-        function handleExportData() { try { /* ... (same export logic) ... */ const dE={version:6,exportedAt:new Date().toISOString(),notes:notes,expenses:expenses,preferences:getDataFromLocalStorage(PREFS_KEY,{})}; const dS=JSON.stringify(dE,null,2); const b=new Blob([dS],{type:'application/json'}); const u=URL.createObjectURL(b); const l=document.createElement('a'); const tS=new Date().toISOString().slice(0,19).replace('T','_').replace(/:/g,'-'); l.download=`QuickNotesPro_Backup_${tS}.json`; l.href=u; l.click(); URL.revokeObjectURL(u); showToast("Data exported successfully."); } catch(e){console.error("Export failed:",e);showErrorToast("Data export failed.");} }
-        function handleImportData(event) { /* ... (same import logic) ... */ const f=event.target.files[0];if(!f)return;const r=new FileReader();r.onload=(e)=>{try{const iD=JSON.parse(e.target.result);if(!iD||(!Array.isArray(iD.notes)&&!Array.isArray(iD.expenses))){throw new Error("Invalid file structure.");}const nC=iD.notes?.length||0;const eC=iD.expenses?.length||0;showConfirmationModal(`Import ${nC} notes and ${eC} expenses? This will REPLACE current data.`,()=>{notes=iD.notes||[];expenses=iD.expenses||[];if(iD.preferences){saveDataToLocalStorage(PREFS_KEY,iD.preferences);loadUserPreferences();}saveData();renderAll();switchTab(currentTab||'notes',true);showToast("Data imported successfully.");});}catch(err){console.error("Import failed:",err);showErrorToast(`Import failed: ${err.message||'Could not parse file.'}`);}finally{Elements.importFileInput.value='';}};r.onerror=()=>{showErrorToast("Failed to read file.");Elements.importFileInput.value='';};r.readAsText(f); }
-        // function handleClearAllData() { /* ... (Optional: Keep confirmation logic) ... */ }
+        // --- Data Management (Import/Export - Updated filename) ---
+        function handleExportData() {
+            try {
+                // Simplified preferences object for export
+                const currentPrefs = getDataFromLocalStorage(PREFS_KEY, {});
+                const dE = {
+                    version: 7, // Updated version marker if needed
+                    exportedAt: new Date().toISOString(),
+                    notes: notes,
+                    expenses: expenses,
+                    preferences: { // Only export relevant prefs
+                        theme: currentPrefs.theme,
+                        currentTab: currentPrefs.currentTab,
+                        sortOrder: currentPrefs.sortOrder
+                    }
+                };
+                const dS = JSON.stringify(dE, null, 2);
+                const b = new Blob([dS], { type: 'application/json' });
+                const u = URL.createObjectURL(b);
+                const l = document.createElement('a');
+                const tS = new Date().toISOString().slice(0, 19).replace('T', '_').replace(/:/g, '-');
+                // Changed Export Filename
+                l.download = `FinotePro_Backup_${tS}.json`;
+                l.href = u; l.click(); URL.revokeObjectURL(u);
+                showToast("Data exported successfully.");
+            } catch (e) {
+                console.error("Export failed:", e);
+                showErrorToast("Data export failed.");
+            }
+        }
+        function handleImportData(event) {
+            const f = event.target.files[0];
+            if (!f) return;
+            const r = new FileReader();
+            r.onload = (e) => {
+                try {
+                    const iD = JSON.parse(e.target.result);
+                    if (!iD || (!Array.isArray(iD.notes) && !Array.isArray(iD.expenses))) {
+                        throw new Error("Invalid file structure.");
+                    }
+                    const nC = iD.notes?.length || 0;
+                    const eC = iD.expenses?.length || 0;
+                    showConfirmationModal(`Import ${nC} notes and ${eC} expenses? This will REPLACE current data.`, () => {
+                        notes = iD.notes || [];
+                        expenses = iD.expenses || [];
+                        if (iD.preferences) {
+                            // Only save relevant prefs from imported file
+                            const importedPrefs = {
+                                theme: iD.preferences.theme || 'dark',
+                                currentTab: iD.preferences.currentTab || 'notes',
+                                sortOrder: iD.preferences.sortOrder || 'newest'
+                            };
+                            saveDataToLocalStorage(PREFS_KEY, importedPrefs);
+                            loadUserPreferences(); // Reload prefs to apply imported ones
+                        } else {
+                             // Reset prefs if none in file
+                             saveUserPreferences();
+                        }
+                        saveData(); // Save imported notes/expenses
+                        renderAll();
+                        // Switch to imported tab or default
+                        switchTab(getDataFromLocalStorage(PREFS_KEY, {}).currentTab || 'notes', true);
+                        showToast("Data imported successfully.");
+                    });
+                } catch (err) {
+                    console.error("Import failed:", err);
+                    showErrorToast(`Import failed: ${err.message || 'Could not parse file.'}`);
+                } finally {
+                    Elements.importFileInput.value = '';
+                }
+            };
+            r.onerror = () => {
+                showErrorToast("Failed to read file.");
+                Elements.importFileInput.value = '';
+            };
+            r.readAsText(f);
+        }
 
         // --- Utility Functions ---
         function debounce(func, wait) { let t; return function(...a){ const c=this; clearTimeout(t); t = setTimeout(() => func.apply(c, a), wait); }; }
@@ -617,7 +717,7 @@
         function decodeSanitizedText(text) { if (typeof text !== 'string') return ''; try { const ta = document.createElement('textarea'); ta.innerHTML = text.replace(/<br\s*\/?>/g, '\n'); return ta.value; } catch (e) { return text; } }
         function showToast(message, duration = 3000) { createToast(message, 'success', duration); }
         function showErrorToast(message, duration = 5000) { createToast(message, 'error', duration); }
-        function createToast(message, type = 'success', duration) { /* Keep simple toast from 'Enhanced' version */ const t=document.createElement('div');t.textContent=message;t.className=`toast toast-${type}`;t.style.cssText="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);padding:10px 20px;border-radius:var(--radius-md);color:white;z-index:1005;opacity:0;transition:opacity .3s ease, transform .3s ease;box-shadow:0 3px 10px rgba(0,0,0,.2);font-size:var(--font-size-sm);"; t.style.backgroundColor = type === 'error' ? 'var(--error-color)' : 'var(--success-color)'; document.body.appendChild(t); setTimeout(() => { t.style.opacity = '1'; t.style.transform = 'translateX(-50%) translateY(-10px)'; }, 50); setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateX(-50%) translateY(0)'; setTimeout(() => { t.remove(); }, 300); }, duration); }
+        function createToast(message, type = 'success', duration) { /* Keep simple toast */ const t=document.createElement('div');t.textContent=message;t.className=`toast toast-${type}`;t.style.cssText="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);padding:10px 20px;border-radius:var(--radius-md);color:white;z-index:1005;opacity:0;transition:opacity .3s ease, transform .3s ease;box-shadow:0 3px 10px rgba(0,0,0,.2);font-size:var(--font-size-sm);"; t.style.backgroundColor = type === 'error' ? 'var(--error-color)' : 'var(--success-color)'; document.body.appendChild(t); setTimeout(() => { t.style.opacity = '1'; t.style.transform = 'translateX(-50%) translateY(-10px)'; }, 50); setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateX(-50%) translateY(0)'; setTimeout(() => { t.remove(); }, 300); }, duration); }
 
         // --- Settings Panel Logic ---
         function toggleCustomizationPanel() { Elements.customizationPanel.classList.toggle('open'); }
