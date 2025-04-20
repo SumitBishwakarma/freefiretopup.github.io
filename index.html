@@ -1,697 +1,2006 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finote Pro - Clean & Refined</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <title>Finote Pro - Notes & Expenses Tracker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <style>
-        /* --- CSS Variables (Back to simpler base) --- */
+        /* CSS Variables */
         :root {
-            --font-primary: 'Inter', sans-serif;
-            --font-size-base: 16px; --font-size-sm: 14px; --font-size-xs: 12px; --font-size-lg: 18px; --font-size-xl: 20px;
-            --font-light: 300; --font-normal: 400; --font-medium: 500; --font-semibold: 600; --font-bold: 700;
+            /* Typography */
+            --font-primary: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-size-xs: 0.75rem;
+            --font-size-sm: 0.875rem;
+            --font-size-md: 1rem;
+            --font-size-lg: 1.25rem;
+            --font-size-xl: 1.5rem;
+            --font-weight-light: 300;
+            --font-weight-regular: 400;
+            --font-weight-medium: 500;
+            --font-weight-semibold: 600;
+            --font-weight-bold: 700;
 
-            --transition-fast: 0.2s ease;
-            --transition-std: 0.3s ease;
+            /* Transitions */
+            --transition-fast: 0.15s ease;
+            --transition-medium: 0.3s ease;
             --transition-slow: 0.5s ease;
 
-            --radius-sm: 4px;
-            --radius-md: 8px;
-            --radius-lg: 12px;
-            --radius-xl: 16px;
-            --radius-full: 9999px;
+            /* Border Radius */
+            --border-radius-sm: 4px;
+            --border-radius-md: 8px;
+            --border-radius-lg: 12px;
+            --border-radius-xl: 16px;
+            --border-radius-full: 9999px;
 
-            /* Dark Theme Base */
-            --bg-primary: #111827;
-            --bg-secondary: #1f2937;
-            --bg-tertiary: #374151;
-            --bg-hover: #2c3a4e;
-            --text-primary: #f9fafb;
-            --text-secondary: #d1d5db;
-            --text-muted: #9ca3af;
-            --border-color: #4b5563;
-            --shadow-color: rgba(0, 0, 0, 0.4);
-            --modal-overlay-color: rgba(0, 0, 0, 0.6);
-            --scrollbar-thumb: #4b5563;
-            --scrollbar-track: var(--bg-primary);
-
-            /* Default Accent Color (Purple) */
-            --primary-color: #8b5cf6;
-            --primary-dark: #7c3aed;
-            --primary-light: rgba(139, 92, 246, 0.1);
-            --accent-color: #ec4899; /* Still used for Expense border maybe */
-            --favorite-color: #f59e0b;
-            --success-color: #22c55e;
-            --error-color: #ef4444;
-            --focus-ring-color: rgba(139, 92, 246, 0.4); /* Focus color */
+            /* Shadows */
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
         }
 
+        /* Dark Theme (Default) */
+        body {
+            /* Base Colors */
+            --color-bg-primary: #121212;
+            --color-bg-secondary: #1e1e1e;
+            --color-bg-tertiary: #2d2d2d;
+            --color-bg-hover: rgba(255, 255, 255, 0.05);
+            --color-bg-elevated: #252525;
+
+            /* Text Colors */
+            --text-primary: rgba(255, 255, 255, 0.87);
+            --text-secondary: rgba(255, 255, 255, 0.6);
+            --text-muted: rgba(255, 255, 255, 0.38);
+
+            /* Border Colors */
+            --border-color: rgba(255, 255, 255, 0.12);
+            --divider-color: rgba(255, 255, 255, 0.06);
+
+            /* Theme Colors - Dark */
+            --primary-color: #9c27b0;
+            --primary-color-light: #bb48cd;
+            --primary-color-dark: #7b1fa2;
+            --secondary-color: #03a9f4;
+            --accent-color: #ff9800;
+            --error-color: #f44336;
+            --success-color: #4caf50;
+            --warning-color: #ff9800;
+            --info-color: #2196f3;
+
+            /* Card Colors - Dark */
+            --card-bg: #252525;
+            --card-bg-hover: #2d2d2d;
+            --card-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
+            --card-favorite-bg: linear-gradient(135deg, rgba(155, 89, 182, 0.08) 0%, rgba(255, 153, 0, 0.08) 100%);
+
+            /* Scrollbar */
+            --scrollbar-track: #2d2d2d;
+            --scrollbar-thumb: #454545;
+            --scrollbar-thumb-hover: #555555;
+
+            /* Category Colors */
+            --category-general-color: #607d8b;
+            --category-work-color: #3f51b5;
+            --category-personal-color: #e91e63;
+            --category-ideas-color: #9c27b0;
+            --category-todo-color: #4caf50;
+        }
+
+        /* Light Theme */
         body.light-theme {
-            --bg-primary: #f9fafb;
-            --bg-secondary: #ffffff;
-            --bg-tertiary: #f3f4f6;
-            --bg-hover: #e5e7eb;
-            --text-primary: #111827;
-            --text-secondary: #374151;
-            --text-muted: #6b7280;
-            --border-color: #d1d5db;
-            --shadow-color: rgba(0, 0, 0, 0.1);
-            --modal-overlay-color: rgba(0, 0, 0, 0.3);
-            --scrollbar-thumb: #d1d5db;
-            --scrollbar-track: var(--bg-primary);
-            --focus-ring-color: rgba(139, 92, 246, 0.3);
+            /* Base Colors */
+            --color-bg-primary: #f9f9f9;
+            --color-bg-secondary: #f1f1f1;
+            --color-bg-tertiary: #e8e8e8;
+            --color-bg-hover: rgba(0, 0, 0, 0.05);
+            --color-bg-elevated: #ffffff;
+
+            /* Text Colors */
+            --text-primary: rgba(0, 0, 0, 0.87);
+            --text-secondary: rgba(0, 0, 0, 0.6);
+            --text-muted: rgba(0, 0, 0, 0.38);
+
+            /* Border Colors */
+            --border-color: rgba(0, 0, 0, 0.12);
+            --divider-color: rgba(0, 0, 0, 0.06);
+
+            /* Theme Colors - Light */
+            --primary-color: #6a1b9a;
+            --primary-color-light: #9c27b0;
+            --primary-color-dark: #4a148c;
+            --secondary-color: #0288d1;
+            --accent-color: #f57c00;
+            --error-color: #d32f2f;
+            --success-color: #388e3c;
+            --warning-color: #f57c00;
+            --info-color: #1976d2;
+
+            /* Card Colors - Light */
+            --card-bg: #ffffff;
+            --card-bg-hover: #f5f5f5;
+            --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            --card-favorite-bg: linear-gradient(135deg, rgba(155, 89, 182, 0.08) 0%, rgba(255, 153, 0, 0.05) 100%);
+
+            /* Scrollbar */
+            --scrollbar-track: #f1f1f1;
+            --scrollbar-thumb: #c1c1c1;
+            --scrollbar-thumb-hover: #a8a8a8;
+
+            /* Category Colors remain the same */
         }
 
-        /* Other Themes (CSS remains, but controls are removed) */
-        body.green-theme { --primary-color: #22c55e; --primary-dark: #16a34a; --accent-color: #f97316; --primary-light: rgba(34, 197, 94, 0.1); --focus-ring-color: rgba(34, 197, 94, 0.4); }
-        body.blue-theme { --primary-color: #3b82f6; --primary-dark: #2563eb; --accent-color: #f43f5e; --primary-light: rgba(59, 130, 246, 0.1); --focus-ring-color: rgba(59, 130, 246, 0.4); }
+        /* Green Theme */
+        body.green-theme {
+            --primary-color: #00796b;
+            --primary-color-light: #009688;
+            --primary-color-dark: #00695c;
+            --secondary-color: #4caf50;
+            --accent-color: #ffc107;
+        }
 
-        /* Font Size Themes (CSS remains, but controls are removed) */
-        body.large-text { /* ... (Assuming styles exist elsewhere or just override --font-size-base etc.) ... */ }
-        body.small-text { /* ... (Assuming styles exist elsewhere or just override --font-size-base etc.) ... */ }
+        /* Blue Theme */
+        body.blue-theme {
+            --primary-color: #1565c0;
+            --primary-color-light: #1976d2;
+            --primary-color-dark: #0d47a1;
+            --secondary-color: #03a9f4;
+            --accent-color: #ff5722;
+        }
+    </style>
+    <style>
+        /* General Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-        /* --- General Styles --- */
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-primary); -webkit-tap-highlight-color: transparent; }
-        html { scroll-behavior: smooth; scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track); scrollbar-width: thin; }
-        body::-webkit-scrollbar { width: 8px; } body::-webkit-scrollbar-track { background: var(--scrollbar-track); } body::-webkit-scrollbar-thumb { background-color: var(--scrollbar-thumb); border-radius: var(--radius-full); border: 2px solid var(--scrollbar-track); }
-        body { background-color: var(--bg-primary); color: var(--text-primary); line-height: 1.6; font-size: var(--font-size-base); transition: background-color var(--transition-std), color var(--transition-std); }
-        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        html,
+        body {
+            height: 100%;
+            overflow-x: hidden;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
 
-        /* --- Header --- */
-        header {
-            background-color: var(--bg-secondary);
+        body {
+            font-family: var(--font-primary);
+            font-size: var(--font-size-md);
+            background-color: var(--color-bg-primary);
             color: var(--text-primary);
-            padding: 20px 0;
-            box-shadow: 0 4px 15px -5px var(--shadow-color);
-            position: sticky; top: 0; z-index: 10;
-            border-bottom: 1px solid var(--border-color);
-            transition: background-color var(--transition-std), border-color var(--transition-std);
+            transition: background-color var(--transition-medium), color var(--transition-medium);
+            line-height: 1.6;
         }
-        /* Changed H1 text (indirectly via HTML) */
-        header h1 { text-align: center; font-size: var(--font-size-xl); margin-bottom: 25px; color: var(--primary-color); font-weight: var(--font-bold); letter-spacing: -0.5px; transition: color var(--transition-std); }
-        .header-controls { display: flex; flex-wrap: wrap; gap: 20px; align-items: center; margin-bottom: 20px; }
 
-        /* --- Search Bar (Refined Contained Style) --- */
-        .search-container {
-            flex: 1;
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--scrollbar-track);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--scrollbar-thumb);
+            border-radius: var(--border-radius-md);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--scrollbar-thumb-hover);
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1rem;
+            padding-bottom: 5rem;
+            /* Space for FAB */
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+            position: relative;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .app-title {
             display: flex;
             align-items: center;
-            position: relative;
-            background-color: var(--bg-tertiary); /* Contained background */
-            border-radius: var(--radius-md); /* Rounded corners */
-            transition: background-color var(--transition-std), box-shadow var(--transition-fast), border-color var(--transition-fast);
-            min-width: 250px;
-            border: 1px solid var(--border-color); /* Visible border */
+            gap: 0.5rem;
         }
-        .search-container:focus-within {
-            background-color: var(--bg-secondary);
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px var(--focus-ring-color); /* Focus ring */
+
+        .app-title h1 {
+            font-size: var(--font-size-xl);
+            font-weight: var(--font-weight-bold);
+            margin: 0;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
         }
-        .search-container .search-icon {
-            position: absolute; left: 15px; top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-            font-size: 1.1em;
-            pointer-events: none;
-            transition: color var(--transition-fast);
-        }
-        .search-container:focus-within .search-icon {
+
+        .app-title i {
+            font-size: var(--font-size-xl);
             color: var(--primary-color);
         }
-        .search-container input[type=text] {
-            flex: 1;
-            padding: 12px 45px 12px 45px; /* Standard padding */
-            border: none;
-            border-radius: var(--radius-md); /* Match container */
-            background-color: transparent; /* Input itself is transparent */
-            color: var(--text-primary);
-            font-size: 1rem;
-            outline: none;
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
-        .search-container input::placeholder { color: var(--text-muted); transition: color var(--transition-fast); }
-        .search-container:focus-within input::placeholder { color: var(--text-secondary); }
-        .search-clear-btn {
-            position: absolute; right: 12px; top: 50%;
-            transform: translateY(-50%) scale(0.8); opacity: 0;
-            background: none; border: none; color: var(--text-muted);
-            font-size: 1.4em; cursor: pointer; padding: 5px; line-height: 1;
-            transition: opacity var(--transition-fast), transform var(--transition-fast), color var(--transition-fast);
-            visibility: hidden;
-        }
-        .search-container.has-text .search-clear-btn { opacity: 1; transform: translateY(-50%) scale(1); visibility: visible; }
-        .search-clear-btn:hover { color: var(--error-color); }
 
-        /* --- Sort Buttons (Simple Style) --- */
-        .sort-container { display: flex; gap: 10px; }
-        .sort-btn { background-color: var(--bg-tertiary); color: var(--text-secondary); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: var(--radius-md); cursor: pointer; font-size: var(--font-size-sm); font-weight: var(--font-medium); transition: all var(--transition-fast); display: flex; align-items: center; gap: 6px; white-space: nowrap; }
-        .sort-btn:hover { background-color: var(--bg-hover); border-color: var(--text-muted); color: var(--text-primary); }
-        .sort-btn.active { background-color: var(--primary-color); border-color: var(--primary-color); color: #fff; box-shadow: 0 2px 8px -1px rgba(139, 92, 246, 0.5); }
-        .sort-btn.active:hover { background-color: var(--primary-dark); }
-
-        /* --- Tabs (Simple Style without sliding underline) --- */
-        .tabs { display: flex; background-color: transparent; border-bottom: 1px solid var(--border-color); }
-        .tab { flex: 1; text-align: center; padding: 14px 10px; color: var(--text-muted); cursor: pointer; transition: color var(--transition-std), border-color var(--transition-std), background-color var(--transition-std); font-weight: var(--font-semibold); font-size: var(--font-size-sm); position: relative; border-bottom: 3px solid transparent; margin-bottom: -1px; text-transform: uppercase; letter-spacing: .5px; }
-        .tab:hover { color: var(--text-secondary); background-color: rgba(255, 255, 255, 0.03); }
-        body.light-theme .tab:hover { background-color: rgba(0, 0, 0, 0.03); }
-        .tab.active { color: var(--primary-color); border-bottom-color: var(--primary-color); /* Standard underline */ }
-        .tab-icon { margin-right: 6px; font-size: 1em; opacity: .8; transition: opacity var(--transition-std); }
-        .tab.active .tab-icon { opacity: 1; }
-
-        /* --- Main Content & Cards --- */
-        main.container { padding-top: 0; }
-        .tab-content { display: none; padding-top: 25px; animation: contentFadeIn 0.5s ease forwards; opacity: 0; } /* Simple fade in */
-        @keyframes contentFadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .tab-content.active { display: block; }
-        #notes-container, #favorites-container, #expenses-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-
-        /* Card Base Style (Simple PopIn Animation) */
-        .card {
-            opacity: 0; /* Start hidden */
-            animation: popIn 0.4s ease-out forwards;
-            background-color: var(--bg-secondary);
-            border-radius: var(--radius-lg);
-            padding: 20px;
-            box-shadow: 0 4px 12px -4px var(--shadow-color);
+        /* Search Container */
+        .search-container {
             position: relative;
-            transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
+            width: 300px;
+            max-width: 100%;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 0.75rem;
+            padding-left: 2.5rem;
+            background-color: var(--color-bg-tertiary);
+            color: var(--text-primary);
             border: 1px solid var(--border-color);
-            display: flex; flex-direction: column;
-            min-height: 150px; overflow: hidden;
+            border-radius: var(--border-radius-full);
+            outline: none;
+            transition: all var(--transition-fast);
         }
-        @keyframes popIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
-        .card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px -6px var(--shadow-color); background-color: var(--bg-hover); }
-        .expense-card { border-left: 4px solid var(--accent-color); } /* Still uses accent-color */
-        .favorite-card { border-left: 4px solid var(--favorite-color); }
+        .search-container input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px var(--primary-color-light);
+        }
 
-        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; gap: 10px; }
-        .card-title { font-weight: var(--font-semibold); font-size: 1.1rem; color: var(--text-primary); word-break: break-word; flex-grow: 1; }
-        .card-actions { display: flex; gap: 8px; font-size: .85em; flex-shrink: 0; }
-        .action-btn { background-color: rgba(255, 255, 255, .05); color: var(--text-muted); border: none; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all var(--transition-fast); line-height: 1; }
-        body.light-theme .action-btn { background-color: rgba(0, 0, 0, .04); }
-        .action-btn:hover { transform: scale(1.15); color: var(--text-primary); background-color: rgba(255, 255, 255, .1); }
-        body.light-theme .action-btn:hover { background-color: rgba(0, 0, 0, .08); }
-        .delete-btn:hover { background-color: var(--error-color); color: #fff; }
-        .edit-btn:hover { background-color: var(--primary-color); color: #fff; }
-        .favorite-btn:hover { background-color: var(--favorite-color); color: #fff; }
-        .favorite-btn.active { background-color: var(--favorite-color); color: #fff; }
-        .favorite-btn.active:hover { background-color: #d97706; }
+        .search-container i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
 
-        .card-content { font-size: var(--font-size-sm); color: var(--text-secondary); white-space: pre-wrap; word-break: break-word; line-height: 1.5; margin-bottom: 15px; flex-grow: 1; }
-        .card-footer { margin-top: auto; padding-top: 10px; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+        .search-container .search-clear-btn {
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            background: none;
+            border: none;
+            cursor: pointer;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity var(--transition-fast);
+        }
 
-        /* Category back to simple icon + text */
-        .card-category-info { display: flex; align-items: center; gap: 6px; font-size: var(--font-size-xs); color: var(--text-muted); font-weight: var(--font-medium); text-transform: capitalize; }
-        .card-category-info i { font-size: .9em; color: var(--primary-color); transition: color var(--transition-std); }
-        /* Keep category specific colors if desired, they are independent of the main theme accent */
-        .category-work i { color: #3b82f6; }
-        .category-personal i { color: #16a34a; }
-        .category-ideas i { color: #f59e0b; }
-        .category-todo i { color: #ef4444; }
-        .category-general i { color: var(--primary-color); }
+        .search-container.has-text .search-clear-btn {
+            opacity: 1;
+            pointer-events: auto;
+        }
 
-        .card-timestamp { font-size: var(--font-size-xs); color: var(--text-muted); display: flex; align-items: center; white-space: nowrap; }
-        .card-timestamp i { margin-right: 5px; font-size: .9em; }
-        .total-expenses-display { text-align: right; margin:-10px 0 20px 0; font-size: var(--font-size-sm); color: var(--text-secondary); padding: 8px 15px; background-color: rgba(236, 72, 153, 0.1); border-radius: var(--radius-md); border: 1px solid var(--accent-color); display: inline-block; float: right; }
-        .total-expenses-display strong { color: var(--accent-color); font-weight: var(--font-semibold); margin-left: 5px; }
+        /* Sort Buttons */
+        .sort-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
 
-        /* --- Empty States (Simple) --- */
-        .empty-state { grid-column: 1 / -1; text-align: center; padding: 60px 30px; color: var(--text-muted); display: flex; flex-direction: column; align-items: center; gap: 20px; border: 2px dashed var(--border-color); border-radius: var(--radius-lg); background-color: rgba(0, 0, 0, 0.05); opacity: .8; }
-        body.light-theme .empty-state { background-color: rgba(0, 0, 0, 0.02); }
-        .empty-state i { font-size: 3.5em; color: var(--text-muted); margin-bottom: 10px; opacity: .6; }
-        .empty-state p { font-size: var(--font-size-base); font-weight: var(--font-medium); }
+        .sort-btn {
+            padding: 0.5rem 0.75rem;
+            background-color: var(--color-bg-tertiary);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-md);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
 
-        /* --- FAB & Settings Button (Simple) --- */
-        .fab { position: fixed; bottom: 30px; right: 30px; width: 56px; height: 56px; background-image: linear-gradient(to bottom right, var(--primary-color), var(--primary-dark)); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 20px -4px rgba(139, 92, 246, .6); border: none; font-size: 22px; cursor: pointer; transition: all var(--transition-fast); z-index: 99; }
-        .fab:hover { transform: scale(1.1) translateY(-2px); box-shadow: 0 8px 25px -4px rgba(139, 92, 246, .8); }
-        .fab:active { transform: scale(.95); transition-duration: .1s; }
-        .settings-btn { position: fixed; bottom: 30px; left: 30px; width: 52px; height: 52px; background-image: linear-gradient(to bottom right, #4b5563, #374151); color: var(--text-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 15px -3px var(--shadow-color); border: none; font-size: 20px; cursor: pointer; transition: all var(--transition-fast); z-index: 99; }
-        .settings-btn:hover { transform: scale(1.1) rotate(30deg); box-shadow: 0 7px 20px -3px var(--shadow-color); background-image: linear-gradient(to bottom right, #6b7280, #4b5563); }
+        .sort-btn:hover {
+            background-color: var(--color-bg-hover);
+        }
 
-        /* --- Modals (Simple fade/scale animation) --- */
+        .sort-btn.active {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            border-color: var(--primary-color);
+        }
+    </style>
+    <style>
+        /* Tabs */
+        .tabs {
+            position: relative;
+            display: flex;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--divider-color);
+            width: 100%;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tabs::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            width: var(--indicator-width, 0);
+            background-color: var(--primary-color);
+            border-radius: var(--border-radius-full);
+            transition: transform var(--transition-medium), width var(--transition-medium);
+        }
+
+        .tab {
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-weight: var(--font-weight-medium);
+            cursor: pointer;
+            position: relative;
+            white-space: nowrap;
+            transition: color var(--transition-fast);
+        }
+
+        .tab:hover {
+            color: var(--text-primary);
+        }
+
+        .tab.active {
+            color: var(--primary-color);
+            font-weight: var(--font-weight-semibold);
+        }
+
+        .tab i {
+            margin-right: 0.5rem;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            animation: fadeIn var(--transition-medium);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Card Grid Layout */
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.25rem;
+            margin-top: 1rem;
+        }
+
+        /* Cards */
+        .card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            transition: transform var(--transition-medium), box-shadow var(--transition-medium);
+            animation: cardAppear var(--transition-medium);
+            border: 1px solid transparent;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 16px rgba(0, 0, 0, 0.2);
+            border-color: var(--divider-color);
+        }
+
+        .card-header {
+            padding: 1rem;
+            border-bottom: 1px solid var(--divider-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-title {
+            font-size: var(--font-size-lg);
+            font-weight: var(--font-weight-semibold);
+            margin: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 70%;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            width: 32px;
+            height: 32px;
+            border-radius: var(--border-radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .action-btn:hover {
+            background-color: var(--color-bg-hover);
+            color: var(--text-primary);
+        }
+
+        .favorite-btn.active {
+            color: #ffc107;
+        }
+
+        .card-content {
+            padding: 1rem;
+            flex: 1;
+            word-break: break-word;
+            white-space: pre-wrap;
+            overflow-wrap: break-word;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .expense-amount {
+            font-size: var(--font-size-xl);
+            font-weight: var(--font-weight-bold);
+            color: var(--error-color);
+            text-align: center;
+        }
+
+        .card-footer {
+            padding: 0.75rem 1rem;
+            border-top: 1px solid var(--divider-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: var(--font-size-sm);
+            color: var(--text-muted);
+        }
+
+        .card-category-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-timestamp {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Expense & Favorite Cards */
+        .expense-card {
+            border-left: 4px solid var(--error-color);
+        }
+
+        .favorite-card {
+            background: var(--card-favorite-bg);
+            border-left: 4px solid var(--accent-color);
+        }
+
+        /* Empty State */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 1rem;
+            background-color: var(--color-bg-secondary);
+            border-radius: var(--border-radius-lg);
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--text-muted);
+        }
+
+        .empty-state h3 {
+            margin-bottom: 0.5rem;
+            font-weight: var(--font-weight-medium);
+        }
+    </style>
+    <style>
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: var(--border-radius-md);
+            font-weight: var(--font-weight-medium);
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            font-size: var(--font-size-md);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-color-light);
+        }
+
+        .btn-secondary {
+            background-color: var(--color-bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--color-bg-hover);
+        }
+
+        .btn-danger {
+            background-color: var(--error-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            opacity: 0.9;
+        }
+
+        /* Floating action button */
+        .add-fab {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 56px;
+            height: 56px;
+            border-radius: var(--border-radius-full);
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-medium);
+            z-index: 50;
+        }
+
+        .add-fab i {
+            font-size: 1.5rem;
+        }
+
+        .add-fab:hover {
+            transform: translateY(-4px);
+            background-color: var(--primary-color-light);
+            box-shadow: var(--shadow-xl);
+        }
+
+        /* Settings button */
+        .settings-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--border-radius-full);
+            background-color: var(--color-bg-tertiary);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-fast);
+        }
+
+        .settings-btn:hover {
+            background-color: var(--color-bg-hover);
+            color: var(--text-primary);
+        }
+
+        /* Modals */
         .modal {
-            display: none; position: fixed; inset: 0;
-            background-color: var(--modal-overlay-color); /* Simple overlay */
-            z-index: 1000; overflow-y: auto; padding: 20px;
-            align-items: center; justify-content: center;
-            opacity: 0; transition: opacity var(--transition-std);
-         }
-        .modal.open { display: flex; opacity: 1; }
-        .modal-content {
-            background-color: var(--bg-secondary); padding: 30px; border-radius: var(--radius-xl);
-            max-width: 550px; width: 100%; box-shadow: 0 10px 30px -10px var(--shadow-color);
-            position: relative; border: 1px solid var(--border-color);
-            opacity: 0; transform: scale(0.95); /* Start scaled down */
-            transition: opacity var(--transition-std) 0.05s, transform var(--transition-std) 0.05s, background-color var(--transition-std), border-color var(--transition-std); /* Slight delay */
-         }
-        .modal.open .modal-content { opacity: 1; transform: scale(1); /* Scale in */ }
-        .close-modal { position: absolute; top: 15px; right: 15px; background: var(--bg-tertiary); border: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--text-muted); cursor: pointer; transition: all var(--transition-fast); }
-        .close-modal:hover { background-color: var(--error-color); color: #fff; transform: rotate(90deg) scale(1.1); }
-        .modal h2 { margin-bottom: 25px; color: var(--text-primary); font-weight: var(--font-semibold); font-size: var(--font-size-lg); text-align: center; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; color: var(--text-secondary); font-weight: var(--font-medium); font-size: var(--font-size-sm); }
-        input[type=text], input[type=number], input[type=date], textarea, select {
-            width: 100%; padding: 12px 15px; border-radius: var(--radius-md);
-            border: 1px solid var(--border-color); background-color: var(--bg-tertiary);
-            color: var(--text-primary); font-size: 1rem; transition: all var(--transition-fast);
-            box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-fast);
         }
-        body.light-theme input, body.light-theme textarea, body.light-theme select { background-color: var(--bg-tertiary); border-color: #d1d5db; }
-        /* Standard focus */
-        input:focus, textarea:focus, select:focus {
+
+        .modal.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: var(--color-bg-elevated);
+            border-radius: var(--border-radius-lg);
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: translateY(20px);
+            transition: transform var(--transition-medium);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .modal.open .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid var(--divider-color);
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: var(--font-size-lg);
+            font-weight: var(--font-weight-semibold);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--border-radius-full);
+            transition: all var(--transition-fast);
+        }
+
+        .close-modal:hover {
+            background-color: var(--color-bg-hover);
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            padding: 1rem;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-weight: var(--font-weight-medium);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: var(--border-radius-md);
+            border: 1px solid var(--border-color);
+            background-color: var(--color-bg-tertiary);
+            color: var(--text-primary);
+            transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+            font-family: var(--font-family);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
             outline: none;
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px var(--focus-ring-color), inset 0 1px 2px rgba(0, 0, 0, .1);
-            background-color: var(--bg-secondary);
-        }
-        body.light-theme input:focus, body.light-theme textarea:focus, body.light-theme select:focus { background-color: #f3f4f6; }
-
-        textarea { resize: vertical; min-height: 100px; }
-        select { appearance: none; background-repeat: no-repeat; background-position: right 15px center; background-size: 16px 16px; padding-right: 40px; cursor: pointer; /* BG set via JS */ }
-        #confirmation-modal .modal-content { max-width: 400px; }
-        #confirmation-message { text-align: center; margin-bottom: 25px; color: var(--text-secondary); font-size: 1rem; }
-        .confirmation-actions { display: flex; justify-content: center; gap: 15px; }
-
-        /* --- Buttons (Simple Style) --- */
-        .btn { padding: 10px 20px; border: none; border-radius: var(--radius-md); cursor: pointer; font-size: var(--font-size-sm); font-weight: var(--font-semibold); transition: all var(--transition-fast); display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; white-space: nowrap; }
-        .btn i { line-height: 1; }
-        .btn-primary { background-color: var(--primary-color); color: #fff; box-shadow: 0 3px 8px -2px rgba(139, 92, 246, .5); }
-        .btn-primary:hover { background-color: var(--primary-dark); box-shadow: 0 4px 10px -2px rgba(139, 92, 246, .7); transform: translateY(-1px); }
-        .btn-primary:active { transform: translateY(0); }
-        .btn-secondary { background-color: var(--bg-tertiary); color: var(--text-secondary); border: 1px solid var(--border-color); }
-        .btn-secondary:hover { background-color: var(--border-color); color: var(--text-primary); border-color: #6b7280; }
-        .btn-danger { background-color: var(--error-color); color: #fff; }
-        .btn-danger:hover { background-color: #dc2626; transform: translateY(-1px); }
-
-        /* --- Customization Panel (Simplified) --- */
-        .customization-panel { position: fixed; left: -350px; top: 0; width: 320px; height: 100%; background-color: var(--bg-secondary); box-shadow: 4px 0 20px -5px var(--shadow-color); z-index: 1001; transition: left .4s cubic-bezier(.25, .8, .25, 1), background-color var(--transition-std), border-color var(--transition-std); padding: 25px; overflow: hidden; border-right: 1px solid var(--border-color); display: flex; flex-direction: column; }
-        .customization-panel.open { left: 0; }
-        .panel-scroll-content { flex-grow: 1; overflow-y: auto; margin-right: -15px; padding-right: 15px; }
-        .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color); flex-shrink: 0; }
-        .panel-header h3 { color: var(--primary-color); font-size: 1.3rem; font-weight: var(--font-semibold); margin: 0; }
-        .close-panel { background: var(--bg-tertiary); border: none; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; color: var(--text-muted); cursor: pointer; transition: all var(--transition-fast); }
-        .close-panel:hover { background-color: var(--error-color); color: #fff; transform: rotate(90deg); }
-        .panel-section { margin-bottom: 30px; }
-        .panel-section h4 { color: var(--text-secondary); margin-bottom: 15px; font-size: .9rem; font-weight: var(--font-semibold); border-bottom: 1px solid var(--border-color); padding-bottom: 8px; text-transform: uppercase; letter-spacing: .5px; }
-        .options-grid { display: flex; flex-wrap: wrap; gap: 10px; }
-        .option-btn { padding: 8px 15px; border-radius: var(--radius-md); cursor: pointer; font-size: var(--font-size-sm); font-weight: var(--font-medium); transition: all var(--transition-fast); border: 1px solid var(--border-color); background-color: var(--bg-tertiary); color: var(--text-secondary); display: flex; align-items: center; gap: 6px; }
-        .option-btn.active { border-color: var(--primary-color); color: var(--primary-color); background-color: var(--primary-light); box-shadow: none; }
-        .option-btn:hover:not(.active) { background-color: var(--bg-hover); color: var(--text-primary); }
-        .color-preview { display: inline-block; width: 16px; height: 16px; border-radius: 50%; margin-right: 8px; border: 1px solid hsla(0, 0%, 100%, .2); }
-        body.light-theme .color-preview { border: 1px solid rgba(0, 0, 0, .1); }
-        .data-actions button { width: 100%; margin-bottom: 10px; }
-        #import-file-input { display: none; }
-
-        /* --- Simple Delete Animation --- */
-        @keyframes shakeAndFadeSimple {
-             0% { transform: translateX(0); opacity: 1;}
-             10%, 50%, 90% { transform: translateX(-4px); }
-             30%, 70% { transform: translateX(4px); }
-             100% { transform: translateX(0); opacity: 0; }
-        }
-        .card.deleting {
-             animation: shakeAndFadeSimple 0.5s ease forwards;
-             /* Opacity handled by keyframes */
+            box-shadow: 0 0 0 2px var(--primary-color-light);
         }
 
-        /* --- Responsive Styles (Keep adjustments from 'Enhanced' version) --- */
-        @media (max-width: 768px) {
-            .container { padding: 15px; }
-            header h1 { font-size: var(--font-size-lg); margin-bottom: 20px; }
-            .header-controls { flex-direction: column; align-items: stretch; gap: 15px; }
-            .sort-container { justify-content: center; }
-            .tab { padding: 12px 8px; font-size: var(--font-size-xs); }
-            .fab, .settings-btn { width: 48px; height: 48px; font-size: 18px; bottom: 15px; }
-            .fab { right: 15px; } .settings-btn { left: 15px; }
-            #notes-container, #favorites-container, #expenses-container { grid-template-columns: 1fr; gap: 15px; }
-            .total-expenses-display { float: none; text-align: center; display: block; margin: 15px 0; }
-            .panel-scroll-content { margin-right: -10px; padding-right: 10px; }
-        }
-        @media (max-width: 480px) {
-            .modal-content { padding: 20px; }
-            .modal h2 { font-size: 1.1rem; }
-            .btn { padding: 8px 15px; font-size: var(--font-size-xs); }
-            .card { padding: 15px; }
-            .card-title { font-size: 1rem; }
-            .card-content { font-size: var(--font-size-xs); }
-            .card-footer { flex-direction: column; align-items: flex-start; gap: 8px; }
-            .card-timestamp { margin-left: auto; align-self: flex-end; }
-            .customization-panel { width: calc(100% - 40px); left: calc(-100% + 40px); }
-            .customization-panel.open { left: 0; }
-            .header-controls .search-container { min-width: unset; }
+        .form-group select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 16px 12px;
+            padding-right: 2.5rem;
         }
 
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .error-text {
+            color: var(--error-color);
+            font-size: var(--font-size-sm);
+            margin-top: 0.25rem;
+            min-height: 18px;
+        }
+
+        /* Category colors */
+        .category-general {
+            border-left: 4px solid var(--category-general-color);
+        }
+
+        .category-work {
+            border-left: 4px solid var(--category-work-color);
+        }
+
+        .category-personal {
+            border-left: 4px solid var(--category-personal-color);
+        }
+
+        .category-ideas {
+            border-left: 4px solid var(--category-ideas-color);
+        }
+
+        .category-todo {
+            border-left: 4px solid var(--category-todo-color);
+        }
+
+        /* Animations */
+        @keyframes cardAppear {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .deleting {
+            animation: deleteAnimation 0.6s ease forwards;
+        }
+
+        @keyframes deleteAnimation {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.8;
+                transform: scale(0.95);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.9);
+                height: 0;
+                margin: -10px 0;
+                padding: 0;
+            }
+        }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(50px);
+            background-color: var(--color-bg-elevated);
+            color: var(--text-primary);
+            padding: 1rem 1.5rem;
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            opacity: 0;
+            transition: all var(--transition-medium);
+        }
+
+        .toast-success {
+            border-left: 4px solid var(--success-color);
+        }
+
+        .toast-error {
+            border-left: 4px solid var(--error-color);
+        }
+
+        /* Total expenses display */
+        .total-expenses-container {
+            margin-bottom: 1rem;
+            text-align: right;
+        }
+
+        .total-expenses-display {
+            display: inline-block;
+            background-color: var(--color-bg-elevated);
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-sm);
+            border-left: 4px solid var(--error-color);
+        }
+
+        .total-expenses-amount {
+            font-weight: var(--font-weight-bold);
+            color: var(--error-color);
+        }
+
+        /* Customization Panel */
+        .customization-panel {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 320px;
+            height: 100%;
+            background-color: var(--color-bg-elevated);
+            z-index: 900;
+            transform: translateX(100%);
+            transition: transform var(--transition-medium);
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .customization-panel.open {
+            transform: translateX(0);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--divider-color);
+        }
+
+        .panel-header h2 {
+            margin: 0;
+            font-size: var(--font-size-lg);
+            font-weight: var(--font-weight-semibold);
+        }
+
+        .close-panel {
+            background: none;
+            border: none;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            border-radius: var(--border-radius-full);
+            transition: all var(--transition-fast);
+        }
+
+        .close-panel:hover {
+            background-color: var(--color-bg-hover);
+            color: var(--text-primary);
+        }
+
+        .panel-body {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .settings-section {
+            margin-bottom: 2rem;
+        }
+
+        .settings-section h3 {
+            margin-bottom: 1rem;
+            font-size: var(--font-size-md);
+            font-weight: var(--font-weight-semibold);
+            color: var(--text-primary);
+        }
+
+        .theme-options,
+        .import-export-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .option-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            background-color: var(--color-bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-md);
+            transition: all var(--transition-fast);
+            cursor: pointer;
+            flex: 1;
+            min-width: 80px;
+            gap: 0.5rem;
+        }
+
+        .option-btn i {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+        }
+
+        .option-btn span {
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
+        }
+
+        .option-btn:hover {
+            background-color: var(--color-bg-hover);
+        }
+
+        .option-btn.active {
+            background-color: var(--primary-color-light);
+            border-color: var(--primary-color);
+        }
+
+        .option-btn.active i,
+        .option-btn.active span {
+            color: white;
+        }
+
+        .import-export-options {
+            flex-direction: column;
+        }
+
+        .import-export-options button {
+            width: 100%;
+            justify-content: flex-start;
+        }
     </style>
 </head>
+
 <body>
-    <header>
-        <div class="container">
-            <h1><i class="fas fa-bolt"></i> Finote Pro</h1>
+    <div class="container">
+        <header>
+            <div class="app-title">
+                <i class="fas fa-sticky-note"></i>
+                <h1>Finote Pro</h1>
+            </div>
             <div class="header-controls">
                 <div class="search-container" id="search-container">
-                     <i class="fas fa-search search-icon"></i>
-                     <input type="text" id="search-input" placeholder="Search notes..." aria-label="Search notes">
-                    <button class="search-clear-btn" id="search-clear-btn" title="Clear search" aria-label="Clear search">&times;</button>
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="search-input" placeholder="Search notes and expenses...">
+                    <button class="search-clear-btn" id="search-clear-btn">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </div>
-                <div class="sort-container">
-                     <button id="sort-newest" class="sort-btn active" title="Sort by newest first" aria-label="Sort by newest first"><i class="fas fa-arrow-down-short-wide"></i> Newest</button>
-                    <button id="sort-oldest" class="sort-btn" title="Sort by oldest first" aria-label="Sort by oldest first"><i class="fas fa-arrow-up-short-wide"></i> Oldest</button>
-                 </div>
-             </div>
-            <div class="tabs">
-                <div class="tab active" data-tab="notes" role="tab" aria-selected="true" aria-controls="notes-content"><i class="fas fa-lightbulb tab-icon"></i>Notes</div>
-                <div class="tab" data-tab="favorites" role="tab" aria-selected="false" aria-controls="favorites-content"><i class="fas fa-star tab-icon"></i>Favorites</div>
-                 <div class="tab" data-tab="expenses" role="tab" aria-selected="false" aria-controls="expenses-content"><i class="fas fa-receipt tab-icon"></i>Expenses</div>
-             </div>
-        </div>
-    </header>
-
-    <main class="container">
-        <div class="tab-content active" id="notes-content" role="tabpanel" aria-labelledby="notes-tab">
-            <div id="notes-container"></div>
-            <div class="empty-state" id="notes-empty-state" style="display: none;"><i class="fas fa-folder-open fa-3x"></i><p>No notes here yet. Let's create one!</p></div>
-        </div>
-        <div class="tab-content" id="favorites-content" role="tabpanel" aria-labelledby="favorites-tab">
-            <div id="favorites-container"></div>
-            <div class="empty-state" id="favorites-empty-state" style="display: none;"><i class="fas fa-star fa-3x"></i><p>Your favorite notes will shine here.</p></div>
-        </div>
-        <div class="tab-content" id="expenses-content" role="tabpanel" aria-labelledby="expenses-tab">
-            <div id="total-expenses-container">
-                <div class="total-expenses-display" style="display: none;">Total: <strong id="total-expenses-amount">₹0.00</strong></div>
+                <div class="sort-buttons">
+                    <button class="sort-btn active" id="sort-newest">
+                        <i class="fas fa-sort-amount-down"></i>Newest
+                    </button>
+                    <button class="sort-btn" id="sort-oldest">
+                        <i class="fas fa-sort-amount-up"></i>Oldest
+                    </button>
+                </div>
+                <button class="settings-btn" id="settings-btn" title="Settings">
+                    <i class="fas fa-cog"></i>
+                </button>
             </div>
-            <div id="expenses-container"></div>
-            <div class="empty-state" id="expenses-empty-state" style="display: none;"><i class="fas fa-money-bill-wave fa-3x"></i><p>Track your expenses by adding them here.</p></div>
-        </div>
-    </main>
+        </header>
 
-     <div class="modal" id="note-modal" role="dialog" aria-modal="true" aria-labelledby="note-modal-title">
-         <div class="modal-content">
-             <button class="close-modal" title="Close" aria-label="Close">&times;</button>
-            <h2 id="note-modal-title">Add Note</h2>
-            <form id="note-form" novalidate>
-                 <input type="hidden" id="note-id">
-                 <div class="form-group"><label for="note-title">Title</label><input type="text" id="note-title" required placeholder="Enter note title"><div class="error-message" id="title-error"></div></div>
-                 <div class="form-group"><label for="note-category">Category</label><select id="note-category" required><option value="general">General</option><option value="work">Work</option><option value="personal">Personal</option><option value="ideas">Ideas</option><option value="todo">To-Do</option></select><div class="error-message" id="category-error"></div></div>
-                 <div class="form-group"><label for="note-content">Description</label><textarea id="note-content" rows="6" required placeholder="Start typing your note..."></textarea><div class="error-message" id="content-error"></div></div>
-                <button type="submit" class="btn btn-primary" style="width: 100%;"><i class="fas fa-save"></i> Save Note</button>
-             </form>
-         </div>
+        <div class="tabs" role="tablist">
+            <button class="tab active" data-tab="notes" role="tab" aria-selected="true">
+                <i class="fas fa-sticky-note"></i>Notes
+            </button>
+            <button class="tab" data-tab="favorites" role="tab" aria-selected="false">
+                <i class="fas fa-star"></i>Favorites
+            </button>
+            <button class="tab" data-tab="expenses" role="tab" aria-selected="false">
+                <i class="fas fa-receipt"></i>Expenses
+            </button>
+        </div>
+
+        <div id="total-expenses-container" style="display: none;" class="total-expenses-container">
+            <div class="total-expenses-display">
+                <span>Total Expenses: </span>
+                <span id="total-expenses-amount" class="total-expenses-amount"></span>
+            </div>
+        </div>
+
+        <!-- Notes Tab -->
+        <div id="notes-content" class="tab-content active">
+            <div id="notes-container" class="cards-container"></div>
+            <div id="notes-empty-state" class="empty-state">
+                <i class="fas fa-clipboard"></i>
+                <h3>No Notes Yet</h3>
+                <p>Click the + button to add your first note.</p>
+            </div>
+        </div>
+
+        <!-- Favorites Tab -->
+        <div id="favorites-content" class="tab-content">
+            <div id="favorites-container" class="cards-container"></div>
+            <div id="favorites-empty-state" class="empty-state">
+                <i class="fas fa-star"></i>
+                <h3>No Favorite Notes</h3>
+                <p>Mark notes as favorite to see them here.</p>
+            </div>
+        </div>
+
+        <!-- Expenses Tab -->
+        <div id="expenses-content" class="tab-content">
+            <div id="expenses-container" class="cards-container"></div>
+            <div id="expenses-empty-state" class="empty-state">
+                <i class="fas fa-receipt"></i>
+                <h3>No Expenses Yet</h3>
+                <p>Click the + button to add your first expense.</p>
+            </div>
+        </div>
+
+        <!-- Add Button -->
+        <button class="add-fab" id="add-fab" title="Add New Note">
+            <i class="fas fa-plus"></i>
+        </button>
+
+        <!-- Note Modal -->
+        <div class="modal" id="note-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="note-modal-title">Add Note</h2>
+                    <button class="close-modal" aria-label="Close modal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="note-form">
+                        <input type="hidden" id="note-id">
+                        <div class="form-group">
+                            <label for="note-title">Title</label>
+                            <input type="text" id="note-title" placeholder="Enter note title" required>
+                            <div id="title-error" class="error-text"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="note-category">Category</label>
+                            <select id="note-category" required>
+                                <option value="general">General</option>
+                                <option value="work">Work</option>
+                                <option value="personal">Personal</option>
+                                <option value="ideas">Ideas</option>
+                                <option value="todo">To-Do</option>
+                            </select>
+                            <div id="category-error" class="error-text"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="note-content">Description</label>
+                            <textarea id="note-content" rows="6" placeholder="Enter your notes here"
+                                required></textarea>
+                            <div id="content-error" class="error-text"></div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary close-modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Note</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Expense Modal -->
+        <div class="modal" id="add-expense-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="expense-modal-title">Add Expense</h2>
+                    <button class="close-modal" aria-label="Close modal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="add-expense-form">
+                        <div class="form-group">
+                            <label for="expense-title">Expense Title</label>
+                            <input type="text" id="expense-title" placeholder="E.g., Groceries, Rent, etc." required>
+                            <div id="ex-title-error" class="error-text"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="expense-amount">Amount (₹)</label>
+                            <input type="number" id="expense-amount" step="0.01" min="0.01" placeholder="0.00" required>
+                            <div id="ex-amount-error" class="error-text"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="expense-date">Date</label>
+                            <input type="date" id="expense-date" required>
+                            <div id="ex-date-error" class="error-text"></div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary close-modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Add
+                                Expense</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Confirmation Modal -->
+        <div class="modal" id="confirmation-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Confirm Action</h2>
+                    <button class="close-modal" aria-label="Close modal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="confirmation-message"></p>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancel-btn">Cancel</button>
+                        <button type="button" class="btn btn-danger" id="confirm-btn">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Customization Panel -->
+        <div class="customization-panel" id="customization-panel">
+            <div class="panel-header">
+                <h2>Settings</h2>
+                <button id="close-panel" class="close-panel">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="panel-body">
+                <div class="settings-section">
+                    <h3>Theme</h3>
+                    <div class="theme-options">
+                        <button class="option-btn active" data-theme="dark">
+                            <i class="fas fa-moon"></i>
+                            <span>Dark</span>
+                        </button>
+                        <button class="option-btn" data-theme="light">
+                            <i class="fas fa-sun"></i>
+                            <span>Light</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="settings-section">
+                    <h3>Import/Export</h3>
+                    <div class="import-export-options">
+                        <button class="btn btn-secondary" id="import-btn">
+                            <i class="fas fa-file-import"></i>
+                            <span>Import Data</span>
+                        </button>
+                        <button class="btn btn-secondary" id="export-btn">
+                            <i class="fas fa-file-export"></i>
+                            <span>Export Data</span>
+                        </button>
+                        <input type="file" id="import-file-input" accept=".json" style="display: none;">
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-     <div class="modal" id="add-expense-modal" role="dialog" aria-modal="true" aria-labelledby="expense-modal-title">
-        <div class="modal-content">
-            <button class="close-modal" title="Close" aria-label="Close">&times;</button>
-             <h2 id="expense-modal-title">Add Expense</h2>
-             <form id="add-expense-form" novalidate>
-                 <div class="form-group"><label for="expense-title">Description</label><input type="text" id="expense-title" required placeholder="e.g., Coffee, Dinner"><div class="error-message" id="ex-title-error"></div></div>
-                <div class="form-group"><label for="expense-amount">Amount (INR)</label><input type="number" id="expense-amount" min="0.01" step="0.01" required placeholder="e.g., 50.75"><div class="error-message" id="ex-amount-error"></div></div>
-                 <div class="form-group"><label for="expense-date">Date</label><input type="date" id="expense-date" required><div class="error-message" id="ex-date-error"></div></div>
-                 <button type="submit" class="btn btn-primary" style="width: 100%;"><i class="fas fa-plus-circle"></i> Add Expense</button>
-            </form>
-        </div>
-     </div>
-
-     <div class="modal" id="confirmation-modal" role="alertdialog" aria-modal="true" aria-labelledby="confirmation-title">
-         <div class="modal-content">
-            <h2 id="confirmation-title">Confirm Action</h2><p id="confirmation-message">Are you sure?</p>
-             <div class="confirmation-actions"><button id="confirm-btn" class="btn btn-danger"><i class="fas fa-check"></i> Confirm</button><button id="cancel-btn" class="btn btn-secondary"><i class="fas fa-times"></i> Cancel</button></div>
-         </div>
-     </div>
-
-     <button class="fab" id="add-fab" title="Add New Item" aria-label="Add New Item"><i class="fas fa-plus"></i></button>
-     <button class="settings-btn" id="settings-btn" title="Open Settings" aria-label="Open Settings"><i class="fas fa-sliders-h"></i></button>
-
-     <div class="customization-panel" id="customization-panel">
-         <div class="panel-header"><h3>Settings</h3><button class="close-panel" id="close-panel" title="Close Settings" aria-label="Close Settings">&times;</button></div>
-         <div class="panel-scroll-content">
-             <div class="panel-section">
-                <h4>Appearance</h4>
-                 <label style="font-size: var(--font-size-xs); margin-bottom: 10px;">Theme</label><div class="options-grid theme-options"><button class="option-btn active" data-theme="dark"><i class="fas fa-moon"></i> Dark</button><button class="option-btn" data-theme="light"><i class="fas fa-sun"></i> Light</button></div>
-                 </div>
-             <div class="panel-section">
-                 <h4>Data Management</h4>
-                <div class="data-actions"><input type="file" id="import-file-input" accept=".json"><button class="btn btn-secondary" id="import-btn" title="Import notes and expenses from a JSON file"><i class="fas fa-upload"></i> Import Data</button><button class="btn btn-secondary" id="export-btn" title="Export all notes and expenses to a JSON file"><i class="fas fa-download"></i> Export Data</button></div>
-            </div>
-             </div>
-     </div>
-
-    <script defer>
-        // --- JavaScript (Cleaned & Refined with modifications) ---
-
+    <script>
         // --- Constants & Global State ---
-        // Changed Keys slightly to avoid conflicts with old version if needed
-        const NOTES_KEY = 'finoteNotesData_v7';
-        const EXPENSES_KEY = 'finoteExpensesData_v7';
-        const PREFS_KEY = 'finotePrefs_v7'; // Only theme, tab, sort order now
-        const CATEGORY_ICONS = { general: 'fa-solid fa-lightbulb', work: 'fa-solid fa-briefcase', personal: 'fa-solid fa-user', ideas: 'fa-solid fa-wand-magic-sparkles', todo: 'fa-solid fa-list-check' };
+        const NOTES_KEY = 'finoteNotesData_v8';
+        const EXPENSES_KEY = 'finoteExpensesData_v8';
+        const PREFS_KEY = 'finotePrefs_v8';
+        const CATEGORY_ICONS = {
+            general: 'fa-solid fa-lightbulb',
+            work: 'fa-solid fa-briefcase',
+            personal: 'fa-solid fa-user',
+            ideas: 'fa-solid fa-wand-magic-sparkles',
+            todo: 'fa-solid fa-list-check'
+        };
 
-        let notes = []; let expenses = []; let currentTab = 'notes'; let sortOrder = 'newest'; let searchQuery = '';
-        let elementThatTriggeredModal = null; let confirmationCallback = null;
+        let notes = [];
+        let expenses = [];
+        let currentTab = 'notes';
+        let sortOrder = 'newest';
+        let searchQuery = '';
+        let elementThatTriggeredModal = null;
+        let confirmationCallback = null;
 
         // --- DOM Elements Cache ---
-         const Elements = {
-             notesContainer: document.getElementById('notes-container'), favoritesContainer: document.getElementById('favorites-container'), expensesContainer: document.getElementById('expenses-container'),
-             notesEmptyState: document.getElementById('notes-empty-state'), favoritesEmptyState: document.getElementById('favorites-empty-state'), expensesEmptyState: document.getElementById('expenses-empty-state'),
-             tabs: document.querySelectorAll('.tab'), tabContents: document.querySelectorAll('.tab-content'),
-             searchContainer: document.getElementById('search-container'), searchInput: document.getElementById('search-input'), searchClearBtn: document.getElementById('search-clear-btn'),
-             sortNewestBtn: document.getElementById('sort-newest'), sortOldestBtn: document.getElementById('sort-oldest'),
-             noteModal: document.getElementById('note-modal'), addExpenseModal: document.getElementById('add-expense-modal'), confirmationModal: document.getElementById('confirmation-modal'),
-             closeModalButtons: document.querySelectorAll('.close-modal'), confirmBtn: document.getElementById('confirm-btn'), cancelBtn: document.getElementById('cancel-btn'), confirmationMessage: document.getElementById('confirmation-message'),
-             noteForm: document.getElementById('note-form'), noteModalTitle: document.getElementById('note-modal-title'), noteIdInput: document.getElementById('note-id'), noteTitleInput: document.getElementById('note-title'), noteCategoryInput: document.getElementById('note-category'), noteContentInput: document.getElementById('note-content'),
-             addExpenseForm: document.getElementById('add-expense-form'), expenseModalTitle: document.getElementById('expense-modal-title'), expenseTitleInput: document.getElementById('expense-title'), expenseAmountInput: document.getElementById('expense-amount'), expenseDateInput: document.getElementById('expense-date'),
-             addFab: document.getElementById('add-fab'), settingsBtn: document.getElementById('settings-btn'),
-             customizationPanel: document.getElementById('customization-panel'), closePanel: document.getElementById('close-panel'),
-             themeOptions: document.querySelectorAll('.theme-options .option-btn'), // Keep theme options
-             // Removed colorOptions and fontSizeOptions from cache
-             importBtn: document.getElementById('import-btn'), exportBtn: document.getElementById('export-btn'), importFileInput: document.getElementById('import-file-input'),
-             totalExpensesContainer: document.getElementById('total-expenses-container'), totalExpensesDisplay: document.querySelector('.total-expenses-display'), totalExpensesAmount: document.getElementById('total-expenses-amount'),
-             // Error message placeholders (optional)
-             titleError: document.getElementById('title-error'), contentError: document.getElementById('content-error'), categoryError: document.getElementById('category-error'),
-             exTitleError: document.getElementById('ex-title-error'), exAmountError: document.getElementById('ex-amount-error'), exDateError: document.getElementById('ex-date-error'),
-         };
+        const Elements = {
+            notesContainer: document.getElementById('notes-container'),
+            favoritesContainer: document.getElementById('favorites-container'),
+            expensesContainer: document.getElementById('expenses-container'),
+            notesEmptyState: document.getElementById('notes-empty-state'),
+            favoritesEmptyState: document.getElementById('favorites-empty-state'),
+            expensesEmptyState: document.getElementById('expenses-empty-state'),
+            tabs: document.querySelectorAll('.tab'),
+            tabContents: document.querySelectorAll('.tab-content'),
+            searchContainer: document.getElementById('search-container'),
+            searchInput: document.getElementById('search-input'),
+            searchClearBtn: document.getElementById('search-clear-btn'),
+            sortNewestBtn: document.getElementById('sort-newest'),
+            sortOldestBtn: document.getElementById('sort-oldest'),
+            noteModal: document.getElementById('note-modal'),
+            addExpenseModal: document.getElementById('add-expense-modal'),
+            confirmationModal: document.getElementById('confirmation-modal'),
+            closeModalButtons: document.querySelectorAll('.close-modal'),
+            confirmBtn: document.getElementById('confirm-btn'),
+            cancelBtn: document.getElementById('cancel-btn'),
+            confirmationMessage: document.getElementById('confirmation-message'),
+            noteForm: document.getElementById('note-form'),
+            noteModalTitle: document.getElementById('note-modal-title'),
+            noteIdInput: document.getElementById('note-id'),
+            noteTitleInput: document.getElementById('note-title'),
+            noteCategoryInput: document.getElementById('note-category'),
+            noteContentInput: document.getElementById('note-content'),
+            addExpenseForm: document.getElementById('add-expense-form'),
+            expenseModalTitle: document.getElementById('expense-modal-title'),
+            expenseTitleInput: document.getElementById('expense-title'),
+            expenseAmountInput: document.getElementById('expense-amount'),
+            expenseDateInput: document.getElementById('expense-date'),
+            addFab: document.getElementById('add-fab'),
+            settingsBtn: document.getElementById('settings-btn'),
+            customizationPanel: document.getElementById('customization-panel'),
+            closePanel: document.getElementById('close-panel'),
+            themeOptions: document.querySelectorAll('.theme-options .option-btn'),
+            importBtn: document.getElementById('import-btn'),
+            exportBtn: document.getElementById('export-btn'),
+            importFileInput: document.getElementById('import-file-input'),
+            totalExpensesContainer: document.getElementById('total-expenses-container'),
+            totalExpensesDisplay: document.querySelector('.total-expenses-display'),
+            totalExpensesAmount: document.getElementById('total-expenses-amount'),
+            titleError: document.getElementById('title-error'),
+            contentError: document.getElementById('content-error'),
+            categoryError: document.getElementById('category-error'),
+            exTitleError: document.getElementById('ex-title-error'),
+            exAmountError: document.getElementById('ex-amount-error'),
+            exDateError: document.getElementById('ex-date-error'),
+        };
 
         // --- Initialization ---
-         function initApp() {
-             // Changed App Name in Log
-             console.log("🚀 Finote Pro Clean Initializing...");
-             loadUserPreferences(); loadData(); setupEventListeners();
-             switchTab(currentTab, true); renderAll(); updateSelectArrows();
-             // Changed App Name in Log
-             console.log("👍 Finote Pro Clean Ready!");
-         }
+        function initApp() {
+            console.log("🚀 Finote Pro Initializing...");
+            loadUserPreferences();
+            loadData();
+            setupEventListeners();
+            switchTab(currentTab, true);
+            renderAll();
+            updateSelectArrows();
+            setupTabIndicator();
+            console.log("👍 Finote Pro Ready!");
+        }
 
-        // --- Data Handling (Robust) ---
-        function loadData() { notes = getDataFromLocalStorage(NOTES_KEY, []); expenses = getDataFromLocalStorage(EXPENSES_KEY, []); }
-        function saveData() { saveDataToLocalStorage(NOTES_KEY, notes); saveDataToLocalStorage(EXPENSES_KEY, expenses); }
-        function getDataFromLocalStorage(key, defaultValue) { try { const d = localStorage.getItem(key); return d ? JSON.parse(d) : defaultValue; } catch(e) { console.error("LS Read Error:", key, e); return defaultValue; } }
-        function saveDataToLocalStorage(key, data) { try { localStorage.setItem(key, JSON.stringify(data)); } catch(e) { console.error("LS Write Error:", key, e); showErrorToast("Could not save data."); } }
+        // --- Data Handling ---
+        function loadData() {
+            notes = getDataFromLocalStorage(NOTES_KEY, []);
+            expenses = getDataFromLocalStorage(EXPENSES_KEY, []);
+        }
 
-        // --- Preferences (Simplified) ---
+        function saveData() {
+            saveDataToLocalStorage(NOTES_KEY, notes);
+            saveDataToLocalStorage(EXPENSES_KEY, expenses);
+        }
+
+        function getDataFromLocalStorage(key, defaultValue) {
+            try {
+                const d = localStorage.getItem(key);
+                return d ? JSON.parse(d) : defaultValue;
+            } catch(e) {
+                console.error("LocalStorage Read Error:", key, e);
+                return defaultValue;
+            }
+        }
+
+        function saveDataToLocalStorage(key, data) {
+            try {
+                localStorage.setItem(key, JSON.stringify(data));
+            } catch(e) {
+                console.error("LocalStorage Write Error:", key, e);
+                showErrorToast("Could not save data.");
+            }
+        }
+
+        // --- Preferences ---
         function loadUserPreferences() {
-            // Only load theme, tab, sortOrder
             const prefs = getDataFromLocalStorage(PREFS_KEY, { theme: 'dark', currentTab: 'notes', sortOrder: 'newest' });
             setTheme(prefs.theme);
             currentTab = prefs.currentTab || 'notes';
             sortOrder = prefs.sortOrder || 'newest';
             updateActiveOption(Elements.themeOptions, document.querySelector(`.theme-options .option-btn[data-theme="${prefs.theme}"]`));
-            // Removed color and font size loading
             Elements.sortNewestBtn.classList.toggle('active', sortOrder === 'newest');
             Elements.sortOldestBtn.classList.toggle('active', sortOrder === 'oldest');
         }
+
         function saveUserPreferences() {
-             // Only save theme, tab, sortOrder
-             const currentPrefs = {
-                 theme: document.body.classList.contains('light-theme') ? 'light' : 'dark',
-                 currentTab: currentTab,
-                 sortOrder: sortOrder
-             };
-             saveDataToLocalStorage(PREFS_KEY, currentPrefs);
+            const currentPrefs = {
+                theme: document.body.classList.contains('light-theme') ? 'light' : 'dark',
+                currentTab: currentTab,
+                sortOrder: sortOrder
+            };
+            saveDataToLocalStorage(PREFS_KEY, currentPrefs);
         }
+
         function setTheme(theme) {
             document.body.classList.toggle('light-theme', theme === 'light');
-            // Ensure other theme classes are removed if necessary (though controls are gone)
             document.body.classList.remove('green-theme', 'blue-theme');
             updateSelectArrows();
         }
-        // Removed setColor and setFontSize functions entirely
 
         function updateActiveOption(optionsNodeList, activeOptionElement) {
             if (!activeOptionElement || !optionsNodeList) return;
             optionsNodeList.forEach(o => o.classList.remove('active'));
             activeOptionElement.classList.add('active');
         }
-        function updateSelectArrows() { const mc=getComputedStyle(document.body).getPropertyValue('--text-muted').trim(); const sc=encodeURIComponent(mc); const si=`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='${sc}'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>`; const bu=`url("data:image/svg+xml,${si}")`; document.querySelectorAll('select').forEach(sel=>{sel.style.backgroundImage=bu;sel.style.transition='background-image var(--transition-fast), border-color var(--transition-fast), background-color var(--transition-fast), box-shadow var(--transition-fast)';}); }
+
+        function updateSelectArrows() {
+            const mc = getComputedStyle(document.body).getPropertyValue('--text-muted').trim();
+            const sc = encodeURIComponent(mc);
+            const si = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='${sc}'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>`;
+            const bu = `url("data:image/svg+xml,${si}")`;
+            document.querySelectorAll('select').forEach(sel => {
+                sel.style.backgroundImage = bu;
+                sel.style.transition = 'background-image var(--transition-fast), border-color var(--transition-fast), background-color var(--transition-fast), box-shadow var(--transition-fast)';
+            });
+        }
 
         // --- Event Listener Setup ---
         function setupEventListeners() {
-             Elements.tabs.forEach(tab => tab.addEventListener('click', () => switchTab(tab.dataset.tab)));
-             Elements.addFab.addEventListener('click', handleAddButtonClick);
-             Elements.closeModalButtons.forEach(btn => btn.addEventListener('click', () => closeModal(btn.closest('.modal'))));
-             [Elements.noteModal, Elements.addExpenseModal, Elements.confirmationModal].forEach(modal => { modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(modal); }); });
-             Elements.confirmBtn.addEventListener('click', handleConfirmAction); Elements.cancelBtn.addEventListener('click', () => closeModal(Elements.confirmationModal));
-             Elements.noteForm.addEventListener('submit', handleSaveNote); Elements.addExpenseForm.addEventListener('submit', handleAddExpense);
-             Elements.searchInput.addEventListener('input', debounce(performSearch, 300)); Elements.searchClearBtn.addEventListener('click', clearSearch);
-             Elements.sortNewestBtn.addEventListener('click', () => handleSort('newest')); Elements.sortOldestBtn.addEventListener('click', () => handleSort('oldest'));
-             Elements.settingsBtn.addEventListener('click', toggleCustomizationPanel); Elements.closePanel.addEventListener('click', toggleCustomizationPanel);
-             // Only setup listener for theme options
-             Elements.themeOptions.forEach(o => o.addEventListener('click', () => handlePreferenceChange(o, Elements.themeOptions, setTheme, 'theme')));
-             // Removed listeners for color and font size options
-             Elements.importBtn.addEventListener('click', () => Elements.importFileInput.click()); Elements.importFileInput.addEventListener('change', handleImportData); Elements.exportBtn.addEventListener('click', handleExportData);
-             document.body.addEventListener('click', handleCardActionDelegation);
-             document.addEventListener('keydown', handleGlobalKeydown);
+            Elements.tabs.forEach(tab => tab.addEventListener('click', () => switchTab(tab.dataset.tab)));
+            Elements.addFab.addEventListener('click', handleAddButtonClick);
+            Elements.closeModalButtons.forEach(btn => btn.addEventListener('click', () => closeModal(btn.closest('.modal'))));
+            
+            [Elements.noteModal, Elements.addExpenseModal, Elements.confirmationModal].forEach(modal => {
+                modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(modal); });
+            });
+            
+            Elements.confirmBtn.addEventListener('click', handleConfirmAction);
+            Elements.cancelBtn.addEventListener('click', () => closeModal(Elements.confirmationModal));
+            Elements.noteForm.addEventListener('submit', handleSaveNote);
+            Elements.addExpenseForm.addEventListener('submit', handleAddExpense);
+            Elements.searchInput.addEventListener('input', debounce(performSearch, 300));
+            Elements.searchClearBtn.addEventListener('click', clearSearch);
+            Elements.sortNewestBtn.addEventListener('click', () => handleSort('newest'));
+            Elements.sortOldestBtn.addEventListener('click', () => handleSort('oldest'));
+            Elements.settingsBtn.addEventListener('click', toggleCustomizationPanel);
+            Elements.closePanel.addEventListener('click', toggleCustomizationPanel);
+            Elements.themeOptions.forEach(o => o.addEventListener('click', () => handlePreferenceChange(o, Elements.themeOptions, setTheme, 'theme')));
+            Elements.importBtn.addEventListener('click', () => Elements.importFileInput.click());
+            Elements.importFileInput.addEventListener('change', handleImportData);
+            Elements.exportBtn.addEventListener('click', handleExportData);
+            document.body.addEventListener('click', handleCardActionDelegation);
+            document.addEventListener('keydown', handleGlobalKeydown);
+            window.addEventListener('resize', setupTabIndicator);
+        }
+
+        // --- Tab Indicator Animation ---
+        function setupTabIndicator() {
+            const tabs = document.querySelector('.tabs');
+            const activeTab = document.querySelector('.tab.active');
+            
+            if (!tabs || !activeTab) return;
+            
+            const indicator = tabs.querySelector('::after') || tabs;
+            const activeRect = activeTab.getBoundingClientRect();
+            const tabsRect = tabs.getBoundingClientRect();
+            
+            // Set the width and position of the indicator
+            tabs.style.setProperty('--indicator-width', `${activeRect.width}px`);
+            tabs.style.setProperty('--indicator-left', `${activeRect.left - tabsRect.left}px`);
+            
+            // Apply the CSS
+            tabs.style.cssText = `
+                --indicator-width: ${activeRect.width}px;
+                --indicator-left: ${activeRect.left - tabsRect.left}px;
+            `;
+            
+            // Update the ::after selector
+            const style = document.createElement('style');
+            style.id = 'dynamic-tab-indicator';
+            const oldStyle = document.getElementById('dynamic-tab-indicator');
+            
+            if (oldStyle) {
+                oldStyle.remove();
+            }
+            
+            style.textContent = `
+                .tabs::after {
+                    width: var(--indicator-width, 0);
+                    transform: translateX(var(--indicator-left, 0));
+                }
+            `;
+            
+            document.head.appendChild(style);
         }
 
         // --- Event Handlers ---
-        function handleGlobalKeydown(e) { if (e.key === 'Escape') { const om = document.querySelector('.modal.open'); if (om) closeModal(om); else if (Elements.customizationPanel.classList.contains('open')) toggleCustomizationPanel(); } }
-        function handleAddButtonClick(e) { elementThatTriggeredModal = e.currentTarget; if (currentTab === 'expenses') openExpenseModal(); else openNoteModal(); }
-        // Simplified preference change handler (only for theme now)
+        function handleGlobalKeydown(e) {
+            if (e.key === 'Escape') {
+                const om = document.querySelector('.modal.open');
+                if (om) closeModal(om);
+                else if (Elements.customizationPanel.classList.contains('open')) toggleCustomizationPanel();
+            }
+        }
+
+        function handleAddButtonClick(e) {
+            elementThatTriggeredModal = e.currentTarget;
+            if (currentTab === 'expenses') openExpenseModal();
+            else openNoteModal();
+        }
+
         function handlePreferenceChange(clickedOption, allOptions, setterFunction, dataType) {
             const v = clickedOption.dataset[dataType];
-            setterFunction(v); // Calls setTheme
+            setterFunction(v);
             updateActiveOption(allOptions, clickedOption);
             saveUserPreferences();
         }
+
         function handleCardActionDelegation(e) {
-            const targetButton = e.target.closest('.action-btn'); if (!targetButton) return;
-            const card = targetButton.closest('.card'); if (!card) return;
+            const targetButton = e.target.closest('.action-btn');
+            if (!targetButton) return;
+            
+            const card = targetButton.closest('.card');
+            if (!card) return;
+            
             const noteId = card.dataset.noteId ? parseInt(card.dataset.noteId) : null;
             const expenseId = card.dataset.expenseId ? parseInt(card.dataset.expenseId) : null;
 
-            if (targetButton.classList.contains('edit-btn') && noteId !== null) { elementThatTriggeredModal = targetButton; openNoteModal(noteId); }
-            else if (targetButton.classList.contains('favorite-btn') && noteId !== null) { toggleFavorite(noteId, targetButton.querySelector('i')); }
-            else if (targetButton.classList.contains('delete-btn')) {
+            if (targetButton.classList.contains('edit-btn') && noteId !== null) {
                 elementThatTriggeredModal = targetButton;
-                if (noteId !== null) { const n=notes.find(x=>x.id===noteId); if(n) showConfirmationModal(`Delete note "${decodeSanitizedText(n.title)||'Untitled'}"?`, () => deleteNote(noteId, card)); }
-                else if (expenseId !== null) { const ex=expenses.find(x=>x.id===expenseId); if(ex) showConfirmationModal(`Delete expense "${ex.title||'Untitled'}"?`, () => deleteExpense(expenseId, card)); }
+                openNoteModal(noteId);
+            } else if (targetButton.classList.contains('favorite-btn') && noteId !== null) {
+                toggleFavorite(noteId, targetButton.querySelector('i'));
+            } else if (targetButton.classList.contains('delete-btn')) {
+                elementThatTriggeredModal = targetButton;
+                if (noteId !== null) {
+                    const n = notes.find(x => x.id === noteId);
+                    if (n) showConfirmationModal(`Delete note "${decodeSanitizedText(n.title) || 'Untitled'}"?`, () => deleteNote(noteId, card));
+                } else if (expenseId !== null) {
+                    const ex = expenses.find(x => x.id === expenseId);
+                    if (ex) showConfirmationModal(`Delete expense "${ex.title || 'Untitled'}"?`, () => deleteExpense(expenseId, card));
+                }
             }
-         }
+        }
 
         // --- Modal Management ---
-        function openModal(modalElement, elementToFocus = null) { if (!modalElement) return; modalElement.classList.add('open'); setTimeout(() => { const ft = elementToFocus || modalElement.querySelector('input, textarea, select, button:not(.close-modal)'); if (ft) ft.focus(); }, 150); }
-        function closeModal(modalElement) { if (!modalElement) return; modalElement.classList.remove('open'); if (modalElement === Elements.confirmationModal) { confirmationCallback = null; } else { if (elementThatTriggeredModal) { elementThatTriggeredModal.focus(); elementThatTriggeredModal = null; } setTimeout(() => { const f = modalElement.querySelector('form'); if (f) { f.reset(); /* clearValidationErrors(f); */ } if (modalElement.id === 'note-modal') Elements.noteIdInput.value = ''; }, 300); } }
-        function showConfirmationModal(message, onConfirm) { confirmationCallback = onConfirm; Elements.confirmationMessage.textContent = message; openModal(Elements.confirmationModal, Elements.cancelBtn); }
-        function handleConfirmAction() { if (typeof confirmationCallback === 'function') confirmationCallback(); closeModal(Elements.confirmationModal); }
+        function openModal(modalElement, elementToFocus = null) {
+            if (!modalElement) return;
+            modalElement.classList.add('open');
+            setTimeout(() => {
+                const ft = elementToFocus || modalElement.querySelector('input, textarea, select, button:not(.close-modal)');
+                if (ft) ft.focus();
+            }, 150);
+        }
 
-        // --- Form Validation (Simplified - use alert or implement inline) ---
-        function validateNoteForm() { const title = Elements.noteTitleInput.value.trim(); const content = Elements.noteContentInput.value.trim(); if (!title || !content) { showErrorToast("Title and Description are required.", 3000); return false; } return true; }
-        function validateExpenseForm() { const title = Elements.expenseTitleInput.value.trim(); const amount = Elements.expenseAmountInput.value; const date = Elements.expenseDateInput.value; if (!title || !amount || isNaN(parseFloat(amount)) || parseFloat(amount) <= 0 || !date) { showErrorToast("Please fill all expense fields with valid data.", 3000); return false; } return true; }
+        function closeModal(modalElement) {
+            if (!modalElement) return;
+            modalElement.classList.remove('open');
+            
+            if (modalElement === Elements.confirmationModal) {
+                confirmationCallback = null;
+            } else {
+                if (elementThatTriggeredModal) {
+                    elementThatTriggeredModal.focus();
+                    elementThatTriggeredModal = null;
+                }
+                
+                setTimeout(() => {
+                    const f = modalElement.querySelector('form');
+                    if (f) f.reset();
+                    if (modalElement.id === 'note-modal') Elements.noteIdInput.value = '';
+                }, 300);
+            }
+        }
+
+        function showConfirmationModal(message, onConfirm) {
+            confirmationCallback = onConfirm;
+            Elements.confirmationMessage.textContent = message;
+            openModal(Elements.confirmationModal, Elements.cancelBtn);
+        }
+
+        function handleConfirmAction() {
+            if (typeof confirmationCallback === 'function') confirmationCallback();
+            closeModal(Elements.confirmationModal);
+        }
+
+        // --- Form Validation ---
+        function validateNoteForm() {
+            const title = Elements.noteTitleInput.value.trim();
+            const content = Elements.noteContentInput.value.trim();
+            
+            if (!title || !content) {
+                showErrorToast("Title and Description are required.", 3000);
+                return false;
+            }
+            
+            return true;
+        }
+
+        function validateExpenseForm() {
+            const title = Elements.expenseTitleInput.value.trim();
+            const amount = Elements.expenseAmountInput.value;
+            const date = Elements.expenseDateInput.value;
+            
+            if (!title || !amount || isNaN(parseFloat(amount)) || parseFloat(amount) <= 0 || !date) {
+                showErrorToast("Please fill all expense fields with valid data.", 3000);
+                return false;
+            }
+            
+            return true;
+        }
 
         // --- Core Logic: Notes ---
-        function openNoteModal(id = null) { /* ... (logic remains the same) ... */ if (id) { const note = notes.find(n => n.id === id); if (!note) { showErrorToast("Note not found."); return; } Elements.noteModalTitle.textContent = "Edit Note"; Elements.noteIdInput.value = note.id; Elements.noteTitleInput.value = decodeSanitizedText(note.title); Elements.noteCategoryInput.value = note.category; Elements.noteContentInput.value = decodeSanitizedText(note.content); Elements.noteModal.querySelector('.btn-primary').innerHTML = '<i class="fas fa-save"></i> Update Note'; } else { Elements.noteModalTitle.textContent = "Add Note"; Elements.noteIdInput.value = ''; Elements.noteForm.reset(); Elements.noteModal.querySelector('.btn-primary').innerHTML = '<i class="fas fa-save"></i> Save Note'; } openModal(Elements.noteModal, Elements.noteTitleInput); }
-        function handleSaveNote(e) { e.preventDefault(); if (!validateNoteForm()) return; const id = parseInt(Elements.noteIdInput.value); const title = sanitizeText(Elements.noteTitleInput.value.trim()); const category = Elements.noteCategoryInput.value; const content = sanitizeText(Elements.noteContentInput.value.trim()); const timestamp = new Date().toISOString(); let isNew = false; let affectedNoteTitle = title; if (id) { const index = notes.findIndex(n => n.id === id); if (index > -1) { notes[index] = { ...notes[index], title, category, content, timestamp }; affectedNoteTitle = notes[index].title; } else { showErrorToast("Error updating note."); return; } } else { const newNote = { id: Date.now(), title, category, content, timestamp, isFavorite: false }; notes.unshift(newNote); isNew = true; } saveData(); closeModal(Elements.noteModal); renderNotes(); showToast(`Note "${decodeSanitizedText(affectedNoteTitle) || 'Untitled'}" ${isNew ? 'added' : 'updated'}.`); }
-        function toggleFavorite(id, iconElement) { const index = notes.findIndex(note => note.id === id); if (index > -1) { notes[index].isFavorite = !notes[index].isFavorite; if (iconElement) { iconElement.className = `fa-${notes[index].isFavorite ? 'solid' : 'regular'} fa-star`; const btn = iconElement.closest('.favorite-btn'); if(btn) btn.classList.toggle('active', notes[index].isFavorite); const card = iconElement.closest('.card'); if(card) card.classList.toggle('favorite-card', notes[index].isFavorite); } saveData(); renderNotes(); } } // Re-render needed for both tabs
-        function deleteNote(id, cardElement) { const noteIndex = notes.findIndex(n => n.id === id); if (noteIndex === -1) return; const deletedTitle = notes[noteIndex].title; cardElement.classList.add('deleting'); setTimeout(() => { notes = notes.filter(note => note.id !== id); saveData(); renderNotes(); showToast(`Note "${decodeSanitizedText(deletedTitle) || 'Untitled'}" deleted.`); }, 500); } // Match animation duration
+        function openNoteModal(id = null) {
+            if (id) {
+                const note = notes.find(n => n.id === id);
+                if (!note) {
+                    showErrorToast("Note not found.");
+                    return;
+                }
+                
+                Elements.noteModalTitle.textContent = "Edit Note";
+                Elements.noteIdInput.value = note.id;
+                Elements.noteTitleInput.value = decodeSanitizedText(note.title);
+                Elements.noteCategoryInput.value = note.category;
+                Elements.noteContentInput.value = decodeSanitizedText(note.content);
+                Elements.noteModal.querySelector('.btn-primary').innerHTML = '<i class="fas fa-save"></i> Update Note';
+            } else {
+                Elements.noteModalTitle.textContent = "Add Note";
+                Elements.noteIdInput.value = '';
+                Elements.noteForm.reset();
+                Elements.noteModal.querySelector('.btn-primary').innerHTML = '<i class="fas fa-save"></i> Save Note';
+            }
+            
+            openModal(Elements.noteModal, Elements.noteTitleInput);
+        }
+
+        function handleSaveNote(e) {
+            e.preventDefault();
+            
+            if (!validateNoteForm()) return;
+            
+            const id = parseInt(Elements.noteIdInput.value);
+            const title = sanitizeText(Elements.noteTitleInput.value.trim());
+            const category = Elements.noteCategoryInput.value;
+            const content = sanitizeText(Elements.noteContentInput.value.trim());
+            const timestamp = new Date().toISOString();
+            
+            let isNew = false;
+            let affectedNoteTitle = title;
+            
+            if (id) {
+                const index = notes.findIndex(n => n.id === id);
+                if (index > -1) {
+                    notes[index] = { ...notes[index], title, category, content, timestamp };
+                    affectedNoteTitle = notes[index].title;
+                } else {
+                    showErrorToast("Error updating note.");
+                    return;
+                }
+            } else {
+                const newNote = {
+                    id: Date.now(),
+                    title,
+                    category,
+                    content,
+                    timestamp,
+                    isFavorite: false
+                };
+                notes.unshift(newNote);
+                isNew = true;
+            }
+            
+            saveData();
+            closeModal(Elements.noteModal);
+            renderNotes();
+            showToast(`Note "${decodeSanitizedText(affectedNoteTitle) || 'Untitled'}" ${isNew ? 'added' : 'updated'}.`);
+        }
+
+        function toggleFavorite(id, iconElement) {
+            const index = notes.findIndex(note => note.id === id);
+            
+            if (index > -1) {
+                notes[index].isFavorite = !notes[index].isFavorite;
+                
+                if (iconElement) {
+                    iconElement.className = `fa-${notes[index].isFavorite ? 'solid' : 'regular'} fa-star`;
+                    const btn = iconElement.closest('.favorite-btn');
+                    if (btn) btn.classList.toggle('active', notes[index].isFavorite);
+                    const card = iconElement.closest('.card');
+                    if (card) card.classList.toggle('favorite-card', notes[index].isFavorite);
+                }
+                
+                saveData();
+                renderNotes();
+            }
+        }
+
+        function deleteNote(id, cardElement) {
+            const noteIndex = notes.findIndex(n => n.id === id);
+            if (noteIndex === -1) return;
+            
+            const deletedTitle = notes[noteIndex].title;
+            cardElement.classList.add('deleting');
+            
+            setTimeout(() => {
+                notes = notes.filter(note => note.id !== id);
+                saveData();
+                renderNotes();
+                showToast(`Note "${decodeSanitizedText(deletedTitle) || 'Untitled'}" deleted.`);
+            }, 600); // Match animation duration
+        }
 
         // --- Core Logic: Expenses ---
-        function openExpenseModal() { /* ... (logic remains the same) ... */ Elements.expenseModalTitle.textContent = "Add Expense"; Elements.addExpenseForm.reset(); Elements.expenseDateInput.valueAsDate = new Date(); openModal(Elements.addExpenseModal, Elements.expenseTitleInput); }
-        function handleAddExpense(e) { e.preventDefault(); if (!validateExpenseForm()) return; const title = Elements.expenseTitleInput.value.trim(); const amount = parseFloat(Elements.expenseAmountInput.value); const date = Elements.expenseDateInput.value; const timestamp = new Date().toISOString(); const newExpense = { id: Date.now(), title, amount, date, timestamp }; expenses.unshift(newExpense); saveData(); closeModal(Elements.addExpenseModal); renderExpenses(); showToast(`Expense "${title || 'Untitled'}" added.`); }
-        function deleteExpense(id, cardElement) { const expenseIndex = expenses.findIndex(ex => ex.id === id); if (expenseIndex === -1) return; const deletedTitle = expenses[expenseIndex].title; cardElement.classList.add('deleting'); setTimeout(() => { expenses = expenses.filter(ex => ex.id !== id); saveData(); renderExpenses(); showToast(`Expense "${deletedTitle || 'Untitled'}" deleted.`); }, 500); } // Match animation duration
+        function openExpenseModal() {
+            Elements.expenseModalTitle.textContent = "Add Expense";
+            Elements.addExpenseForm.reset();
+            Elements.expenseDateInput.valueAsDate = new Date();
+            openModal(Elements.addExpenseModal, Elements.expenseTitleInput);
+        }
+
+        function handleAddExpense(e) {
+            e.preventDefault();
+            
+            if (!validateExpenseForm()) return;
+            
+            const title = Elements.expenseTitleInput.value.trim();
+            const amount = parseFloat(Elements.expenseAmountInput.value);
+            const date = Elements.expenseDateInput.value;
+            const timestamp = new Date().toISOString();
+            
+            const newExpense = {
+                id: Date.now(),
+                title,
+                amount,
+                date,
+                timestamp
+            };
+            
+            expenses.unshift(newExpense);
+            saveData();
+            closeModal(Elements.addExpenseModal);
+            renderExpenses();
+            showToast(`Expense "${title || 'Untitled'}" added.`);
+        }
+
+        function deleteExpense(id, cardElement) {
+            const expenseIndex = expenses.findIndex(ex => ex.id === id);
+            if (expenseIndex === -1) return;
+            
+            const deletedTitle = expenses[expenseIndex].title;
+            cardElement.classList.add('deleting');
+            
+            setTimeout(() => {
+                expenses = expenses.filter(ex => ex.id !== id);
+                saveData();
+                renderExpenses();
+                showToast(`Expense "${deletedTitle || 'Untitled'}" deleted.`);
+            }, 600); // Match animation duration
+        }
 
         // --- Search & Sort ---
-        function performSearch() { searchQuery = Elements.searchInput.value.trim().toLowerCase(); Elements.searchContainer.classList.toggle('has-text', searchQuery.length > 0); if (currentTab === 'notes' || currentTab === 'favorites') { renderNotes(); } else if (currentTab === 'expenses') { renderExpenses(); /* Expense filtering remains basic */ } }
-        function clearSearch() { Elements.searchInput.value = ''; performSearch(); Elements.searchInput.focus(); }
-        function handleSort(order) { if (sortOrder === order) return; sortOrder = order; Elements.sortNewestBtn.classList.toggle('active', order === 'newest'); Elements.sortOldestBtn.classList.toggle('active', order === 'oldest'); saveUserPreferences(); renderAll(); }
-
-        // --- Rendering (Simplified Animations) ---
-        function renderAll() { renderNotes(); renderExpenses(); }
-        function filterItems(items) { if (!searchQuery) return items; /* Filter notes */ if (items === expenses) return items; return items.filter(item => { const title = (decodeSanitizedText(item.title || '') || '').toLowerCase(); const content = (decodeSanitizedText(item.content || '') || '').toLowerCase(); const category = (item.category || '').toLowerCase(); return title.includes(searchQuery) || content.includes(searchQuery) || category.includes(searchQuery); }); }
-        function sortItems(items) { return [...items].sort((a, b) => { const dateA = new Date(a.timestamp); const dateB = new Date(b.timestamp); return sortOrder === 'newest' ? dateB - dateA : dateA - dateB; }); }
-        function renderNotes() { const filtered = filterItems(notes); const sorted = sortItems(filtered); renderItemList(sorted, Elements.notesContainer, createNoteElement); const favFiltered = filterItems(notes.filter(n => n.isFavorite)); const favSorted = sortItems(favFiltered); renderItemList(favSorted, Elements.favoritesContainer, createNoteElement); checkEmptyStates(); }
-        function renderExpenses() { const filtered = filterItems(expenses); const sorted = sortItems(filtered); renderItemList(sorted, Elements.expensesContainer, createExpenseElement); calculateAndDisplayTotalExpenses(); checkEmptyStates(); }
-        function renderItemList(items, container, createElementFn) { /* Back to simple rendering without stagger */ const fragment = document.createDocumentFragment(); items.forEach(item => fragment.appendChild(createElementFn(item))); container.innerHTML = ''; container.appendChild(fragment); }
-        function checkEmptyStates() { Elements.notesEmptyState.style.display = Elements.notesContainer.children.length === 0 ? 'flex' : 'none'; Elements.favoritesEmptyState.style.display = Elements.favoritesContainer.children.length === 0 ? 'flex' : 'none'; Elements.expensesEmptyState.style.display = Elements.expensesContainer.children.length === 0 ? 'flex' : 'none'; }
-
-        function createNoteElement(note) { /* Using simple category display */
-            const div = document.createElement('div'); div.className = `card category-${note.category} ${note.isFavorite ? 'favorite-card' : ''}`; div.dataset.noteId = note.id;
-            const title = decodeSanitizedText(note.title) || 'Untitled Note'; const content = decodeSanitizedText(note.content); const catIcon = CATEGORY_ICONS[note.category] || CATEGORY_ICONS.general; const fDate = formatDate(new Date(note.timestamp)); const favIconClass = note.isFavorite ? 'fa-solid' : 'fa-regular';
-            div.innerHTML = `<div class="card-header"><h3 class="card-title"></h3><div class="card-actions"><button class="action-btn edit-btn" title="Edit"><i class="fas fa-pencil-alt"></i></button><button class="action-btn favorite-btn ${note.isFavorite ? 'active' : ''}" title="Favorite"><i class="${favIconClass} fa-star"></i></button><button class="action-btn delete-btn" title="Delete"><i class="fas fa-trash"></i></button></div></div><div class="card-content"></div><div class="card-footer"><div class="card-category-info"><i class="${catIcon}"></i><span>${note.category}</span></div><div class="card-timestamp"><i class="far fa-clock"></i> ${fDate}</div></div>`;
-            div.querySelector('.card-title').textContent = title; div.querySelector('.card-content').textContent = content; return div;
+        function performSearch() {
+            searchQuery = Elements.searchInput.value.trim().toLowerCase();
+            Elements.searchContainer.classList.toggle('has-text', searchQuery.length > 0);
+            
+            if (currentTab === 'notes' || currentTab === 'favorites') {
+                renderNotes();
+            } else if (currentTab === 'expenses') {
+                renderExpenses();
+            }
         }
-        function createExpenseElement(expense) { /* Simple category display */
-            const div = document.createElement('div'); div.className = 'card expense-card'; div.dataset.expenseId = expense.id; const fAmount = formatCurrency(expense.amount); const fDate = formatDate(new Date(expense.timestamp)); let dDate = expense.date; try { dDate = new Date(expense.date + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }); } catch (e) {}
-            div.innerHTML = `<div class="card-header"><h3 class="card-title"></h3><div class="card-actions"><button class="action-btn delete-btn" title="Delete"><i class="fas fa-trash"></i></button></div></div><div class="card-content expense-amount"></div><div class="card-footer"><div class="card-category-info"><i class="fas fa-calendar-alt" style="color: var(--text-muted);"></i><span>${dDate}</span></div><div class="card-timestamp"><i class="far fa-clock"></i> Added ${fDate}</div></div>`;
-            div.querySelector('.card-title').textContent = expense.title || 'Untitled Expense'; div.querySelector('.expense-amount').textContent = fAmount; return div;
-        }
-        function calculateAndDisplayTotalExpenses() { const total = expenses.reduce((sum, ex) => sum + (ex.amount || 0), 0); if (total > 0 && expenses.length > 0) { Elements.totalExpensesAmount.textContent = formatCurrency(total); Elements.totalExpensesDisplay.style.display = 'inline-block'; } else { Elements.totalExpensesDisplay.style.display = 'none'; } }
 
-        // --- Tab Switching (Simple) ---
+        function clearSearch() {
+            Elements.searchInput.value = '';
+            performSearch();
+            Elements.searchInput.focus();
+        }
+
+        function handleSort(order) {
+            if (sortOrder === order) return;
+            
+            sortOrder = order;
+            Elements.sortNewestBtn.classList.toggle('active', order === 'newest');
+            Elements.sortOldestBtn.classList.toggle('active', order === 'oldest');
+            saveUserPreferences();
+            renderAll();
+        }
+
+        // --- Rendering ---
+        function renderAll() {
+            renderNotes();
+            renderExpenses();
+        }
+
+        function filterItems(items) {
+            if (!searchQuery) return items;
+            
+            if (items === expenses) return items.filter(item => {
+                const title = (item.title || '').toLowerCase();
+                const amount = (item.amount || '').toString();
+                return title.includes(searchQuery) || amount.includes(searchQuery);
+            });
+            
+            return items.filter(item => {
+                const title = (decodeSanitizedText(item.title || '') || '').toLowerCase();
+                const content = (decodeSanitizedText(item.content || '') || '').toLowerCase();
+                const category = (item.category || '').toLowerCase();
+                return title.includes(searchQuery) || content.includes(searchQuery) || category.includes(searchQuery);
+            });
+        }
+
+        function sortItems(items) {
+            return [...items].sort((a, b) => {
+                const dateA = new Date(a.timestamp);
+                const dateB = new Date(b.timestamp);
+                return sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
+            });
+        }
+
+        function renderNotes() {
+            const filtered = filterItems(notes);
+            const sorted = sortItems(filtered);
+            renderItemList(sorted, Elements.notesContainer, createNoteElement);
+            
+            const favFiltered = filterItems(notes.filter(n => n.isFavorite));
+            const favSorted = sortItems(favFiltered);
+            renderItemList(favSorted, Elements.favoritesContainer, createNoteElement);
+            
+            checkEmptyStates();
+        }
+
+        function renderExpenses() {
+            const filtered = filterItems(expenses);
+            const sorted = sortItems(filtered);
+            renderItemList(sorted, Elements.expensesContainer, createExpenseElement);
+            calculateAndDisplayTotalExpenses();
+            checkEmptyStates();
+        }
+
+        function renderItemList(items, container, createElementFn) {
+            const fragment = document.createDocumentFragment();
+            items.forEach(item => fragment.appendChild(createElementFn(item)));
+            container.innerHTML = '';
+            container.appendChild(fragment);
+        }
+
+        function checkEmptyStates() {
+            Elements.notesEmptyState.style.display = Elements.notesContainer.children.length === 0 ? 'flex' : 'none';
+            Elements.favoritesEmptyState.style.display = Elements.favoritesContainer.children.length === 0 ? 'flex' : 'none';
+            Elements.expensesEmptyState.style.display = Elements.expensesContainer.children.length === 0 ? 'flex' : 'none';
+        }
+
+        function createNoteElement(note) {
+            const div = document.createElement('div');
+            div.className = `card category-${note.category} ${note.isFavorite ? 'favorite-card' : ''}`;
+            div.dataset.noteId = note.id;
+            
+            const title = decodeSanitizedText(note.title) || 'Untitled Note';
+            const content = decodeSanitizedText(note.content);
+            const catIcon = CATEGORY_ICONS[note.category] || CATEGORY_ICONS.general;
+            const fDate = formatDate(new Date(note.timestamp));
+            const favIconClass = note.isFavorite ? 'fa-solid' : 'fa-regular';
+            
+            div.innerHTML = `
+                <div class="card-header">
+                    <h3 class="card-title"></h3>
+                    <div class="card-actions">
+                        <button class="action-btn edit-btn" title="Edit"><i class="fas fa-pencil-alt"></i></button>
+                        <button class="action-btn favorite-btn ${note.isFavorite ? 'active' : ''}" title="Favorite"><i class="${favIconClass} fa-star"></i></button>
+                        <button class="action-btn delete-btn" title="Delete"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+                <div class="card-content"></div>
+                <div class="card-footer">
+                    <div class="card-category-info">
+                        <i class="${catIcon}"></i><span>${note.category}</span>
+                    </div>
+                    <div class="card-timestamp">
+                        <i class="far fa-clock"></i> ${fDate}
+                    </div>
+                </div>
+            `;
+            
+            div.querySelector('.card-title').textContent = title;
+            div.querySelector('.card-content').textContent = content;
+            
+            return div;
+        }
+
+        function createExpenseElement(expense) {
+            const div = document.createElement('div');
+            div.className = 'card expense-card';
+            div.dataset.expenseId = expense.id;
+            
+            const fAmount = formatCurrency(expense.amount);
+            const fDate = formatDate(new Date(expense.timestamp));
+            let dDate = expense.date;
+            
+            try {
+                dDate = new Date(expense.date + 'T00:00:00').toLocaleDateString('en-IN', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric'
+                });
+            } catch (e) {}
+            
+            div.innerHTML = `
+                <div class="card-header">
+                    <h3 class="card-title"></h3>
+                    <div class="card-actions">
+                        <button class="action-btn delete-btn" title="Delete"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+                <div class="card-content expense-amount"></div>
+                <div class="card-footer">
+                    <div class="card-category-info">
+                        <i class="fas fa-calendar-alt" style="color: var(--text-muted);"></i><span>${dDate}</span>
+                    </div>
+                    <div class="card-timestamp">
+                        <i class="far fa-clock"></i> Added ${fDate}
+                    </div>
+                </div>
+            `;
+            
+            div.querySelector('.card-title').textContent = expense.title || 'Untitled Expense';
+            div.querySelector('.expense-amount').textContent = fAmount;
+            
+            return div;
+        }
+
+        function calculateAndDisplayTotalExpenses() {
+            const total = expenses.reduce((sum, ex) => sum + (ex.amount || 0), 0);
+            
+            if (total > 0 && expenses.length > 0) {
+                Elements.totalExpensesAmount.textContent = formatCurrency(total);
+                Elements.totalExpensesDisplay.style.display = 'inline-block';
+            } else {
+                Elements.totalExpensesDisplay.style.display = 'none';
+            }
+        }
+
+        // --- Tab Switching ---
         function switchTab(tabId, isInitialLoad = false) {
-            if (!tabId) return; currentTab = tabId; saveUserPreferences(); // Save pref on switch
-            Elements.tabs.forEach(tab => { const selected = tab.dataset.tab === tabId; tab.classList.toggle('active', selected); tab.setAttribute('aria-selected', selected); });
-            Elements.tabContents.forEach(content => { const active = content.id === `${tabId}-content`; content.classList.toggle('active', active); });
+            if (!tabId) return;
+            
+            currentTab = tabId;
+            saveUserPreferences();
+            
+            Elements.tabs.forEach(tab => {
+                const selected = tab.dataset.tab === tabId;
+                tab.classList.toggle('active', selected);
+                tab.setAttribute('aria-selected', selected);
+            });
+            
+            Elements.tabContents.forEach(content => {
+                const active = content.id === `${tabId}-content`;
+                content.classList.toggle('active', active);
+            });
+            
             Elements.totalExpensesContainer.style.display = (tabId === 'expenses') ? 'block' : 'none';
-            // Update FAB title
-            if (tabId === 'expenses') { Elements.addFab.title = "Add New Expense"; Elements.addFab.ariaLabel = "Add New Expense"; } else { Elements.addFab.title = "Add New Note"; Elements.addFab.ariaLabel = "Add New Note"; }
-            if (!isInitialLoad && searchQuery) { performSearch(); } // Re-filter if needed
+            
+            if (tabId === 'expenses') {
+                Elements.addFab.title = "Add New Expense";
+                Elements.addFab.ariaLabel = "Add New Expense";
+            } else {
+                Elements.addFab.title = "Add New Note";
+                Elements.addFab.ariaLabel = "Add New Note";
+            }
+            
+            if (!isInitialLoad && searchQuery) {
+                performSearch();
+            }
+            
+            // Update tab indicator
+            setupTabIndicator();
         }
 
-        // --- Data Management (Import/Export - Updated filename) ---
+        // --- Data Management (Import/Export) ---
         function handleExportData() {
             try {
-                // Simplified preferences object for export
                 const currentPrefs = getDataFromLocalStorage(PREFS_KEY, {});
                 const dE = {
-                    version: 7, // Updated version marker if needed
+                    version: 8,
                     exportedAt: new Date().toISOString(),
                     notes: notes,
                     expenses: expenses,
-                    preferences: { // Only export relevant prefs
+                    preferences: {
                         theme: currentPrefs.theme,
                         currentTab: currentPrefs.currentTab,
                         sortOrder: currentPrefs.sortOrder
                     }
                 };
+                
                 const dS = JSON.stringify(dE, null, 2);
                 const b = new Blob([dS], { type: 'application/json' });
                 const u = URL.createObjectURL(b);
                 const l = document.createElement('a');
                 const tS = new Date().toISOString().slice(0, 19).replace('T', '_').replace(/:/g, '-');
-                // Changed Export Filename
+                
                 l.download = `FinotePro_Backup_${tS}.json`;
-                l.href = u; l.click(); URL.revokeObjectURL(u);
+                l.href = u;
+                l.click();
+                URL.revokeObjectURL(u);
+                
                 showToast("Data exported successfully.");
             } catch (e) {
                 console.error("Export failed:", e);
                 showErrorToast("Data export failed.");
             }
         }
+
         function handleImportData(event) {
             const f = event.target.files[0];
             if (!f) return;
+            
             const r = new FileReader();
+            
             r.onload = (e) => {
                 try {
                     const iD = JSON.parse(e.target.result);
+                    
                     if (!iD || (!Array.isArray(iD.notes) && !Array.isArray(iD.expenses))) {
                         throw new Error("Invalid file structure.");
                     }
+                    
                     const nC = iD.notes?.length || 0;
                     const eC = iD.expenses?.length || 0;
+                    
                     showConfirmationModal(`Import ${nC} notes and ${eC} expenses? This will REPLACE current data.`, () => {
                         notes = iD.notes || [];
                         expenses = iD.expenses || [];
+                        
                         if (iD.preferences) {
-                            // Only save relevant prefs from imported file
                             const importedPrefs = {
                                 theme: iD.preferences.theme || 'dark',
                                 currentTab: iD.preferences.currentTab || 'notes',
                                 sortOrder: iD.preferences.sortOrder || 'newest'
                             };
+                            
                             saveDataToLocalStorage(PREFS_KEY, importedPrefs);
-                            loadUserPreferences(); // Reload prefs to apply imported ones
+                            loadUserPreferences();
                         } else {
-                             // Reset prefs if none in file
-                             saveUserPreferences();
+                            saveUserPreferences();
                         }
-                        saveData(); // Save imported notes/expenses
+                        
+                        saveData();
                         renderAll();
-                        // Switch to imported tab or default
                         switchTab(getDataFromLocalStorage(PREFS_KEY, {}).currentTab || 'notes', true);
                         showToast("Data imported successfully.");
                     });
@@ -702,28 +2011,123 @@
                     Elements.importFileInput.value = '';
                 }
             };
+            
             r.onerror = () => {
                 showErrorToast("Failed to read file.");
                 Elements.importFileInput.value = '';
             };
+            
             r.readAsText(f);
         }
 
         // --- Utility Functions ---
-        function debounce(func, wait) { let t; return function(...a){ const c=this; clearTimeout(t); t = setTimeout(() => func.apply(c, a), wait); }; }
-        function formatDate(date) { if (!(date instanceof Date) || isNaN(date)) return 'Invalid Date'; try { const opts = { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', hour12: true }; if (date.getFullYear() !== new Date().getFullYear()) opts.year = 'numeric'; return date.toLocaleString('en-IN', opts); } catch (e) { return date.toISOString().slice(0, 16).replace('T', ' '); } }
-        function formatCurrency(amount) { try { return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(amount); } catch (e) { return `₹${(amount || 0).toFixed(2)}`; } }
-        function sanitizeText(text) { if (typeof text !== 'string') return ''; const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }; return text.replace(/[&<>"']/g, m => map[m]).replace(/\n/g, '<br>'); }
-        function decodeSanitizedText(text) { if (typeof text !== 'string') return ''; try { const ta = document.createElement('textarea'); ta.innerHTML = text.replace(/<br\s*\/?>/g, '\n'); return ta.value; } catch (e) { return text; } }
-        function showToast(message, duration = 3000) { createToast(message, 'success', duration); }
-        function showErrorToast(message, duration = 5000) { createToast(message, 'error', duration); }
-        function createToast(message, type = 'success', duration) { /* Keep simple toast */ const t=document.createElement('div');t.textContent=message;t.className=`toast toast-${type}`;t.style.cssText="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);padding:10px 20px;border-radius:var(--radius-md);color:white;z-index:1005;opacity:0;transition:opacity .3s ease, transform .3s ease;box-shadow:0 3px 10px rgba(0,0,0,.2);font-size:var(--font-size-sm);"; t.style.backgroundColor = type === 'error' ? 'var(--error-color)' : 'var(--success-color)'; document.body.appendChild(t); setTimeout(() => { t.style.opacity = '1'; t.style.transform = 'translateX(-50%) translateY(-10px)'; }, 50); setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateX(-50%) translateY(0)'; setTimeout(() => { t.remove(); }, 300); }, duration); }
+        function debounce(func, wait) {
+            let t;
+            return function(...a) {
+                const c = this;
+                clearTimeout(t);
+                t = setTimeout(() => func.apply(c, a), wait);
+            };
+        }
+
+        function formatDate(date) {
+            if (!(date instanceof Date) || isNaN(date)) return 'Invalid Date';
+            
+            try {
+                const opts = {
+                    day: 'numeric',
+                    month: 'short',
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    hour12: true
+                };
+                
+                if (date.getFullYear() !== new Date().getFullYear()) opts.year = 'numeric';
+                return date.toLocaleString('en-IN', opts);
+            } catch (e) {
+                return date.toISOString().slice(0, 16).replace('T', ' ');
+            }
+        }
+
+        function formatCurrency(amount) {
+            try {
+                return new Intl.NumberFormat('en-IN', {
+                    style: 'currency',
+                    currency: 'INR',
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }).format(amount);
+            } catch (e) {
+                return `₹${(amount || 0).toFixed(2)}`;
+            }
+        }
+
+        function sanitizeText(text) {
+            if (typeof text !== 'string') return '';
+            
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            
+            return text.replace(/[&<>"']/g, m => map[m]).replace(/\n/g, '<br>');
+        }
+
+        function decodeSanitizedText(text) {
+            if (typeof text !== 'string') return '';
+            
+            try {
+                const ta = document.createElement('textarea');
+                ta.innerHTML = text.replace(/<br\s*\/?>/g, '\n');
+                return ta.value;
+            } catch (e) {
+                return text;
+            }
+        }
+
+        function showToast(message, duration = 3000) {
+            createToast(message, 'success', duration);
+        }
+
+        function showErrorToast(message, duration = 5000) {
+            createToast(message, 'error', duration);
+        }
+
+        function createToast(message, type = 'success', duration) {
+            const t = document.createElement('div');
+            t.textContent = message;
+            t.className = `toast toast-${type}`;
+            
+            document.body.appendChild(t);
+            
+            // Trigger animation
+            setTimeout(() => {
+                t.style.opacity = '1';
+                t.style.transform = 'translateX(-50%) translateY(-20px)';
+            }, 50);
+            
+            // Remove toast after duration
+            setTimeout(() => {
+                t.style.opacity = '0';
+                t.style.transform = 'translateX(-50%) translateY(0)';
+                
+                setTimeout(() => {
+                    t.remove();
+                }, 300);
+            }, duration);
+        }
 
         // --- Settings Panel Logic ---
-        function toggleCustomizationPanel() { Elements.customizationPanel.classList.toggle('open'); }
+        function toggleCustomizationPanel() {
+            Elements.customizationPanel.classList.toggle('open');
+        }
 
         // --- App Start ---
         document.addEventListener('DOMContentLoaded', initApp);
     </script>
 </body>
+
 </html>
