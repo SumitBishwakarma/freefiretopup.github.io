@@ -1,2133 +1,460 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finote Pro - Notes & Expenses Tracker</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Yo Style - Style Your Name</title>
+    <!-- Google Fonts: Poppins (Interface) + Anton (Styled Name) -->
+    <!-- font-display=swap helps reduce Flash Of Unstyled Text (FOUT) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+
     <style>
-        /* CSS Variables */
+        /* --- CSS Variables --- */
         :root {
-            /* Typography */
-            --font-primary: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-            --font-size-xs: 0.75rem;
-            --font-size-sm: 0.875rem;
-            --font-size-md: 1rem;
-            --font-size-lg: 1.25rem;
-            --font-size-xl: 1.5rem;
-            --font-weight-light: 300;
-            --font-weight-regular: 400;
-            --font-weight-medium: 500;
-            --font-weight-semibold: 600;
-            --font-weight-bold: 700;
-
-            /* Transitions */
-            --transition-fast: 0.15s ease;
-            --transition-medium: 0.3s ease;
-            --transition-slow: 0.5s ease;
-
-            /* Border Radius */
-            --border-radius-sm: 4px;
-            --border-radius-md: 8px;
-            --border-radius-lg: 12px;
-            --border-radius-xl: 16px;
-            --border-radius-full: 9999px;
-
-            /* Shadows */
-            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
-            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-            --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+            --bg-primary: #121212;
+            --bg-secondary: #1e1e1e;
+            --text-primary: #e0e0e0;
+            --text-secondary: #aaaaaa;
+            --accent-color: #00ff7f; /* Vibrant Spring Green */
+            --accent-darker: #00cc66;
+            --border-color: #333333;
+            --shadow-color: rgba(0, 255, 127, 0.2);
+            --shadow-dark: rgba(0, 0, 0, 0.3);
+            --font-main: 'Poppins', sans-serif; /* Default font */
+            --font-styled-name: 'Anton', sans-serif; /* Specific font for the styled output */
+            --transition-speed: 0.3s;
         }
 
-        /* Dark Theme (Default) */
-        body {
-            /* Base Colors */
-            --color-bg-primary: #121212;
-            --color-bg-secondary: #1e1e1e;
-            --color-bg-tertiary: #2d2d2d;
-            --color-bg-hover: rgba(255, 255, 255, 0.05);
-            --color-bg-elevated: #252525;
-
-            /* Text Colors */
-            --text-primary: rgba(255, 255, 255, 0.87);
-            --text-secondary: rgba(255, 255, 255, 0.6);
-            --text-muted: rgba(255, 255, 255, 0.38);
-
-            /* Border Colors */
-            --border-color: rgba(255, 255, 255, 0.12);
-            --divider-color: rgba(255, 255, 255, 0.06);
-
-            /* Theme Colors - Dark */
-            --primary-color: #9c27b0;
-            --primary-color-light: #bb48cd;
-            --primary-color-dark: #7b1fa2;
-            --secondary-color: #03a9f4;
-            --accent-color: #ff9800;
-            --error-color: #f44336;
-            --success-color: #4caf50;
-            --warning-color: #ff9800;
-            --info-color: #2196f3;
-
-            /* Card Colors - Dark */
-            --card-bg: #252525;
-            --card-bg-hover: #2d2d2d;
-            --card-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
-            --card-favorite-bg: linear-gradient(135deg, rgba(155, 89, 182, 0.08) 0%, rgba(255, 153, 0, 0.08) 100%);
-
-            /* Scrollbar */
-            --scrollbar-track: #2d2d2d;
-            --scrollbar-thumb: #454545;
-            --scrollbar-thumb-hover: #555555;
-
-            /* Category Colors */
-            --category-general-color: #607d8b;
-            --category-work-color: #3f51b5;
-            --category-personal-color: #e91e63;
-            --category-ideas-color: #9c27b0;
-            --category-todo-color: #4caf50;
-        }
-
-        /* Light Theme */
-        body.light-theme {
-            /* Base Colors */
-            --color-bg-primary: #f9f9f9;
-            --color-bg-secondary: #f1f1f1;
-            --color-bg-tertiary: #e8e8e8;
-            --color-bg-hover: rgba(0, 0, 0, 0.05);
-            --color-bg-elevated: #ffffff;
-
-            /* Text Colors */
-            --text-primary: rgba(0, 0, 0, 0.87);
-            --text-secondary: rgba(0, 0, 0, 0.6);
-            --text-muted: rgba(0, 0, 0, 0.38);
-
-            /* Border Colors */
-            --border-color: rgba(0, 0, 0, 0.12);
-            --divider-color: rgba(0, 0, 0, 0.06);
-
-            /* Theme Colors - Light */
-            --primary-color: #6a1b9a;
-            --primary-color-light: #9c27b0;
-            --primary-color-dark: #4a148c;
-            --secondary-color: #0288d1;
-            --accent-color: #f57c00;
-            --error-color: #d32f2f;
-            --success-color: #388e3c;
-            --warning-color: #f57c00;
-            --info-color: #1976d2;
-
-            /* Card Colors - Light */
-            --card-bg: #ffffff;
-            --card-bg-hover: #f5f5f5;
-            --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            --card-favorite-bg: linear-gradient(135deg, rgba(155, 89, 182, 0.08) 0%, rgba(255, 153, 0, 0.05) 100%);
-
-            /* Scrollbar */
-            --scrollbar-track: #f1f1f1;
-            --scrollbar-thumb: #c1c1c1;
-            --scrollbar-thumb-hover: #a8a8a8;
-
-            /* Category Colors remain the same */
-        }
-
-        /* Green Theme */
-        body.green-theme {
-            --primary-color: #00796b;
-            --primary-color-light: #009688;
-            --primary-color-dark: #00695c;
-            --secondary-color: #4caf50;
-            --accent-color: #ffc107;
-        }
-
-        /* Blue Theme */
-        body.blue-theme {
-            --primary-color: #1565c0;
-            --primary-color-light: #1976d2;
-            --primary-color-dark: #0d47a1;
-            --secondary-color: #03a9f4;
-            --accent-color: #ff5722;
-        }
-    </style>
-    <style>
-        /* General Styles */
-        * {
-            box-sizing: border-box;
+        /* --- Global Reset & Base Styles --- */
+        *, *::before, *::after {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
-        html,
-        body {
-            height: 100%;
-            overflow-x: hidden;
-            text-rendering: optimizeLegibility;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+        html {
+            font-size: 100%; /* Base font size for rem units */
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: var(--font-primary);
-            font-size: var(--font-size-md);
-            background-color: var(--color-bg-primary);
+            font-family: var(--font-main);
+            background-color: var(--bg-primary);
             color: var(--text-primary);
-            transition: background-color var(--transition-medium), color var(--transition-medium);
             line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden; /* Prevent horizontal scroll */
         }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 10px;
-            height: 10px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--scrollbar-track);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--scrollbar-thumb);
-            border-radius: var(--border-radius-md);
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--scrollbar-thumb-hover);
-        }
-
-        /* Layout */
         .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 1rem;
-            padding-bottom: 5rem;
-            /* Space for FAB */
+            width: 90%;
+            max-width: 1100px; /* Consistent max-width */
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 15px;
+            padding-right: 15px;
         }
 
-        /* Header */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem 0;
-            position: relative;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .app-title {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .app-title h1 {
-            font-size: var(--font-size-xl);
-            font-weight: var(--font-weight-bold);
-            margin: 0;
-            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-fill-color: transparent;
-        }
-
-        .app-title i {
-            font-size: var(--font-size-xl);
-            color: var(--primary-color);
-        }
-
-        .header-controls {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        /* Search Container */
-        .search-container {
-            position: relative;
-            width: 300px;
-            max-width: 100%;
-        }
-
-        .search-container input {
-            width: 100%;
-            padding: 0.75rem;
-            padding-left: 2.5rem;
-            background-color: var(--color-bg-tertiary);
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius-full);
-            outline: none;
-            transition: all var(--transition-fast);
-        }
-
-        .search-container input:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px var(--primary-color-light);
-        }
-
-        .search-container i {
-            position: absolute;
-            left: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-secondary);
-        }
-
-        .search-container .search-clear-btn {
-            position: absolute;
-            right: 0.75rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-secondary);
-            background: none;
-            border: none;
-            cursor: pointer;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity var(--transition-fast);
-        }
-
-        .search-container.has-text .search-clear-btn {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        /* Sort Buttons */
-        .sort-buttons {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .sort-btn {
-            padding: 0.5rem 0.75rem;
-            background-color: var(--color-bg-tertiary);
-            color: var(--text-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius-md);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            cursor: pointer;
-            transition: all var(--transition-fast);
-        }
-
-        .sort-btn:hover {
-            background-color: var(--color-bg-hover);
-        }
-
-        .sort-btn.active {
-            background-color: var(--primary-color);
-            color: #ffffff;
-            border-color: var(--primary-color);
-        }
-    </style>
-    <style>
-        /* Tabs */
-        .tabs {
-            position: relative;
-            display: flex;
-            margin-bottom: 1.5rem;
-            border-bottom: 1px solid var(--divider-color);
-            width: 100%;
-            overflow-x: auto;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
-
-        .tabs::-webkit-scrollbar {
-            display: none;
-        }
-
-        .tabs::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            height: 3px;
-            width: var(--indicator-width, 0);
-            background-color: var(--primary-color);
-            border-radius: var(--border-radius-full);
-            transition: transform var(--transition-medium), width var(--transition-medium);
-        }
-
-        .tab {
-            padding: 1rem 1.5rem;
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-weight: var(--font-weight-medium);
-            cursor: pointer;
-            position: relative;
-            white-space: nowrap;
-            transition: color var(--transition-fast);
-        }
-
-        .tab:hover {
-            color: var(--text-primary);
-        }
-
-        .tab.active {
-            color: var(--primary-color);
-            font-weight: var(--font-weight-semibold);
-        }
-
-        .tab i {
-            margin-right: 0.5rem;
-        }
-
-        /* Tab Content */
-        .tab-content {
-            display: none;
-            animation: fadeIn var(--transition-medium);
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        /* Card Grid Layout */
-        .cards-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.25rem;
-            margin-top: 1rem;
-        }
-
-        /* Cards */
-        .card {
-            background-color: var(--card-bg);
-            border-radius: var(--border-radius-lg);
-            box-shadow: var(--card-shadow);
-            overflow: hidden;
-            transition: transform var(--transition-medium), box-shadow var(--transition-medium);
-            animation: cardAppear var(--transition-medium);
-            border: 1px solid transparent;
-            height: auto;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 16px rgba(0, 0, 0, 0.2);
-            border-color: var(--divider-color);
-        }
-
-        .card-header {
-            padding: 1rem;
-            border-bottom: 1px solid var(--divider-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .card-title {
-            font-size: var(--font-size-lg);
-            font-weight: var(--font-weight-semibold);
-            margin: 0;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            max-width: 70%;
-        }
-
-        .card-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .action-btn {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            width: 32px;
-            height: 32px;
-            border-radius: var(--border-radius-full);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all var(--transition-fast);
-        }
-
-        .action-btn:hover {
-            background-color: var(--color-bg-hover);
-            color: var(--text-primary);
-        }
-
-        .favorite-btn.active {
-            color: #ffc107;
-        }
-
-        .card-content {
-            padding: 1rem;
-            flex: 1;
-            word-break: break-word;
-            white-space: pre-wrap;
-            overflow-wrap: break-word;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-
-        .expense-amount {
-            font-size: var(--font-size-xl);
-            font-weight: var(--font-weight-bold);
-            color: var(--error-color);
-            text-align: center;
-        }
-
-        .card-footer {
-            padding: 0.75rem 1rem;
-            border-top: 1px solid var(--divider-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: var(--font-size-sm);
-            color: var(--text-muted);
-        }
-
-        .card-category-info {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .card-timestamp {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        /* Expense & Favorite Cards */
-        .expense-card {
-            border-left: 4px solid var(--error-color);
-        }
-
-        .favorite-card {
-            background: var(--card-favorite-bg);
-            border-left: 4px solid var(--accent-color);
-        }
-
-        /* Empty State */
-        .empty-state {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 3rem 1rem;
-            background-color: var(--color-bg-secondary);
-            border-radius: var(--border-radius-lg);
-            text-align: center;
-            color: var(--text-secondary);
-        }
-
-        .empty-state i {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            color: var(--text-muted);
-        }
-
-        .empty-state h3 {
-            margin-bottom: 0.5rem;
-            font-weight: var(--font-weight-medium);
-        }
-    </style>
-    <style>
-        /* Buttons */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            padding: 0.6rem 1.2rem;
-            border-radius: var(--border-radius-md);
-            font-weight: var(--font-weight-medium);
-            border: none;
-            cursor: pointer;
-            transition: all var(--transition-fast);
-            font-size: var(--font-size-md);
-        }
-
-        .btn-primary {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--primary-color-light);
-        }
-
-        .btn-secondary {
-            background-color: var(--color-bg-tertiary);
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
-        }
-
-        .btn-secondary:hover {
-            background-color: var(--color-bg-hover);
-        }
-
-        .btn-danger {
-            background-color: var(--error-color);
-            color: white;
-        }
-
-        .btn-danger:hover {
-            opacity: 0.9;
-        }
-
-        /* Floating action button */
-        .add-fab {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            width: 56px;
-            height: 56px;
-            border-radius: var(--border-radius-full);
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            box-shadow: var(--shadow-lg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all var(--transition-medium);
-            z-index: 50;
-        }
-
-        .add-fab i {
-            font-size: 1.5rem;
-        }
-
-        .add-fab:hover {
-            transform: translateY(-4px);
-            background-color: var(--primary-color-light);
-            box-shadow: var(--shadow-xl);
-        }
-
-        /* Settings button */
-        .settings-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: var(--border-radius-full);
-            background-color: var(--color-bg-tertiary);
-            color: var(--text-secondary);
-            border: 1px solid var(--border-color);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all var(--transition-fast);
-        }
-
-        .settings-btn:hover {
-            background-color: var(--color-bg-hover);
-            color: var(--text-primary);
-        }
-
-        /* Modals */
-        .modal {
-            position: fixed;
+        /* --- Header/Navbar --- */
+        .app-header {
+            background-color: rgba(30, 30, 30, 0.85); /* Slightly less transparent */
+            backdrop-filter: blur(8px); /* Slightly stronger blur */
+            -webkit-backdrop-filter: blur(8px);
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky; /* Keep header visible */
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all var(--transition-fast);
+            right: 0; /* Ensure it spans full width */
+            z-index: 1000; /* High z-index */
         }
 
-        .modal.open {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .modal-content {
-            background-color: var(--color-bg-elevated);
-            border-radius: var(--border-radius-lg);
-            width: 90%;
-            max-width: 500px;
-            max-height: 90vh;
-            overflow-y: auto;
-            transform: translateY(20px);
-            transition: transform var(--transition-medium);
-            box-shadow: var(--shadow-xl);
-        }
-
-        .modal.open .modal-content {
-            transform: translateY(0);
-        }
-
-        .modal-header {
+        .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem;
-            border-bottom: 1px solid var(--divider-color);
         }
 
-        .modal-header h2 {
-            margin: 0;
-            font-size: var(--font-size-lg);
-            font-weight: var(--font-weight-semibold);
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            text-decoration: none;
         }
+         .logo span {
+            color: var(--text-primary);
+            font-weight: 400; /* Regular weight for the second part */
+         }
 
-        .close-modal {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            cursor: pointer;
-            width: 32px;
-            height: 32px;
+        /* --- Main Content Area --- */
+        main {
+             flex-grow: 1; /* Allow main content to fill space */
+             padding-top: 40px; /* Add padding below sticky header */
+             padding-bottom: 40px;
+         }
+
+        /* --- Hero Section --- */
+        .hero-section {
+            text-align: center;
+            padding: 40px 0; /* Adjusted padding */
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            border-radius: var(--border-radius-full);
-            transition: all var(--transition-fast);
         }
 
-        .close-modal:hover {
-            background-color: var(--color-bg-hover);
-            color: var(--text-primary);
+        .hero-section h1 {
+            font-size: clamp(2.5rem, 6vw, 3.8rem); /* Responsive title size */
+            font-weight: 700;
+            margin-bottom: 15px;
+            max-width: 800px;
         }
+         .hero-section h1 .highlight { /* Specific class for highlighted text */
+            color: var(--accent-color);
+         }
 
-        .modal-body {
-            padding: 1rem;
-        }
-
-        /* Forms */
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
+        .hero-section .subtitle {
+            font-size: clamp(1rem, 3vw, 1.2rem);
             color: var(--text-secondary);
-            font-weight: var(--font-weight-medium);
+            margin-bottom: 40px;
+            max-width: 600px;
         }
 
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 0.75rem;
-            border-radius: var(--border-radius-md);
-            border: 1px solid var(--border-color);
-            background-color: var(--color-bg-tertiary);
-            color: var(--text-primary);
-            transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
-            font-family: var(--font-family);
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px var(--primary-color-light);
-        }
-
-        .form-group select {
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            background-repeat: no-repeat;
-            background-position: right 0.75rem center;
-            background-size: 16px 12px;
-            padding-right: 2.5rem;
-        }
-
-        .form-actions {
+        .input-group {
             display: flex;
-            justify-content: flex-end;
-            gap: 1rem;
-            margin-top: 1.5rem;
+            flex-direction: column; /* Stack on small screens */
+            gap: 15px; /* Space between input and button */
+            align-items: center;
+            width: 100%;
+            max-width: 500px; /* Control group width */
         }
 
-        .error-text {
-            color: var(--error-color);
-            font-size: var(--font-size-sm);
-            margin-top: 0.25rem;
-            min-height: 18px;
+        #nameInput {
+            font-family: var(--font-main);
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 1.1rem;
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+            appearance: none; /* Remove default browser styling */
+             -webkit-appearance: none;
         }
 
-        /* Category colors */
-        .category-general {
-            border-left: 4px solid var(--category-general-color);
+        #nameInput::placeholder {
+            color: #777;
+             opacity: 1; /* Ensure placeholder is visible */
         }
 
-        .category-work {
-            border-left: 4px solid var(--category-work-color);
+        #nameInput:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px var(--shadow-color);
         }
 
-        .category-personal {
-            border-left: 4px solid var(--category-personal-color);
+        #styleButton {
+            font-family: var(--font-main);
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #000; /* Black text contrasts well with accent */
+            background-color: var(--accent-color);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            white-space: nowrap; /* Prevent button text wrapping */
+            appearance: none; /* Remove default browser styling */
+             -webkit-appearance: none;
         }
 
-        .category-ideas {
-            border-left: 4px solid var(--category-ideas-color);
+        #styleButton:hover {
+            background-color: var(--accent-darker);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px var(--shadow-dark);
         }
 
-        .category-todo {
-            border-left: 4px solid var(--category-todo-color);
+        #styleButton:active {
+            transform: translateY(0); /* Push down effect */
+            box-shadow: 0 2px 5px var(--shadow-dark);
         }
 
-        /* Animations */
-        @keyframes cardAppear {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        /* --- Output Section --- */
+        .output-section {
+            padding: 40px 0; /* Consistent padding */
+            width: 100%;
+            display: flex;
+            justify-content: center;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
+        .output-container {
+            background-color: var(--bg-secondary);
+            padding: 40px 30px; /* Adjusted padding for responsiveness */
+            border-radius: 15px;
+            min-height: 250px; /* Reserve vertical space to reduce layout shift */
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden; /* Clip content if extremely large */
+             position: relative; /* Needed for potential absolute positioning inside */
         }
 
-        .deleting {
-            animation: deleteAnimation 0.6s ease forwards;
+        /* --- The Styled Name --- */
+        .styled-name {
+            font-family: var(--font-styled-name); /* Using Anton font */
+            font-size: clamp(2.5rem, 10vw, 7rem); /* Adjusted clamp values for Anton */
+            font-weight: 400; /* Anton standard weight */
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 1.5px; /* Slightly adjusted spacing */
+            text-shadow: 0 0 8px var(--shadow-color), 0 0 15px var(--shadow-color), 1px 1px 3px rgba(0,0,0,0.4); /* Adjusted shadow */
+            margin: 0;
+            line-height: 1.1; /* Tight line height for large fonts */
+            word-break: break-word; /* Allow long words to break */
+            text-align: center;
+            width: 100%; /* Ensure it takes container width for centering */
+
+            /* Animation properties */
+            opacity: 0; /* Start hidden */
+            transform: translateY(15px) scale(0.98); /* Start slightly down and small */
+            visibility: hidden; /* Use visibility for better performance hiding */
+            transition: opacity var(--transition-speed) ease, transform var(--transition-speed) ease, visibility 0s var(--transition-speed); /* Transition for prompt */
         }
 
-        @keyframes deleteAnimation {
+        /* Class for placeholder/prompt messages */
+        .styled-name.prompt {
+            font-family: var(--font-main); /* Use default font for prompts */
+            font-size: clamp(1.2rem, 5vw, 1.8rem); /* Smaller size for prompt */
+            font-weight: 400;
+            color: var(--text-secondary); /* Less prominent color */
+            text-transform: none;
+            letter-spacing: normal;
+            text-shadow: none; /* No shadow for prompt */
+            opacity: 1; /* Make visible immediately */
+            transform: none;
+             visibility: visible;
+            transition: none; /* No transition for prompt appearance */
+        }
+
+        /* --- Name Appearance Animation --- */
+        @keyframes appear {
             0% {
-                opacity: 1;
-                transform: scale(1);
+                opacity: 0;
+                transform: translateY(15px) scale(0.98);
+                visibility: visible;
             }
-            50% {
-                opacity: 0.8;
-                transform: scale(0.95);
+            70% {
+                opacity: 0.9;
+                transform: translateY(-5px) scale(1.02); /* Overshoot slightly */
             }
             100% {
-                opacity: 0;
-                transform: scale(0.9);
-                height: 0;
-                margin: -10px 0;
-                padding: 0;
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                 visibility: visible;
             }
         }
 
-        /* Toast Notifications */
-        .toast {
-            position: fixed;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%) translateY(50px);
-            background-color: var(--color-bg-elevated);
-            color: var(--text-primary);
-            padding: 1rem 1.5rem;
-            border-radius: var(--border-radius-md);
-            box-shadow: var(--shadow-lg);
-            z-index: 1000;
-            opacity: 0;
-            transition: all var(--transition-medium);
+        /* Class to trigger the animation */
+        .styled-name.animate {
+             /* Use a longer, smoother duration maybe */
+             animation: appear 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+             /* 'forwards' keeps the end state */
         }
 
-        .toast-success {
-            border-left: 4px solid var(--success-color);
+
+        /* --- Footer --- */
+        .app-footer {
+            background-color: var(--bg-secondary);
+            padding: 30px 0;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            margin-top: auto; /* Push footer to bottom in flex column */
         }
 
-        .toast-error {
-            border-left: 4px solid var(--error-color);
-        }
-
-        /* Total expenses display */
-        .total-expenses-container {
-            margin-bottom: 1rem;
-            text-align: right;
-        }
-
-        .total-expenses-display {
-            display: inline-block;
-            background-color: var(--color-bg-elevated);
-            padding: 0.5rem 1rem;
-            border-radius: var(--border-radius-md);
-            box-shadow: var(--shadow-sm);
-            border-left: 4px solid var(--error-color);
-        }
-
-        .total-expenses-amount {
-            font-weight: var(--font-weight-bold);
-            color: var(--error-color);
-        }
-
-        /* Customization Panel */
-        .customization-panel {
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 320px;
-            height: 100%;
-            background-color: var(--color-bg-elevated);
-            z-index: 900;
-            transform: translateX(100%);
-            transition: transform var(--transition-medium);
-            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .customization-panel.open {
-            transform: translateX(0);
-        }
-
-        .panel-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--divider-color);
-        }
-
-        .panel-header h2 {
-            margin: 0;
-            font-size: var(--font-size-lg);
-            font-weight: var(--font-weight-semibold);
-        }
-
-        .close-panel {
-            background: none;
-            border: none;
-            cursor: pointer;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .footer-content p {
             color: var(--text-secondary);
-            border-radius: var(--border-radius-full);
-            transition: all var(--transition-fast);
+            font-size: 0.9rem;
+        }
+        .footer-content a {
+             color: var(--accent-color);
+             text-decoration: none;
+             margin: 0 5px;
+             transition: color var(--transition-speed) ease;
+         }
+         .footer-content a:hover {
+             color: var(--accent-darker);
+             text-decoration: underline;
+         }
+
+        /* --- Responsive Adjustments --- */
+        @media (min-width: 600px) {
+            .input-group {
+                flex-direction: row; /* Side-by-side layout */
+            }
+            #nameInput {
+                min-width: 300px;
+                flex-grow: 1; /* Input takes available space */
+            }
+            #styleButton {
+                width: auto;
+                flex-shrink: 0; /* Prevent button shrinking */
+            }
         }
 
-        .close-panel:hover {
-            background-color: var(--color-bg-hover);
-            color: var(--text-primary);
+        @media (max-width: 480px) {
+            .logo { font-size: 1.5rem; }
+            .hero-section h1 { font-size: 2rem; } /* Slightly smaller */
+            .hero-section .subtitle { font-size: 0.95rem; } /* Slightly smaller */
+             .output-container {
+                 padding: 30px 15px; /* Less padding on small screens */
+                 min-height: 200px; /* Adjust min-height */
+            }
+             .styled-name {
+                font-size: clamp(2rem, 12vw, 4.5rem); /* Adjust clamp for small phones */
+                letter-spacing: 1px;
+            }
+             .styled-name.prompt {
+                font-size: clamp(1rem, 4vw, 1.5rem);
+            }
+             #nameInput, #styleButton {
+                font-size: 1rem; /* Adjust input/button font size */
+                 padding: 12px 18px;
+            }
+             #styleButton {
+                 padding: 12px 30px;
+            }
         }
 
-        .panel-body {
-            flex: 1;
-            padding: 1.5rem;
-            overflow-y: auto;
-        }
-
-        .settings-section {
-            margin-bottom: 2rem;
-        }
-
-        .settings-section h3 {
-            margin-bottom: 1rem;
-            font-size: var(--font-size-md);
-            font-weight: var(--font-weight-semibold);
-            color: var(--text-primary);
-        }
-
-        .theme-options,
-        .import-export-options {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-        }
-
-        .option-btn {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-            background-color: var(--color-bg-tertiary);
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius-md);
-            transition: all var(--transition-fast);
-            cursor: pointer;
-            flex: 1;
-            min-width: 80px;
-            gap: 0.5rem;
-        }
-
-        .option-btn i {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-        }
-
-        .option-btn span {
-            font-size: var(--font-size-sm);
-            color: var(--text-secondary);
-        }
-
-        .option-btn:hover {
-            background-color: var(--color-bg-hover);
-        }
-
-        .option-btn.active {
-            background-color: var(--primary-color-light);
-            border-color: var(--primary-color);
-        }
-
-        .option-btn.active i,
-        .option-btn.active span {
-            color: white;
-        }
-
-        .import-export-options {
-            flex-direction: column;
-        }
-
-        .import-export-options button {
-            width: 100%;
-            justify-content: flex-start;
-        }
     </style>
 </head>
-
 <body>
-    <div class="container">
-        <header>
-            <div class="app-title">
-                <i class="fas fa-sticky-note"></i>
-                <h1>Finote Pro</h1>
-            </div>
-            <div class="header-controls">
-                <div class="search-container" id="search-container">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="search-input" placeholder="Search notes and expenses...">
-                    <button class="search-clear-btn" id="search-clear-btn">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                <div class="sort-buttons">
-                    <button class="sort-btn active" id="sort-newest">
-                        <i class="fas fa-sort-amount-down"></i>Newest
-                    </button>
-                    <button class="sort-btn" id="sort-oldest">
-                        <i class="fas fa-sort-amount-up"></i>Oldest
-                    </button>
-                </div>
-                <button class="settings-btn" id="settings-btn" title="Settings">
-                    <i class="fas fa-cog"></i>
-                </button>
-            </div>
-        </header>
 
-        <div class="tabs" role="tablist">
-            <button class="tab active" data-tab="notes" role="tab" aria-selected="true">
-                <i class="fas fa-sticky-note"></i>Notes
-            </button>
-            <button class="tab" data-tab="favorites" role="tab" aria-selected="false">
-                <i class="fas fa-star"></i>Favorites
-            </button>
-            <button class="tab" data-tab="expenses" role="tab" aria-selected="false">
-                <i class="fas fa-receipt"></i>Expenses
-            </button>
+    <!-- Header -->
+    <header class="app-header">
+        <div class="container navbar">
+            <a href="#" class="logo">YO<span>STYLE</span></a>
+            <!-- <nav> Optional links </nav> -->
         </div>
+    </header>
 
-        <div id="total-expenses-container" style="display: none;" class="total-expenses-container">
-            <div class="total-expenses-display">
-                <span>Total Expenses: </span>
-                <span id="total-expenses-amount" class="total-expenses-amount"></span>
-            </div>
-        </div>
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section (Input) -->
+        <section class="hero-section" aria-labelledby="hero-heading">
+            <div class="container">
+                <h1 id="hero-heading">Give Your Name a <span class="highlight">Stylish Edge</span></h1>
+                <p class="subtitle">Just type your name and watch the magic happen! We'll make it look awesome.</p>
 
-        <!-- Notes Tab -->
-        <div id="notes-content" class="tab-content active">
-            <div id="notes-container" class="cards-container"></div>
-            <div id="notes-empty-state" class="empty-state">
-                <i class="fas fa-clipboard"></i>
-                <h3>No Notes Yet</h3>
-                <p>Click the + button to add your first note.</p>
-            </div>
-        </div>
-
-        <!-- Favorites Tab -->
-        <div id="favorites-content" class="tab-content">
-            <div id="favorites-container" class="cards-container"></div>
-            <div id="favorites-empty-state" class="empty-state">
-                <i class="fas fa-star"></i>
-                <h3>No Favorite Notes</h3>
-                <p>Mark notes as favorite to see them here.</p>
-            </div>
-        </div>
-
-        <!-- Expenses Tab -->
-        <div id="expenses-content" class="tab-content">
-            <div id="expenses-container" class="cards-container"></div>
-            <div id="expenses-empty-state" class="empty-state">
-                <i class="fas fa-receipt"></i>
-                <h3>No Expenses Yet</h3>
-                <p>Click the + button to add your first expense.</p>
-            </div>
-        </div>
-
-        <!-- Add Button -->
-        <button class="add-fab" id="add-fab" title="Add New Note">
-            <i class="fas fa-plus"></i>
-        </button>
-
-        <!-- Note Modal -->
-        <div class="modal" id="note-modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2 id="note-modal-title">Add Note</h2>
-                    <button class="close-modal" aria-label="Close modal">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="note-form">
-                        <input type="hidden" id="note-id">
-                        <div class="form-group">
-                            <label for="note-title">Title</label>
-                            <input type="text" id="note-title" placeholder="Enter note title" required>
-                            <div id="title-error" class="error-text"></div>
-                        </div>
-                        <div class="form-group">
-                            <label for="note-category">Category</label>
-                            <select id="note-category" required>
-                                <option value="general">General</option>
-                                <option value="work">Work</option>
-                                <option value="personal">Personal</option>
-                                <option value="ideas">Ideas</option>
-                                <option value="todo">To-Do</option>
-                            </select>
-                            <div id="category-error" class="error-text"></div>
-                        </div>
-                        <div class="form-group">
-                            <label for="note-content">Description</label>
-                            <textarea id="note-content" rows="6" placeholder="Enter your notes here"
-                                required></textarea>
-                            <div id="content-error" class="error-text"></div>
-                        </div>
-                        <div class="form-actions">
-                            <button type="button" class="btn btn-secondary close-modal">Cancel</button>
-                            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Note</button>
-                        </div>
-                    </form>
+                <div class="input-group">
+                    <label for="nameInput" class="sr-only">Enter your name:</label> <!-- Screen reader label -->
+                    <input type="text" id="nameInput" placeholder="Enter your awesome name here...">
+                    <button id="styleButton">Style It!</button>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <!-- Add Expense Modal -->
-        <div class="modal" id="add-expense-modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2 id="expense-modal-title">Add Expense</h2>
-                    <button class="close-modal" aria-label="Close modal">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="add-expense-form">
-                        <div class="form-group">
-                            <label for="expense-title">Expense Title</label>
-                            <input type="text" id="expense-title" placeholder="E.g., Groceries, Rent, etc." required>
-                            <div id="ex-title-error" class="error-text"></div>
-                        </div>
-                        <div class="form-group">
-                            <label for="expense-amount">Amount (₹)</label>
-                            <input type="number" id="expense-amount" step="0.01" min="0.01" placeholder="0.00" required>
-                            <div id="ex-amount-error" class="error-text"></div>
-                        </div>
-                        <div class="form-group">
-                            <label for="expense-date">Date</label>
-                            <input type="date" id="expense-date" required>
-                            <div id="ex-date-error" class="error-text"></div>
-                        </div>
-                        <div class="form-actions">
-                            <button type="button" class="btn btn-secondary close-modal">Cancel</button>
-                            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Add
-                                Expense</button>
-                        </div>
-                    </form>
+        <!-- Output Section -->
+        <section class="output-section" aria-live="polite"> <!-- aria-live notifies screen readers of changes -->
+            <div class="container">
+                 <div class="output-container">
+                    <!-- The styled name or prompt will appear here -->
+                    <h2 id="styledNameOutput" class="styled-name prompt">Style appears here</h2>
                 </div>
             </div>
-        </div>
+        </section>
+    </main>
 
-        <!-- Confirmation Modal -->
-        <div class="modal" id="confirmation-modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2>Confirm Action</h2>
-                    <button class="close-modal" aria-label="Close modal">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p id="confirmation-message"></p>
-                    <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" id="cancel-btn">Cancel</button>
-                        <button type="button" class="btn btn-danger" id="confirm-btn">Confirm</button>
-                    </div>
-                </div>
-            </div>
+    <!-- Footer -->
+    <footer class="app-footer">
+        <div class="container footer-content">
+            <p>&copy; <span id="year"></span> Yo Style - Elevate Your Name. <a href="#">Privacy</a> | <a href="#">Terms</a></p>
         </div>
-
-        <!-- Customization Panel -->
-        <div class="customization-panel" id="customization-panel">
-            <div class="panel-header">
-                <h2>Settings</h2>
-                <button id="close-panel" class="close-panel">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="panel-body">
-                <div class="settings-section">
-                    <h3>Theme</h3>
-                    <div class="theme-options">
-                        <button class="option-btn active" data-theme="dark">
-                            <i class="fas fa-moon"></i>
-                            <span>Dark</span>
-                        </button>
-                        <button class="option-btn" data-theme="light">
-                            <i class="fas fa-sun"></i>
-                            <span>Light</span>
-                        </button>
-                    </div>
-                </div>
-                <div class="settings-section">
-                    <h3>Import/Export</h3>
-                    <div class="import-export-options">
-                        <button class="btn btn-secondary" id="import-btn">
-                            <i class="fas fa-file-import"></i>
-                            <span>Import Data</span>
-                        </button>
-                        <button class="btn btn-secondary" id="export-btn">
-                            <i class="fas fa-file-export"></i>
-                            <span>Export Data</span>
-                        </button>
-                        <input type="file" id="import-file-input" accept=".json" style="display: none;">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    </footer>
 
     <script>
-        // --- Constants & Global State ---
-        const NOTES_KEY = 'finoteNotesData_v8';
-        const EXPENSES_KEY = 'finoteExpensesData_v8';
-        const PREFS_KEY = 'finotePrefs_v8';
-        const CATEGORY_ICONS = {
-            general: 'fa-solid fa-lightbulb',
-            work: 'fa-solid fa-briefcase',
-            personal: 'fa-solid fa-user',
-            ideas: 'fa-solid fa-wand-magic-sparkles',
-            todo: 'fa-solid fa-list-check'
-        };
+        // --- DOM Element Selection ---
+        const nameInput = document.getElementById('nameInput');
+        const styleButton = document.getElementById('styleButton');
+        const styledNameOutput = document.getElementById('styledNameOutput');
+        const yearSpan = document.getElementById('year');
 
-        let notes = [];
-        let expenses = [];
-        let currentTab = 'notes';
-        let sortOrder = 'newest';
-        let searchQuery = '';
-        let elementThatTriggeredModal = null;
-        let confirmationCallback = null;
+        // --- Set Current Year in Footer ---
+        yearSpan.textContent = new Date().getFullYear();
 
-        // --- DOM Elements Cache ---
-        const Elements = {
-            notesContainer: document.getElementById('notes-container'),
-            favoritesContainer: document.getElementById('favorites-container'),
-            expensesContainer: document.getElementById('expenses-container'),
-            notesEmptyState: document.getElementById('notes-empty-state'),
-            favoritesEmptyState: document.getElementById('favorites-empty-state'),
-            expensesEmptyState: document.getElementById('expenses-empty-state'),
-            tabs: document.querySelectorAll('.tab'),
-            tabContents: document.querySelectorAll('.tab-content'),
-            searchContainer: document.getElementById('search-container'),
-            searchInput: document.getElementById('search-input'),
-            searchClearBtn: document.getElementById('search-clear-btn'),
-            sortNewestBtn: document.getElementById('sort-newest'),
-            sortOldestBtn: document.getElementById('sort-oldest'),
-            noteModal: document.getElementById('note-modal'),
-            addExpenseModal: document.getElementById('add-expense-modal'),
-            confirmationModal: document.getElementById('confirmation-modal'),
-            closeModalButtons: document.querySelectorAll('.close-modal'),
-            confirmBtn: document.getElementById('confirm-btn'),
-            cancelBtn: document.getElementById('cancel-btn'),
-            confirmationMessage: document.getElementById('confirmation-message'),
-            noteForm: document.getElementById('note-form'),
-            noteModalTitle: document.getElementById('note-modal-title'),
-            noteIdInput: document.getElementById('note-id'),
-            noteTitleInput: document.getElementById('note-title'),
-            noteCategoryInput: document.getElementById('note-category'),
-            noteContentInput: document.getElementById('note-content'),
-            addExpenseForm: document.getElementById('add-expense-form'),
-            expenseModalTitle: document.getElementById('expense-modal-title'),
-            expenseTitleInput: document.getElementById('expense-title'),
-            expenseAmountInput: document.getElementById('expense-amount'),
-            expenseDateInput: document.getElementById('expense-date'),
-            addFab: document.getElementById('add-fab'),
-            settingsBtn: document.getElementById('settings-btn'),
-            customizationPanel: document.getElementById('customization-panel'),
-            closePanel: document.getElementById('close-panel'),
-            themeOptions: document.querySelectorAll('.theme-options .option-btn'),
-            importBtn: document.getElementById('import-btn'),
-            exportBtn: document.getElementById('export-btn'),
-            importFileInput: document.getElementById('import-file-input'),
-            totalExpensesContainer: document.getElementById('total-expenses-container'),
-            totalExpensesDisplay: document.querySelector('.total-expenses-display'),
-            totalExpensesAmount: document.getElementById('total-expenses-amount'),
-            titleError: document.getElementById('title-error'),
-            contentError: document.getElementById('content-error'),
-            categoryError: document.getElementById('category-error'),
-            exTitleError: document.getElementById('ex-title-error'),
-            exAmountError: document.getElementById('ex-amount-error'),
-            exDateError: document.getElementById('ex-date-error'),
-        };
+        // --- Main Function to Update Name Display ---
+        function updateStyledName() {
+            const name = nameInput.value.trim(); // Get and clean input
 
-        // --- Initialization ---
-        function initApp() {
-            console.log("🚀 Finote Pro Initializing...");
-            loadUserPreferences();
-            loadData();
-            setupEventListeners();
-            switchTab(currentTab, true);
-            renderAll();
-            updateSelectArrows();
-            setupTabIndicator();
-            console.log("👍 Finote Pro Ready!");
-        }
+            // Reset styles/classes before applying new ones
+            styledNameOutput.classList.remove('animate', 'prompt');
+            styledNameOutput.textContent = ''; // Clear previous content temporarily
 
-        // --- Data Handling ---
-        function loadData() {
-            notes = getDataFromLocalStorage(NOTES_KEY, []);
-            expenses = getDataFromLocalStorage(EXPENSES_KEY, []);
-        }
+            if (name) {
+                // Valid name entered
+                styledNameOutput.textContent = name; // Set the new name
 
-        function saveData() {
-            saveDataToLocalStorage(NOTES_KEY, notes);
-            saveDataToLocalStorage(EXPENSES_KEY, expenses);
-        }
+                // ** Reliable Animation Trigger **
+                // 1. Remove the class to reset animation state
+                styledNameOutput.classList.remove('animate');
 
-        function getDataFromLocalStorage(key, defaultValue) {
-            try {
-                const d = localStorage.getItem(key);
-                return d ? JSON.parse(d) : defaultValue;
-            } catch(e) {
-                console.error("LocalStorage Read Error:", key, e);
-                return defaultValue;
-            }
-        }
+                // 2. Force browser reflow. Reading offsetWidth is a common method.
+                // This ensures the removal is processed before adding the class back.
+                void styledNameOutput.offsetWidth;
 
-        function saveDataToLocalStorage(key, data) {
-            try {
-                localStorage.setItem(key, JSON.stringify(data));
-            } catch(e) {
-                console.error("LocalStorage Write Error:", key, e);
-                showErrorToast("Could not save data.");
-            }
-        }
+                // 3. Add the class back to trigger the animation defined in CSS
+                styledNameOutput.classList.add('animate');
 
-        // --- Preferences ---
-        function loadUserPreferences() {
-            const prefs = getDataFromLocalStorage(PREFS_KEY, { theme: 'dark', currentTab: 'notes', sortOrder: 'newest' });
-            setTheme(prefs.theme);
-            currentTab = prefs.currentTab || 'notes';
-            sortOrder = prefs.sortOrder || 'newest';
-            updateActiveOption(Elements.themeOptions, document.querySelector(`.theme-options .option-btn[data-theme="${prefs.theme}"]`));
-            Elements.sortNewestBtn.classList.toggle('active', sortOrder === 'newest');
-            Elements.sortOldestBtn.classList.toggle('active', sortOrder === 'oldest');
-        }
-
-        function saveUserPreferences() {
-            const currentPrefs = {
-                theme: document.body.classList.contains('light-theme') ? 'light' : 'dark',
-                currentTab: currentTab,
-                sortOrder: sortOrder
-            };
-            saveDataToLocalStorage(PREFS_KEY, currentPrefs);
-        }
-
-        function setTheme(theme) {
-            document.body.classList.toggle('light-theme', theme === 'light');
-            document.body.classList.remove('green-theme', 'blue-theme');
-            updateSelectArrows();
-        }
-
-        function updateActiveOption(optionsNodeList, activeOptionElement) {
-            if (!activeOptionElement || !optionsNodeList) return;
-            optionsNodeList.forEach(o => o.classList.remove('active'));
-            activeOptionElement.classList.add('active');
-        }
-
-        function updateSelectArrows() {
-            const mc = getComputedStyle(document.body).getPropertyValue('--text-muted').trim();
-            const sc = encodeURIComponent(mc);
-            const si = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='${sc}'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>`;
-            const bu = `url("data:image/svg+xml,${si}")`;
-            document.querySelectorAll('select').forEach(sel => {
-                sel.style.backgroundImage = bu;
-                sel.style.transition = 'background-image var(--transition-fast), border-color var(--transition-fast), background-color var(--transition-fast), box-shadow var(--transition-fast)';
-            });
-        }
-
-        // --- Event Listener Setup ---
-        function setupEventListeners() {
-            Elements.tabs.forEach(tab => tab.addEventListener('click', () => switchTab(tab.dataset.tab)));
-            Elements.addFab.addEventListener('click', handleAddButtonClick);
-            Elements.closeModalButtons.forEach(btn => btn.addEventListener('click', () => closeModal(btn.closest('.modal'))));
-            
-            [Elements.noteModal, Elements.addExpenseModal, Elements.confirmationModal].forEach(modal => {
-                modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(modal); });
-            });
-            
-            Elements.confirmBtn.addEventListener('click', handleConfirmAction);
-            Elements.cancelBtn.addEventListener('click', () => closeModal(Elements.confirmationModal));
-            Elements.noteForm.addEventListener('submit', handleSaveNote);
-            Elements.addExpenseForm.addEventListener('submit', handleAddExpense);
-            Elements.searchInput.addEventListener('input', debounce(performSearch, 300));
-            Elements.searchClearBtn.addEventListener('click', clearSearch);
-            Elements.sortNewestBtn.addEventListener('click', () => handleSort('newest'));
-            Elements.sortOldestBtn.addEventListener('click', () => handleSort('oldest'));
-            Elements.settingsBtn.addEventListener('click', toggleCustomizationPanel);
-            Elements.closePanel.addEventListener('click', toggleCustomizationPanel);
-            Elements.themeOptions.forEach(o => o.addEventListener('click', () => handlePreferenceChange(o, Elements.themeOptions, setTheme, 'theme')));
-            Elements.importBtn.addEventListener('click', () => Elements.importFileInput.click());
-            Elements.importFileInput.addEventListener('change', handleImportData);
-            Elements.exportBtn.addEventListener('click', handleExportData);
-            document.body.addEventListener('click', handleCardActionDelegation);
-            document.addEventListener('keydown', handleGlobalKeydown);
-            window.addEventListener('resize', setupTabIndicator);
-        }
-
-        // --- Tab Indicator Animation ---
-        function setupTabIndicator() {
-            const tabs = document.querySelector('.tabs');
-            const activeTab = document.querySelector('.tab.active');
-            
-            if (!tabs || !activeTab) return;
-            
-            const indicator = tabs.querySelector('::after') || tabs;
-            const activeRect = activeTab.getBoundingClientRect();
-            const tabsRect = tabs.getBoundingClientRect();
-            
-            // Set the width and position of the indicator
-            tabs.style.setProperty('--indicator-width', `${activeRect.width}px`);
-            tabs.style.setProperty('--indicator-left', `${activeRect.left - tabsRect.left}px`);
-            
-            // Apply the CSS
-            tabs.style.cssText = `
-                --indicator-width: ${activeRect.width}px;
-                --indicator-left: ${activeRect.left - tabsRect.left}px;
-            `;
-            
-            // Update the ::after selector
-            const style = document.createElement('style');
-            style.id = 'dynamic-tab-indicator';
-            const oldStyle = document.getElementById('dynamic-tab-indicator');
-            
-            if (oldStyle) {
-                oldStyle.remove();
-            }
-            
-            style.textContent = `
-                .tabs::after {
-                    width: var(--indicator-width, 0);
-                    transform: translateX(var(--indicator-left, 0));
-                }
-            `;
-            
-            document.head.appendChild(style);
-        }
-
-        // --- Event Handlers ---
-        function handleGlobalKeydown(e) {
-            if (e.key === 'Escape') {
-                const om = document.querySelector('.modal.open');
-                if (om) closeModal(om);
-                else if (Elements.customizationPanel.classList.contains('open')) toggleCustomizationPanel();
-            }
-        }
-
-        function handleAddButtonClick(e) {
-            elementThatTriggeredModal = e.currentTarget;
-            if (currentTab === 'expenses') openExpenseModal();
-            else openNoteModal();
-        }
-
-        function handlePreferenceChange(clickedOption, allOptions, setterFunction, dataType) {
-            const v = clickedOption.dataset[dataType];
-            setterFunction(v);
-            updateActiveOption(allOptions, clickedOption);
-            saveUserPreferences();
-        }
-
-        function handleCardActionDelegation(e) {
-            const targetButton = e.target.closest('.action-btn');
-            if (!targetButton) return;
-            
-            const card = targetButton.closest('.card');
-            if (!card) return;
-            
-            const noteId = card.dataset.noteId ? parseInt(card.dataset.noteId) : null;
-            const expenseId = card.dataset.expenseId ? parseInt(card.dataset.expenseId) : null;
-
-            if (targetButton.classList.contains('edit-btn') && noteId !== null) {
-                elementThatTriggeredModal = targetButton;
-                openNoteModal(noteId);
-            } else if (targetButton.classList.contains('favorite-btn') && noteId !== null) {
-                toggleFavorite(noteId, targetButton.querySelector('i'));
-            } else if (targetButton.classList.contains('delete-btn')) {
-                elementThatTriggeredModal = targetButton;
-                if (noteId !== null) {
-                    const n = notes.find(x => x.id === noteId);
-                    if (n) showConfirmationModal(`Delete note "${decodeSanitizedText(n.title) || 'Untitled'}"?`, () => deleteNote(noteId, card));
-                } else if (expenseId !== null) {
-                    const ex = expenses.find(x => x.id === expenseId);
-                    if (ex) showConfirmationModal(`Delete expense "${ex.title || 'Untitled'}"?`, () => deleteExpense(expenseId, card));
-                }
-            }
-        }
-
-        // --- Modal Management ---
-        function openModal(modalElement, elementToFocus = null) {
-            if (!modalElement) return;
-            modalElement.classList.add('open');
-            setTimeout(() => {
-                const ft = elementToFocus || modalElement.querySelector('input, textarea, select, button:not(.close-modal)');
-                if (ft) ft.focus();
-            }, 150);
-        }
-
-        function closeModal(modalElement) {
-            if (!modalElement) return;
-            modalElement.classList.remove('open');
-            
-            if (modalElement === Elements.confirmationModal) {
-                confirmationCallback = null;
             } else {
-                if (elementThatTriggeredModal) {
-                    elementThatTriggeredModal.focus();
-                    elementThatTriggeredModal = null;
-                }
-                
-                setTimeout(() => {
-                    const f = modalElement.querySelector('form');
-                    if (f) f.reset();
-                    if (modalElement.id === 'note-modal') Elements.noteIdInput.value = '';
-                }, 300);
+                // Empty input - Show prompt message
+                styledNameOutput.textContent = "Please enter a name!";
+                // Add the 'prompt' class for specific styling (defined in CSS)
+                // No animation needed for the prompt.
+                styledNameOutput.classList.add('prompt');
             }
         }
 
-        function showConfirmationModal(message, onConfirm) {
-            confirmationCallback = onConfirm;
-            Elements.confirmationMessage.textContent = message;
-            openModal(Elements.confirmationModal, Elements.cancelBtn);
-        }
+        // --- Event Listeners ---
+        // Click on the button
+        styleButton.addEventListener('click', updateStyledName);
 
-        function handleConfirmAction() {
-            if (typeof confirmationCallback === 'function') confirmationCallback();
-            closeModal(Elements.confirmationModal);
-        }
-
-        // --- Form Validation ---
-        function validateNoteForm() {
-            const title = Elements.noteTitleInput.value.trim();
-            const content = Elements.noteContentInput.value.trim();
-            
-            if (!title || !content) {
-                showErrorToast("Title and Description are required.", 3000);
-                return false;
+        // Press Enter key in the input field
+        nameInput.addEventListener('keydown', (event) => { // Using keydown for potentially faster response
+            if (event.key === 'Enter' || event.keyCode === 13) {
+                 event.preventDefault(); // Prevent default form submission if it were in a form
+                 updateStyledName();
             }
-            
-            return true;
-        }
+        });
 
-        function validateExpenseForm() {
-            const title = Elements.expenseTitleInput.value.trim();
-            const amount = Elements.expenseAmountInput.value;
-            const date = Elements.expenseDateInput.value;
-            
-            if (!title || !amount || isNaN(parseFloat(amount)) || parseFloat(amount) <= 0 || !date) {
-                showErrorToast("Please fill all expense fields with valid data.", 3000);
-                return false;
+        // Screen reader accessibility class (basic example)
+        const srOnlyStyle = document.createElement('style');
+        srOnlyStyle.textContent = `
+            .sr-only {
+                position: absolute;
+                width: 1px;
+                height: 1px;
+                padding: 0;
+                margin: -1px;
+                overflow: hidden;
+                clip: rect(0, 0, 0, 0);
+                white-space: nowrap;
+                border-width: 0;
             }
-            
-            return true;
-        }
+        `;
+        document.head.appendChild(srOnlyStyle);
 
-        // --- Core Logic: Notes ---
-        function openNoteModal(id = null) {
-            if (id) {
-                const note = notes.find(n => n.id === id);
-                if (!note) {
-                    showErrorToast("Note not found.");
-                    return;
-                }
-                
-                Elements.noteModalTitle.textContent = "Edit Note";
-                Elements.noteIdInput.value = note.id;
-                Elements.noteTitleInput.value = decodeSanitizedText(note.title);
-                Elements.noteCategoryInput.value = note.category;
-                Elements.noteContentInput.value = decodeSanitizedText(note.content);
-                Elements.noteModal.querySelector('.btn-primary').innerHTML = '<i class="fas fa-save"></i> Update Note';
-            } else {
-                Elements.noteModalTitle.textContent = "Add Note";
-                Elements.noteIdInput.value = '';
-                Elements.noteForm.reset();
-                Elements.noteModal.querySelector('.btn-primary').innerHTML = '<i class="fas fa-save"></i> Save Note';
-            }
-            
-            openModal(Elements.noteModal, Elements.noteTitleInput);
-        }
-
-        function handleSaveNote(e) {
-            e.preventDefault();
-            
-            if (!validateNoteForm()) return;
-            
-            const id = parseInt(Elements.noteIdInput.value);
-            const title = sanitizeText(Elements.noteTitleInput.value.trim());
-            const category = Elements.noteCategoryInput.value;
-            const content = sanitizeText(Elements.noteContentInput.value.trim());
-            const timestamp = new Date().toISOString();
-            
-            let isNew = false;
-            let affectedNoteTitle = title;
-            
-            if (id) {
-                const index = notes.findIndex(n => n.id === id);
-                if (index > -1) {
-                    notes[index] = { ...notes[index], title, category, content, timestamp };
-                    affectedNoteTitle = notes[index].title;
-                } else {
-                    showErrorToast("Error updating note.");
-                    return;
-                }
-            } else {
-                const newNote = {
-                    id: Date.now(),
-                    title,
-                    category,
-                    content,
-                    timestamp,
-                    isFavorite: false
-                };
-                notes.unshift(newNote);
-                isNew = true;
-            }
-            
-            saveData();
-            closeModal(Elements.noteModal);
-            renderNotes();
-            showToast(`Note "${decodeSanitizedText(affectedNoteTitle) || 'Untitled'}" ${isNew ? 'added' : 'updated'}.`);
-        }
-
-        function toggleFavorite(id, iconElement) {
-            const index = notes.findIndex(note => note.id === id);
-            
-            if (index > -1) {
-                notes[index].isFavorite = !notes[index].isFavorite;
-                
-                if (iconElement) {
-                    iconElement.className = `fa-${notes[index].isFavorite ? 'solid' : 'regular'} fa-star`;
-                    const btn = iconElement.closest('.favorite-btn');
-                    if (btn) btn.classList.toggle('active', notes[index].isFavorite);
-                    const card = iconElement.closest('.card');
-                    if (card) card.classList.toggle('favorite-card', notes[index].isFavorite);
-                }
-                
-                saveData();
-                renderNotes();
-            }
-        }
-
-        function deleteNote(id, cardElement) {
-            const noteIndex = notes.findIndex(n => n.id === id);
-            if (noteIndex === -1) return;
-            
-            const deletedTitle = notes[noteIndex].title;
-            cardElement.classList.add('deleting');
-            
-            setTimeout(() => {
-                notes = notes.filter(note => note.id !== id);
-                saveData();
-                renderNotes();
-                showToast(`Note "${decodeSanitizedText(deletedTitle) || 'Untitled'}" deleted.`);
-            }, 600); // Match animation duration
-        }
-
-        // --- Core Logic: Expenses ---
-        function openExpenseModal() {
-            Elements.expenseModalTitle.textContent = "Add Expense";
-            Elements.addExpenseForm.reset();
-            Elements.expenseDateInput.valueAsDate = new Date();
-            openModal(Elements.addExpenseModal, Elements.expenseTitleInput);
-        }
-
-        function handleAddExpense(e) {
-            e.preventDefault();
-            
-            if (!validateExpenseForm()) return;
-            
-            const title = Elements.expenseTitleInput.value.trim();
-            const amount = parseFloat(Elements.expenseAmountInput.value);
-            const date = Elements.expenseDateInput.value;
-            const timestamp = new Date().toISOString();
-            
-            const newExpense = {
-                id: Date.now(),
-                title,
-                amount,
-                date,
-                timestamp
-            };
-            
-            expenses.unshift(newExpense);
-            saveData();
-            closeModal(Elements.addExpenseModal);
-            renderExpenses();
-            showToast(`Expense "${title || 'Untitled'}" added.`);
-        }
-
-        function deleteExpense(id, cardElement) {
-            const expenseIndex = expenses.findIndex(ex => ex.id === id);
-            if (expenseIndex === -1) return;
-            
-            const deletedTitle = expenses[expenseIndex].title;
-            cardElement.classList.add('deleting');
-            
-            setTimeout(() => {
-                expenses = expenses.filter(ex => ex.id !== id);
-                saveData();
-                renderExpenses();
-                showToast(`Expense "${deletedTitle || 'Untitled'}" deleted.`);
-            }, 600); // Match animation duration
-        }
-
-        // --- Search & Sort ---
-        function performSearch() {
-            searchQuery = Elements.searchInput.value.trim().toLowerCase();
-            Elements.searchContainer.classList.toggle('has-text', searchQuery.length > 0);
-            
-            if (currentTab === 'notes' || currentTab === 'favorites') {
-                renderNotes();
-            } else if (currentTab === 'expenses') {
-                renderExpenses();
-            }
-        }
-
-        function clearSearch() {
-            Elements.searchInput.value = '';
-            performSearch();
-            Elements.searchInput.focus();
-        }
-
-        function handleSort(order) {
-            if (sortOrder === order) return;
-            
-            sortOrder = order;
-            Elements.sortNewestBtn.classList.toggle('active', order === 'newest');
-            Elements.sortOldestBtn.classList.toggle('active', order === 'oldest');
-            saveUserPreferences();
-            renderAll();
-        }
-
-        // --- Rendering ---
-        function renderAll() {
-            renderNotes();
-            renderExpenses();
-        }
-
-        function filterItems(items) {
-            if (!searchQuery) return items;
-            
-            if (items === expenses) return items.filter(item => {
-                const title = (item.title || '').toLowerCase();
-                const amount = (item.amount || '').toString();
-                return title.includes(searchQuery) || amount.includes(searchQuery);
-            });
-            
-            return items.filter(item => {
-                const title = (decodeSanitizedText(item.title || '') || '').toLowerCase();
-                const content = (decodeSanitizedText(item.content || '') || '').toLowerCase();
-                const category = (item.category || '').toLowerCase();
-                return title.includes(searchQuery) || content.includes(searchQuery) || category.includes(searchQuery);
-            });
-        }
-
-        function sortItems(items) {
-            return [...items].sort((a, b) => {
-                const dateA = new Date(a.timestamp);
-                const dateB = new Date(b.timestamp);
-                return sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
-            });
-        }
-
-        function renderNotes() {
-            const filtered = filterItems(notes);
-            const sorted = sortItems(filtered);
-            renderItemList(sorted, Elements.notesContainer, createNoteElement);
-            
-            const favFiltered = filterItems(notes.filter(n => n.isFavorite));
-            const favSorted = sortItems(favFiltered);
-            renderItemList(favSorted, Elements.favoritesContainer, createNoteElement);
-            
-            checkEmptyStates();
-        }
-
-        function renderExpenses() {
-            const filtered = filterItems(expenses);
-            const sorted = sortItems(filtered);
-            renderItemList(sorted, Elements.expensesContainer, createExpenseElement);
-            calculateAndDisplayTotalExpenses();
-            checkEmptyStates();
-        }
-
-        function renderItemList(items, container, createElementFn) {
-            const fragment = document.createDocumentFragment();
-            items.forEach(item => fragment.appendChild(createElementFn(item)));
-            container.innerHTML = '';
-            container.appendChild(fragment);
-        }
-
-        function checkEmptyStates() {
-            Elements.notesEmptyState.style.display = Elements.notesContainer.children.length === 0 ? 'flex' : 'none';
-            Elements.favoritesEmptyState.style.display = Elements.favoritesContainer.children.length === 0 ? 'flex' : 'none';
-            Elements.expensesEmptyState.style.display = Elements.expensesContainer.children.length === 0 ? 'flex' : 'none';
-        }
-
-        function createNoteElement(note) {
-            const div = document.createElement('div');
-            div.className = `card category-${note.category} ${note.isFavorite ? 'favorite-card' : ''}`;
-            div.dataset.noteId = note.id;
-            
-            const title = decodeSanitizedText(note.title) || 'Untitled Note';
-            const content = decodeSanitizedText(note.content);
-            const catIcon = CATEGORY_ICONS[note.category] || CATEGORY_ICONS.general;
-            const fDate = formatDate(new Date(note.timestamp));
-            const favIconClass = note.isFavorite ? 'fa-solid' : 'fa-regular';
-            
-            div.innerHTML = `
-                <div class="card-header">
-                    <h3 class="card-title"></h3>
-                    <div class="card-actions">
-                        <button class="action-btn edit-btn" title="Edit"><i class="fas fa-pencil-alt"></i></button>
-                        <button class="action-btn favorite-btn ${note.isFavorite ? 'active' : ''}" title="Favorite"><i class="${favIconClass} fa-star"></i></button>
-                        <button class="action-btn delete-btn" title="Delete"><i class="fas fa-trash"></i></button>
-                    </div>
-                </div>
-                <div class="card-content"></div>
-                <div class="card-footer">
-                    <div class="card-category-info">
-                        <i class="${catIcon}"></i><span>${note.category}</span>
-                    </div>
-                    <div class="card-timestamp">
-                        <i class="far fa-clock"></i> ${fDate}
-                    </div>
-                </div>
-            `;
-            
-            div.querySelector('.card-title').textContent = title;
-            div.querySelector('.card-content').textContent = content;
-            
-            return div;
-        }
-
-        function createExpenseElement(expense) {
-            const div = document.createElement('div');
-            div.className = 'card expense-card';
-            div.dataset.expenseId = expense.id;
-            
-            const fAmount = formatCurrency(expense.amount);
-            const fDate = formatDate(new Date(expense.timestamp));
-            let dDate = expense.date;
-            
-            try {
-                dDate = new Date(expense.date + 'T00:00:00').toLocaleDateString('en-IN', {
-                    day: 'numeric',
-                    month: 'short',
-                    year: 'numeric'
-                });
-            } catch (e) {}
-            
-            div.innerHTML = `
-                <div class="card-header">
-                    <h3 class="card-title"></h3>
-                    <div class="card-actions">
-                        <button class="action-btn delete-btn" title="Delete"><i class="fas fa-trash"></i></button>
-                    </div>
-                </div>
-                <div class="card-content expense-amount"></div>
-                <div class="card-footer">
-                    <div class="card-category-info">
-                        <i class="fas fa-calendar-alt" style="color: var(--text-muted);"></i><span>${dDate}</span>
-                    </div>
-                    <div class="card-timestamp">
-                        <i class="far fa-clock"></i> Added ${fDate}
-                    </div>
-                </div>
-            `;
-            
-            div.querySelector('.card-title').textContent = expense.title || 'Untitled Expense';
-            div.querySelector('.expense-amount').textContent = fAmount;
-            
-            return div;
-        }
-
-        function calculateAndDisplayTotalExpenses() {
-            const total = expenses.reduce((sum, ex) => sum + (ex.amount || 0), 0);
-            
-            if (total > 0 && expenses.length > 0) {
-                Elements.totalExpensesAmount.textContent = formatCurrency(total);
-                Elements.totalExpensesDisplay.style.display = 'inline-block';
-            } else {
-                Elements.totalExpensesDisplay.style.display = 'none';
-            }
-        }
-
-        // --- Tab Switching ---
-        function switchTab(tabId, isInitialLoad = false) {
-            if (!tabId) return;
-            
-            currentTab = tabId;
-            saveUserPreferences();
-            
-            Elements.tabs.forEach(tab => {
-                const selected = tab.dataset.tab === tabId;
-                tab.classList.toggle('active', selected);
-                tab.setAttribute('aria-selected', selected);
-            });
-            
-            Elements.tabContents.forEach(content => {
-                const active = content.id === `${tabId}-content`;
-                content.classList.toggle('active', active);
-            });
-            
-            Elements.totalExpensesContainer.style.display = (tabId === 'expenses') ? 'block' : 'none';
-            
-            if (tabId === 'expenses') {
-                Elements.addFab.title = "Add New Expense";
-                Elements.addFab.ariaLabel = "Add New Expense";
-            } else {
-                Elements.addFab.title = "Add New Note";
-                Elements.addFab.ariaLabel = "Add New Note";
-            }
-            
-            if (!isInitialLoad && searchQuery) {
-                performSearch();
-            }
-            
-            // Update tab indicator
-            setupTabIndicator();
-        }
-
-        // --- Data Management (Import/Export) ---
-        function handleExportData() {
-            try {
-                const currentPrefs = getDataFromLocalStorage(PREFS_KEY, {});
-                const dE = {
-                    version: 8,
-                    exportedAt: new Date().toISOString(),
-                    notes: notes,
-                    expenses: expenses,
-                    preferences: {
-                        theme: currentPrefs.theme,
-                        currentTab: currentPrefs.currentTab,
-                        sortOrder: currentPrefs.sortOrder
-                    }
-                };
-                
-                const dS = JSON.stringify(dE, null, 2);
-                const b = new Blob([dS], { type: 'application/json' });
-                const u = URL.createObjectURL(b);
-                const l = document.createElement('a');
-                const tS = new Date().toISOString().slice(0, 19).replace('T', '_').replace(/:/g, '-');
-                
-                l.download = `FinotePro_Backup_${tS}.json`;
-                l.href = u;
-                l.click();
-                URL.revokeObjectURL(u);
-                
-                showToast("Data exported successfully.");
-            } catch (e) {
-                console.error("Export failed:", e);
-                showErrorToast("Data export failed.");
-            }
-        }
-
-        function handleImportData(event) {
-            const f = event.target.files[0];
-            if (!f) return;
-            
-            const r = new FileReader();
-            
-            r.onload = (e) => {
-                try {
-                    const iD = JSON.parse(e.target.result);
-                    
-                    if (!iD || (!Array.isArray(iD.notes) && !Array.isArray(iD.expenses))) {
-                        throw new Error("Invalid file structure.");
-                    }
-                    
-                    const nC = iD.notes?.length || 0;
-                    const eC = iD.expenses?.length || 0;
-                    
-                    showConfirmationModal(`Import ${nC} notes and ${eC} expenses? This will REPLACE current data.`, () => {
-                        notes = iD.notes || [];
-                        expenses = iD.expenses || [];
-                        
-                        if (iD.preferences) {
-                            const importedPrefs = {
-                                theme: iD.preferences.theme || 'dark',
-                                currentTab: iD.preferences.currentTab || 'notes',
-                                sortOrder: iD.preferences.sortOrder || 'newest'
-                            };
-                            
-                            saveDataToLocalStorage(PREFS_KEY, importedPrefs);
-                            loadUserPreferences();
-                        } else {
-                            saveUserPreferences();
-                        }
-                        
-                        saveData();
-                        renderAll();
-                        switchTab(getDataFromLocalStorage(PREFS_KEY, {}).currentTab || 'notes', true);
-                        showToast("Data imported successfully.");
-                    });
-                } catch (err) {
-                    console.error("Import failed:", err);
-                    showErrorToast(`Import failed: ${err.message || 'Could not parse file.'}`);
-                } finally {
-                    Elements.importFileInput.value = '';
-                }
-            };
-            
-            r.onerror = () => {
-                showErrorToast("Failed to read file.");
-                Elements.importFileInput.value = '';
-            };
-            
-            r.readAsText(f);
-        }
-
-        // --- Utility Functions ---
-        function debounce(func, wait) {
-            let t;
-            return function(...a) {
-                const c = this;
-                clearTimeout(t);
-                t = setTimeout(() => func.apply(c, a), wait);
-            };
-        }
-
-        function formatDate(date) {
-            if (!(date instanceof Date) || isNaN(date)) return 'Invalid Date';
-            
-            try {
-                const opts = {
-                    day: 'numeric',
-                    month: 'short',
-                    hour: 'numeric',
-                    minute: '2-digit',
-                    hour12: true
-                };
-                
-                if (date.getFullYear() !== new Date().getFullYear()) opts.year = 'numeric';
-                return date.toLocaleString('en-IN', opts);
-            } catch (e) {
-                return date.toISOString().slice(0, 16).replace('T', ' ');
-            }
-        }
-
-        function formatCurrency(amount) {
-            try {
-                return new Intl.NumberFormat('en-IN', {
-                    style: 'currency',
-                    currency: 'INR',
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                }).format(amount);
-            } catch (e) {
-                return `₹${(amount || 0).toFixed(2)}`;
-            }
-        }
-
-        function sanitizeText(text) {
-            if (typeof text !== 'string') return '';
-            
-            const map = {
-                '&': '&amp;',
-                '<': '&lt;',
-                '>': '&gt;',
-                '"': '&quot;',
-                "'": '&#039;'
-            };
-            
-            return text.replace(/[&<>"']/g, m => map[m]).replace(/\n/g, '<br>');
-        }
-
-        function decodeSanitizedText(text) {
-            if (typeof text !== 'string') return '';
-            
-            try {
-                const ta = document.createElement('textarea');
-                ta.innerHTML = text.replace(/<br\s*\/?>/g, '\n');
-                return ta.value;
-            } catch (e) {
-                return text;
-            }
-        }
-
-        function showToast(message, duration = 3000) {
-            createToast(message, 'success', duration);
-        }
-
-        function showErrorToast(message, duration = 5000) {
-            createToast(message, 'error', duration);
-        }
-
-        function createToast(message, type = 'success', duration) {
-            const t = document.createElement('div');
-            t.textContent = message;
-            t.className = `toast toast-${type}`;
-            
-            document.body.appendChild(t);
-            
-            // Trigger animation
-            setTimeout(() => {
-                t.style.opacity = '1';
-                t.style.transform = 'translateX(-50%) translateY(-20px)';
-            }, 50);
-            
-            // Remove toast after duration
-            setTimeout(() => {
-                t.style.opacity = '0';
-                t.style.transform = 'translateX(-50%) translateY(0)';
-                
-                setTimeout(() => {
-                    t.remove();
-                }, 300);
-            }, duration);
-        }
-
-        // --- Settings Panel Logic ---
-        function toggleCustomizationPanel() {
-            Elements.customizationPanel.classList.toggle('open');
-        }
-
-        // --- App Start ---
-        document.addEventListener('DOMContentLoaded', initApp);
     </script>
-</body>
 
+</body>
 </html>
