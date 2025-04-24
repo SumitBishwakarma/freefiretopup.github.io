@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yo Style - Style Your Name</title>
-    <!-- Google Fonts: Poppins (Interface) + Anton (Styled Name) -->
-    <!-- font-display=swap helps reduce Flash Of Unstyled Text (FOUT) -->
+    <!-- Google Fonts: Poppins (Interface) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
 
     <style>
         /* --- CSS Variables --- */
@@ -22,8 +21,7 @@
             --border-color: #333333;
             --shadow-color: rgba(0, 255, 127, 0.2);
             --shadow-dark: rgba(0, 0, 0, 0.3);
-            --font-main: 'Poppins', sans-serif; /* Default font */
-            --font-styled-name: 'Anton', sans-serif; /* Specific font for the styled output */
+            --font-main: 'Poppins', sans-serif;
             --transition-speed: 0.3s;
         }
 
@@ -35,7 +33,7 @@
         }
 
         html {
-            font-size: 100%; /* Base font size for rem units */
+            font-size: 100%;
             scroll-behavior: smooth;
         }
 
@@ -47,12 +45,12 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            overflow-x: hidden; /* Prevent horizontal scroll */
+            overflow-x: hidden;
         }
 
         .container {
             width: 90%;
-            max-width: 1100px; /* Consistent max-width */
+            max-width: 1100px;
             margin-left: auto;
             margin-right: auto;
             padding-left: 15px;
@@ -61,16 +59,16 @@
 
         /* --- Header/Navbar --- */
         .app-header {
-            background-color: rgba(30, 30, 30, 0.85); /* Slightly less transparent */
-            backdrop-filter: blur(8px); /* Slightly stronger blur */
+            background-color: rgba(30, 30, 30, 0.85);
+            backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
             padding: 15px 0;
             border-bottom: 1px solid var(--border-color);
-            position: sticky; /* Keep header visible */
+            position: sticky;
             top: 0;
             left: 0;
-            right: 0; /* Ensure it spans full width */
-            z-index: 1000; /* High z-index */
+            right: 0;
+            z-index: 1000;
         }
 
         .navbar {
@@ -87,32 +85,32 @@
         }
          .logo span {
             color: var(--text-primary);
-            font-weight: 400; /* Regular weight for the second part */
+            font-weight: 400;
          }
 
         /* --- Main Content Area --- */
         main {
-             flex-grow: 1; /* Allow main content to fill space */
-             padding-top: 40px; /* Add padding below sticky header */
+             flex-grow: 1;
+             padding-top: 40px;
              padding-bottom: 40px;
          }
 
         /* --- Hero Section --- */
         .hero-section {
             text-align: center;
-            padding: 40px 0; /* Adjusted padding */
+            padding: 40px 0;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
         .hero-section h1 {
-            font-size: clamp(2.5rem, 6vw, 3.8rem); /* Responsive title size */
+            font-size: clamp(2.5rem, 6vw, 3.8rem);
             font-weight: 700;
             margin-bottom: 15px;
             max-width: 800px;
         }
-         .hero-section h1 .highlight { /* Specific class for highlighted text */
+         .hero-section h1 .highlight {
             color: var(--accent-color);
          }
 
@@ -125,11 +123,11 @@
 
         .input-group {
             display: flex;
-            flex-direction: column; /* Stack on small screens */
-            gap: 15px; /* Space between input and button */
+            flex-direction: column;
+            gap: 15px;
             align-items: center;
             width: 100%;
-            max-width: 500px; /* Control group width */
+            max-width: 500px;
         }
 
         #nameInput {
@@ -142,13 +140,13 @@
             border-radius: 8px;
             color: var(--text-primary);
             transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
-            appearance: none; /* Remove default browser styling */
+            appearance: none;
              -webkit-appearance: none;
         }
 
         #nameInput::placeholder {
             color: #777;
-             opacity: 1; /* Ensure placeholder is visible */
+             opacity: 1;
         }
 
         #nameInput:focus {
@@ -162,7 +160,7 @@
             padding: 15px 40px;
             font-size: 1.1rem;
             font-weight: 700;
-            color: #000; /* Black text contrasts well with accent */
+            color: #000;
             background-color: var(--accent-color);
             border: none;
             border-radius: 8px;
@@ -171,9 +169,9 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            white-space: nowrap; /* Prevent button text wrapping */
-            appearance: none; /* Remove default browser styling */
-             -webkit-appearance: none;
+            white-space: nowrap;
+            appearance: none;
+            -webkit-appearance: none;
         }
 
         #styleButton:hover {
@@ -183,13 +181,13 @@
         }
 
         #styleButton:active {
-            transform: translateY(0); /* Push down effect */
+            transform: translateY(0);
             box-shadow: 0 2px 5px var(--shadow-dark);
         }
 
         /* --- Output Section --- */
         .output-section {
-            padding: 40px 0; /* Consistent padding */
+            padding: 40px 0;
             width: 100%;
             display: flex;
             justify-content: center;
@@ -197,82 +195,83 @@
 
         .output-container {
             background-color: var(--bg-secondary);
-            padding: 40px 30px; /* Adjusted padding for responsiveness */
+            padding: 20px 15px;
             border-radius: 15px;
-            min-height: 250px; /* Reserve vertical space to reduce layout shift */
+            min-height: 250px;
             width: 100%;
             max-width: 800px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             border: 1px solid var(--border-color);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            overflow: hidden; /* Clip content if extremely large */
-             position: relative; /* Needed for potential absolute positioning inside */
+            overflow-y: auto; /* Allow vertical scroll */
+            max-height: 60vh;
         }
 
-        /* --- The Styled Name --- */
-        .styled-name {
-            font-family: var(--font-styled-name); /* Using Anton font */
-            font-size: clamp(2.5rem, 10vw, 7rem); /* Adjusted clamp values for Anton */
-            font-weight: 400; /* Anton standard weight */
-            color: var(--accent-color);
-            text-transform: uppercase;
-            letter-spacing: 1.5px; /* Slightly adjusted spacing */
-            text-shadow: 0 0 8px var(--shadow-color), 0 0 15px var(--shadow-color), 1px 1px 3px rgba(0,0,0,0.4); /* Adjusted shadow */
-            margin: 0;
-            line-height: 1.1; /* Tight line height for large fonts */
-            word-break: break-word; /* Allow long words to break */
-            text-align: center;
-            width: 100%; /* Ensure it takes container width for centering */
-
-            /* Animation properties */
-            opacity: 0; /* Start hidden */
-            transform: translateY(15px) scale(0.98); /* Start slightly down and small */
-            visibility: hidden; /* Use visibility for better performance hiding */
-            transition: opacity var(--transition-speed) ease, transform var(--transition-speed) ease, visibility 0s var(--transition-speed); /* Transition for prompt */
+        /* --- Individual Styled Result Div --- */
+        .styled-result {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 12px 10px;
+            border-bottom: 1px solid var(--border-color);
+            opacity: 0;
+            animation: fadeInResult 0.5s ease forwards;
         }
+        .styled-result:last-child {
+            border-bottom: none;
+        }
+
+        @keyframes fadeInResult {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .styled-result span {
+            font-size: 1.6rem;
+            line-height: 1.4;
+            word-break: break-word;
+            flex-grow: 1;
+        }
+
+        /* --- Copy Button --- */
+        .copy-button {
+            font-family: var(--font-main);
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #000;
+            background-color: var(--accent-color);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .copy-button:hover {
+            background-color: var(--accent-darker);
+            transform: scale(1.05);
+        }
+
+        .copy-button:active {
+             transform: scale(0.98);
+        }
+
 
         /* Class for placeholder/prompt messages */
-        .styled-name.prompt {
-            font-family: var(--font-main); /* Use default font for prompts */
-            font-size: clamp(1.2rem, 5vw, 1.8rem); /* Smaller size for prompt */
+        .output-prompt {
+            font-family: var(--font-main);
+            font-size: clamp(1.2rem, 5vw, 1.8rem);
             font-weight: 400;
-            color: var(--text-secondary); /* Less prominent color */
+            color: var(--text-secondary);
             text-transform: none;
             letter-spacing: normal;
-            text-shadow: none; /* No shadow for prompt */
-            opacity: 1; /* Make visible immediately */
-            transform: none;
-             visibility: visible;
-            transition: none; /* No transition for prompt appearance */
+            text-shadow: none;
+            text-align: center;
+            padding: 40px 20px;
         }
-
-        /* --- Name Appearance Animation --- */
-        @keyframes appear {
-            0% {
-                opacity: 0;
-                transform: translateY(15px) scale(0.98);
-                visibility: visible;
-            }
-            70% {
-                opacity: 0.9;
-                transform: translateY(-5px) scale(1.02); /* Overshoot slightly */
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-                 visibility: visible;
-            }
-        }
-
-        /* Class to trigger the animation */
-        .styled-name.animate {
-             /* Use a longer, smoother duration maybe */
-             animation: appear 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-             /* 'forwards' keeps the end state */
-        }
-
 
         /* --- Footer --- */
         .app-footer {
@@ -280,7 +279,7 @@
             padding: 30px 0;
             border-top: 1px solid var(--border-color);
             text-align: center;
-            margin-top: auto; /* Push footer to bottom in flex column */
+            margin-top: auto;
         }
 
         .footer-content p {
@@ -300,41 +299,28 @@
 
         /* --- Responsive Adjustments --- */
         @media (min-width: 600px) {
-            .input-group {
-                flex-direction: row; /* Side-by-side layout */
-            }
-            #nameInput {
-                min-width: 300px;
-                flex-grow: 1; /* Input takes available space */
-            }
-            #styleButton {
-                width: auto;
-                flex-shrink: 0; /* Prevent button shrinking */
-            }
+            .input-group { flex-direction: row; }
+            #nameInput { min-width: 300px; flex-grow: 1; }
+            #styleButton { width: auto; flex-shrink: 0; }
         }
 
         @media (max-width: 480px) {
             .logo { font-size: 1.5rem; }
-            .hero-section h1 { font-size: 2rem; } /* Slightly smaller */
-            .hero-section .subtitle { font-size: 0.95rem; } /* Slightly smaller */
-             .output-container {
-                 padding: 30px 15px; /* Less padding on small screens */
-                 min-height: 200px; /* Adjust min-height */
-            }
-             .styled-name {
-                font-size: clamp(2rem, 12vw, 4.5rem); /* Adjust clamp for small phones */
-                letter-spacing: 1px;
-            }
-             .styled-name.prompt {
-                font-size: clamp(1rem, 4vw, 1.5rem);
-            }
-             #nameInput, #styleButton {
-                font-size: 1rem; /* Adjust input/button font size */
-                 padding: 12px 18px;
-            }
-             #styleButton {
-                 padding: 12px 30px;
-            }
+            .hero-section h1 { font-size: 2rem; }
+            .hero-section .subtitle { font-size: 0.95rem; }
+            .output-container { padding: 15px 10px; min-height: 200px; }
+            .styled-result span { font-size: 1.3rem; }
+            .copy-button { font-size: 0.8rem; padding: 5px 10px; }
+            .output-prompt { font-size: clamp(1rem, 4vw, 1.5rem); }
+            #nameInput, #styleButton { font-size: 1rem; padding: 12px 18px; }
+            #styleButton { padding: 12px 30px; }
+        }
+
+        /* --- Screen Reader Only Class --- */
+        .sr-only {
+            position: absolute; width: 1px; height: 1px; padding: 0;
+            margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0);
+            white-space: nowrap; border-width: 0;
         }
 
     </style>
@@ -345,7 +331,6 @@
     <header class="app-header">
         <div class="container navbar">
             <a href="#" class="logo">YO<span>STYLE</span></a>
-            <!-- <nav> Optional links </nav> -->
         </div>
     </header>
 
@@ -355,10 +340,10 @@
         <section class="hero-section" aria-labelledby="hero-heading">
             <div class="container">
                 <h1 id="hero-heading">Give Your Name a <span class="highlight">Stylish Edge</span></h1>
-                <p class="subtitle">Just type your name and watch the magic happen! We'll make it look awesome.</p>
+                <p class="subtitle">Type your name & find cool styles for Instagram, WhatsApp, Facebook & more. Copy with one click!</p>
 
                 <div class="input-group">
-                    <label for="nameInput" class="sr-only">Enter your name:</label> <!-- Screen reader label -->
+                    <label for="nameInput" class="sr-only">Enter your name:</label>
                     <input type="text" id="nameInput" placeholder="Enter your awesome name here...">
                     <button id="styleButton">Style It!</button>
                 </div>
@@ -366,11 +351,11 @@
         </section>
 
         <!-- Output Section -->
-        <section class="output-section" aria-live="polite"> <!-- aria-live notifies screen readers of changes -->
+        <section class="output-section" aria-live="polite">
             <div class="container">
                  <div class="output-container">
-                    <!-- The styled name or prompt will appear here -->
-                    <h2 id="styledNameOutput" class="styled-name prompt">Style appears here</h2>
+                    <!-- Initial prompt or results will appear here -->
+                    <div class="output-prompt">Styles will appear here once you enter a name!</div>
                 </div>
             </div>
         </section>
@@ -379,7 +364,7 @@
     <!-- Footer -->
     <footer class="app-footer">
         <div class="container footer-content">
-            <p>&copy; <span id="year"></span> Yo Style - Elevate Your Name. <a href="#">Privacy</a> | <a href="#">Terms</a></p>
+            <p>© <span id="year"></span> Yo Style - Elevate Your Name. <a href="#">Privacy</a> | <a href="#">Terms</a></p>
         </div>
     </footer>
 
@@ -387,72 +372,217 @@
         // --- DOM Element Selection ---
         const nameInput = document.getElementById('nameInput');
         const styleButton = document.getElementById('styleButton');
-        const styledNameOutput = document.getElementById('styledNameOutput');
+        const outputContainer = document.querySelector('.output-container');
         const yearSpan = document.getElementById('year');
 
         // --- Set Current Year in Footer ---
         yearSpan.textContent = new Date().getFullYear();
 
-        // --- Main Function to Update Name Display ---
-        function updateStyledName() {
-            const name = nameInput.value.trim(); // Get and clean input
+        // --- Character Mapping Objects (Add more maps!) ---
+        const map = {
+            // Base characters
+            normal:       'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
 
-            // Reset styles/classes before applying new ones
-            styledNameOutput.classList.remove('animate', 'prompt');
-            styledNameOutput.textContent = ''; // Clear previous content temporarily
+            // Examples - Add many more!
+            bold:         '𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵𝗶𝗷𝗸𝗹𝗺𝗻𝗼𝗽𝗾𝗿𝘀𝘁𝘂𝘃𝘄𝘅𝘆𝘇𝗔𝗕𝗖𝗗𝗘𝗙𝗚𝗛𝗜𝗝𝗞𝗟𝗠𝗡𝗢𝗣𝗤𝗥𝗦𝗧𝗨𝗩𝗪𝗫𝗬𝗭𝟬𝟭𝟮𝟯𝟰𝟱𝟲𝟳𝟴𝟵',
+            italic:       '𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘬𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡', // Italic nums inconsistent
+            boldItalic:   '𝙖𝙗𝙘𝙙𝙚𝙛𝙜𝙝𝙞𝙟𝙠𝙡𝙢𝙣𝙤𝙥𝙦𝙧𝙨𝙩𝙪𝙫𝙬𝙭𝙮𝙯𝘼𝘽𝘾𝘿𝙀𝙁𝙂𝙃𝙄𝙅𝙆𝙇𝙈𝙉𝙊𝙋𝙌𝙍𝙎𝙏𝙐𝙑𝙒𝙓𝙔𝙕', // No bold italic nums generally
+            cursive:      '𝒶𝒷𝒸𝒹𝑒𝒻𝑔𝒽𝒾𝒿𝓀𝓁𝓂𝓃𝑜𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏𝒜ℬ𝒞𝒟ℰℱ𝒢ℋℐ𝒥𝒦ℒℳ𝒩𝒪𝒫𝒬ℛ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵',
+            boldCursive:  '𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩',
+            mono:         '𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿',
+            smallCaps:    'ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀꜱᴛᴜᴠᴡxʏᴢABCDEFGHIJKLMNOPQRSTUVWXYZ', // Only letters are reliable small caps via Unicode
+            bubble:       'ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏ', // Usually letters only
+            inverted:     'ɐqɔpǝɟƃɥıɾʞlɯuodbɹsʇnʌʍxʎz∀qƆpƎℲפHIſʞ˥WNOԀQɹS┴∩ΛMXʎZ0ƖᄅƐㄣϛ9ㄥ86', // Not all chars invert perfectly
+            squiggle1:      'ᗩᗷᑕᗪEᖴGᕼIᒍKᒪᗰᑎOᑭᑫᖇᔕTᑌᐯᗯ᙭YᘔᗩᗷᑕᗪEᖴGᕼIᒍKᒪᗰᑎOᑭᑫᖇᔕTᑌᐯᗯ᙭Yᘔ', // Random decorative examples
+            squiggle2:      'αв¢∂єƒﻭнιנкℓмησρ۹яѕтυνωχуչﾑ乃ᄃり乇ｷムんﾉﾌズﾚᄊ刀ԾｱＱ尺丂ｲЦЏЩΧϤ乙',
+            // Find more maps online! Search for "unicode text style map"
+        };
 
-            if (name) {
-                // Valid name entered
-                styledNameOutput.textContent = name; // Set the new name
+        // --- Character mapping for Glitch Effect (Combining Diacritics) ---
+        const glitchChars = [
+          '\u0300', '\u0301', '\u0302', '\u0303', '\u0304', '\u0305', '\u0306', '\u0307', '\u0308', '\u0309',
+          '\u030a', '\u030b', '\u030c', '\u030d', '\u030e', '\u030f', '\u0310', '\u0311', '\u0312', '\u0313',
+          '\u0314', '\u0315', '\u0316', '\u0317', '\u0318', '\u0319', '\u031a', '\u031b', '\u031c', '\u031d',
+          '\u031e', '\u031f', '\u0320', '\u0321', '\u0322', '\u0323', '\u0324', '\u0325', '\u0326', '\u0327',
+          '\u0328', '\u0329', '\u032a', '\u032b', '\u032c', '\u032d', '\u032e', '\u032f', '\u0330', '\u0331',
+          '\u0332', '\u0333', '\u0334', '\u0335', '\u0336', '\u0337', '\u0338', '\u0339', '\u033a', '\u033b',
+          '\u033c', '\u033d', '\u033e', '\u033f', '\u0340', '\u0341', '\u0342', '\u0343', '\u0344', '\u0345',
+          '\u0346', '\u0347', '\u0348', '\u0349', '\u034a', '\u034b', '\u034c', '\u034d', '\u034e', '\u034f',
+          '\u0350', '\u0351', '\u0352', '\u0353', '\u0354', '\u0355', '\u0356', '\u0357', '\u0358', '\u0359',
+          '\u035a', '\u035b', '\u035c', '\u035d', '\u035e', '\u035f', '\u0360', '\u0361', '\u0362', '\u0363',
+          '\u0364', '\u0365', '\u0366', '\u0367', '\u0368', '\u0369', '\u036a', '\u036b', '\u036c', '\u036d',
+          '\u036e', '\u036f'
+        ];
 
-                // ** Reliable Animation Trigger **
-                // 1. Remove the class to reset animation state
-                styledNameOutput.classList.remove('animate');
-
-                // 2. Force browser reflow. Reading offsetWidth is a common method.
-                // This ensures the removal is processed before adding the class back.
-                void styledNameOutput.offsetWidth;
-
-                // 3. Add the class back to trigger the animation defined in CSS
-                styledNameOutput.classList.add('animate');
-
-            } else {
-                // Empty input - Show prompt message
-                styledNameOutput.textContent = "Please enter a name!";
-                // Add the 'prompt' class for specific styling (defined in CSS)
-                // No animation needed for the prompt.
-                styledNameOutput.classList.add('prompt');
+        // --- Generic Styling Function ---
+        function convertText(text, style) {
+            // Handle Glitch separately
+            if (style === 'glitch') {
+                let output = '';
+                const intensity = 5; // How many glitch chars per original char (adjust)
+                for (let i = 0; i < text.length; i++) {
+                    output += text[i];
+                    for (let j = 0; j < intensity; j++) {
+                        if(Math.random() > 0.3) { // Add glitch effect randomly
+                           output += glitchChars[Math.floor(Math.random() * glitchChars.length)];
+                        }
+                    }
+                }
+                return output;
             }
+
+            // Handle other styles using maps
+            let output = '';
+            const sourceChars = map.normal;
+            const targetChars = map[style];
+
+            if (!targetChars) return text; // Return original if style map not found
+
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                const index = sourceChars.indexOf(char);
+                if (index !== -1 && index < targetChars.length) {
+                    output += targetChars[index];
+                } else {
+                    output += char; // Keep characters not in the map
+                }
+            }
+            return output;
         }
 
+        // --- Function to Add Copy Button (DEBUG version) ---
+        function addCopyToClipboardButton(textToCopy) {
+            console.log('Creating Copy button for text:', textToCopy); // DEBUG LOG 1
+            const button = document.createElement('button');
+            button.textContent = 'Copy';
+            button.className = 'copy-button';
+            button.type = 'button';
+
+            button.onclick = (event) => {
+                console.log('Copy button clicked!'); // DEBUG LOG 2
+                event.stopPropagation();
+
+                // Check if clipboard API is available
+                if (!navigator.clipboard || !navigator.clipboard.writeText) {
+                   console.error('Clipboard API not available or writeText is missing!'); // DEBUG LOG 3
+                   alert('Sorry, the copy function is not supported or blocked in your browser/context.');
+                   return; // Stop here if API is unavailable
+                }
+
+                console.log('Attempting to copy:', textToCopy); // DEBUG LOG 4
+
+                navigator.clipboard.writeText(textToCopy)
+                    .then(() => {
+                        console.log('Copy successful!'); // DEBUG LOG 5
+                        const originalText = 'Copy'; // Hardcoded original text
+                        button.textContent = 'Copied!';
+                        button.style.backgroundColor = '#00a050';
+                        setTimeout(() => {
+                           button.textContent = originalText;
+                           button.style.backgroundColor = '';
+                           }, 1500);
+                    })
+                    .catch(err => {
+                        console.error('Clipboard write failed:', err); // DEBUG LOG 6
+                        // Display error state on button
+                        button.textContent = 'Error';
+                        button.style.backgroundColor = '#ff4d4d'; // Indicate error visually
+                        setTimeout(() => {
+                            button.textContent = 'Copy';
+                            button.style.backgroundColor = '';
+                        }, 2000);
+                    });
+            };
+            return button;
+        }
+
+
+        // --- Main Function to Update Name Display ---
+        function updateStyledName() {
+             const name = nameInput.value.trim();
+
+             // Clear previous results first
+             outputContainer.innerHTML = '';
+
+             if (name) {
+                 // Define the order and keys of styles to generate
+                 const stylesToGenerate = [
+                     'bold', 'italic', 'boldItalic',
+                     'cursive', 'boldCursive',
+                     'mono', 'bubble',
+                     'smallCaps', 'inverted',
+                     'squiggle1', 'squiggle2',
+                     'glitch' // Add glitch here
+                     // Add more keys from your map object here!
+                  ];
+
+                 // Fragment to hold all results before appending (more efficient)
+                 const fragment = document.createDocumentFragment();
+
+                 stylesToGenerate.forEach((styleKey, index) => {
+                     // Skip if map doesn't exist (except for glitch which is handled separately)
+                     if (!map[styleKey] && styleKey !== 'glitch' ) {
+                         console.warn(`Style map not found for key: ${styleKey}`); // Warn if map is missing
+                         return;
+                     }
+
+                     const styledName = convertText(name, styleKey);
+
+                     const resultDiv = document.createElement('div');
+                     resultDiv.className = 'styled-result';
+                     // Staggered animation
+                     resultDiv.style.animationDelay = `${index * 0.05}s`;
+
+                     const nameSpan = document.createElement('span');
+                     nameSpan.textContent = styledName;
+
+                     // Add copy button - Pass the raw styledName string
+                     const copyButton = addCopyToClipboardButton(styledName);
+
+                     resultDiv.appendChild(nameSpan);
+                     resultDiv.appendChild(copyButton);
+                     fragment.appendChild(resultDiv);
+                 });
+
+                 // Append all results at once
+                 outputContainer.appendChild(fragment);
+
+             } else {
+                 // Show prompt message if input is empty
+                 const promptElement = document.createElement('div');
+                 promptElement.className = 'output-prompt'; // Use the specific prompt class
+                 promptElement.textContent = "Please enter a name first!";
+                 outputContainer.appendChild(promptElement);
+             }
+        }
+
+        // --- Initial State ---
+        function showInitialPrompt() {
+             // Ensure initial prompt only shows if output is empty
+             if (!nameInput.value.trim() && outputContainer.children.length <= 1) { // Check if only the prompt exists or it's empty
+                 // Avoid adding multiple prompts
+                 if (!outputContainer.querySelector('.output-prompt')) {
+                     outputContainer.innerHTML = ''; // Clear container before adding prompt
+                     const promptElement = document.createElement('div');
+                     promptElement.className = 'output-prompt';
+                     promptElement.textContent = "Styles will appear here once you enter a name!";
+                     outputContainer.appendChild(promptElement);
+                 }
+             }
+        }
+       // Call on load to set the initial prompt
+       showInitialPrompt();
+
+
         // --- Event Listeners ---
-        // Click on the button
         styleButton.addEventListener('click', updateStyledName);
 
-        // Press Enter key in the input field
-        nameInput.addEventListener('keydown', (event) => { // Using keydown for potentially faster response
+        nameInput.addEventListener('keydown', (event) => {
             if (event.key === 'Enter' || event.keyCode === 13) {
-                 event.preventDefault(); // Prevent default form submission if it were in a form
+                 event.preventDefault();
                  updateStyledName();
             }
         });
-
-        // Screen reader accessibility class (basic example)
-        const srOnlyStyle = document.createElement('style');
-        srOnlyStyle.textContent = `
-            .sr-only {
-                position: absolute;
-                width: 1px;
-                height: 1px;
-                padding: 0;
-                margin: -1px;
-                overflow: hidden;
-                clip: rect(0, 0, 0, 0);
-                white-space: nowrap;
-                border-width: 0;
-            }
-        `;
-        document.head.appendChild(srOnlyStyle);
 
     </script>
 
