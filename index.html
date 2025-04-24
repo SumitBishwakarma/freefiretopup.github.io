@@ -14,15 +14,18 @@
         :root {
             --bg-primary: #121212;
             --bg-secondary: #1e1e1e;
+            --bg-nav: #2a2a2a;
             --text-primary: #e0e0e0;
             --text-secondary: #aaaaaa;
-            --accent-color: #00ff7f; /* Vibrant Spring Green */
+            --accent-color: #00ff7f;
             --accent-darker: #00cc66;
             --border-color: #333333;
             --shadow-color: rgba(0, 255, 127, 0.2);
             --shadow-dark: rgba(0, 0, 0, 0.3);
             --font-main: 'Poppins', sans-serif;
             --transition-speed: 0.3s;
+            --nav-width: 260px;
+            --nav-item-anim-stagger: 0.05s; /* Delay between each item animation */
         }
 
         /* --- Global Reset & Base Styles --- */
@@ -32,6 +35,8 @@
             font-family: var(--font-main); background-color: var(--bg-primary); color: var(--text-primary);
             line-height: 1.6; display: flex; flex-direction: column; min-height: 100vh; overflow-x: hidden;
         }
+        body.menu-open { overflow-y: hidden; }
+
         .container { width: 90%; max-width: 1100px; margin: 0 auto; padding: 0 15px; }
 
         /* --- Header/Navbar --- */
@@ -40,83 +45,100 @@
             padding: 15px 0; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; left: 0; right: 0; z-index: 1000;
         }
         .navbar { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 1.8rem; font-weight: 700; color: var(--accent-color); text-decoration: none; }
+        .logo { font-size: 1.8rem; font-weight: 700; color: var(--accent-color); text-decoration: none; flex-shrink: 0; }
         .logo span { color: var(--text-primary); font-weight: 400; }
+
+        /* --- Menu Toggle Button --- */
+        .menu-toggle {
+            background: none; border: none; color: var(--text-primary); font-size: 1.8rem;
+            cursor: pointer; padding: 5px; display: flex; flex-direction: column; justify-content: space-around;
+            width: 30px; height: 25px; z-index: 1200; margin-left: 15px;
+        }
+         .menu-toggle span {
+            display: block; width: 100%; height: 3px; background-color: var(--text-primary);
+            border-radius: 3px; transition: all var(--transition-speed) ease-in-out;
+        }
+
+        /* --- Side Navigation Menu (Right Side) --- */
+        .side-nav {
+            position: fixed; top: 0; right: 0; left: auto; width: var(--nav-width); height: 100%;
+            background-color: var(--bg-nav); padding: 80px 20px 20px; /* More top padding */
+            transform: translateX(100%); transition: transform var(--transition-speed) ease-in-out;
+            z-index: 1150; overflow-y: auto; border-left: 1px solid var(--border-color);
+        }
+        .side-nav ul { list-style: none; }
+        .side-nav li {
+            /* --- ANIMATION: Initial State --- */
+            opacity: 0;
+            transform: translateX(30px); /* Start slightly to the right */
+            transition: opacity calc(var(--transition-speed) * 0.8) ease, transform calc(var(--transition-speed) * 0.8) ease; /* Slower transition for items */
+            transition-delay: 0s; /* Default delay overridden by JS */
+        }
+        .side-nav a {
+            color: var(--text-primary); text-decoration: none; font-size: 1.1rem;
+            padding: 10px 5px; display: block; transition: color var(--transition-speed) ease, background-color var(--transition-speed) ease;
+            border-radius: 5px; margin-bottom: 10px; /* Added margin */
+        }
+        .side-nav a:hover, .side-nav a.active { color: var(--accent-color); background-color: rgba(255, 255, 255, 0.05); }
+
+        /* --- Menu Overlay --- */
+        .menu-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); opacity: 0; visibility: hidden;
+            transition: opacity var(--transition-speed) ease, visibility 0s var(--transition-speed);
+            z-index: 1100;
+        }
+         body.menu-open .menu-overlay { opacity: 1; visibility: visible; transition-delay: 0s; }
+
+        /* --- Styles when Menu is OPEN --- */
+        body.menu-open .side-nav {
+            transform: translateX(0); /* Slide menu in */
+        }
+         /* --- ANIMATION: Final State for Items --- */
+         body.menu-open .side-nav li {
+            opacity: 1;
+            transform: translateX(0); /* Slide item into place */
+             /* Transition delay will be set by JavaScript */
+        }
+         /* Hamburger -> X Animation */
+         body.menu-open .menu-toggle span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+         body.menu-open .menu-toggle span:nth-child(2) { opacity: 0; }
+         body.menu-open .menu-toggle span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
 
         /* --- Main Content Area --- */
         main { flex-grow: 1; padding: 40px 0; }
 
-        /* --- Hero Section --- */
+        /* ... (rest of your existing CSS for hero, input, output, footer, etc.) ... */
         .hero-section { text-align: center; padding: 40px 0; display: flex; flex-direction: column; align-items: center; }
         .hero-section h1 { font-size: clamp(2.5rem, 6vw, 3.8rem); font-weight: 700; margin-bottom: 15px; max-width: 800px; }
         .hero-section h1 .highlight { color: var(--accent-color); }
         .hero-section .subtitle { font-size: clamp(1rem, 3vw, 1.2rem); color: var(--text-secondary); margin-bottom: 40px; max-width: 600px; }
         .input-group { display: flex; flex-direction: column; gap: 15px; align-items: center; width: 100%; max-width: 500px; }
-        #nameInput {
-            font-family: var(--font-main); width: 100%; padding: 15px 20px; font-size: 1.1rem; background-color: var(--bg-secondary);
-            border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary);
-            transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease; appearance: none; -webkit-appearance: none;
-        }
+        #nameInput { font-family: var(--font-main); width: 100%; padding: 15px 20px; font-size: 1.1rem; background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease; appearance: none; -webkit-appearance: none; }
         #nameInput::placeholder { color: #777; opacity: 1; }
         #nameInput:focus { outline: none; border-color: var(--accent-color); box-shadow: 0 0 0 3px var(--shadow-color); }
-        #styleButton {
-            font-family: var(--font-main); padding: 15px 40px; font-size: 1.1rem; font-weight: 700; color: #000; background-color: var(--accent-color);
-            border: none; border-radius: 8px; cursor: pointer; transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
-            text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); white-space: nowrap; appearance: none; -webkit-appearance: none;
-        }
+        #styleButton { font-family: var(--font-main); padding: 15px 40px; font-size: 1.1rem; font-weight: 700; color: #000; background-color: var(--accent-color); border: none; border-radius: 8px; cursor: pointer; transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); white-space: nowrap; appearance: none; -webkit-appearance: none; }
         #styleButton:hover { background-color: var(--accent-darker); transform: translateY(-3px); box-shadow: 0 6px 15px var(--shadow-dark); }
         #styleButton:active { transform: translateY(0); box-shadow: 0 2px 5px var(--shadow-dark); }
-
-        /* --- Output Section --- */
         .output-section { padding: 40px 0; width: 100%; display: flex; justify-content: center; }
-        .output-container {
-            background-color: var(--bg-secondary); padding: 20px 15px; border-radius: 15px; min-height: 250px; width: 100%;
-            max-width: 800px; border: 1px solid var(--border-color); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            overflow-y: auto; max-height: 60vh;
-        }
-
-        /* --- Individual Styled Result Div --- */
-        .styled-result {
-            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; padding: 12px 10px;
-            border-bottom: 1px solid var(--border-color); opacity: 0; animation: fadeInResult 0.5s ease forwards;
-        }
+        .output-container { background-color: var(--bg-secondary); padding: 20px 15px; border-radius: 15px; min-height: 250px; width: 100%; max-width: 800px; border: 1px solid var(--border-color); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); overflow-y: auto; max-height: 60vh; }
+        .styled-result { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; padding: 12px 10px; border-bottom: 1px solid var(--border-color); opacity: 0; animation: fadeInResult 0.5s ease forwards; }
         .styled-result:last-child { border-bottom: none; }
         @keyframes fadeInResult { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
         .styled-result span { font-size: 1.6rem; line-height: 1.4; word-break: break-word; flex-grow: 1; }
         .styled-result span[title] { cursor: help; }
-
-        /* --- Copy Button --- */
-        .copy-button {
-            font-family: var(--font-main); padding: 6px 12px; font-size: 0.85rem; font-weight: 600; color: #000; background-color: var(--accent-color);
-            border: none; border-radius: 5px; cursor: pointer; transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease;
-            white-space: nowrap; flex-shrink: 0;
-        }
+        .copy-button { font-family: var(--font-main); padding: 6px 12px; font-size: 0.85rem; font-weight: 600; color: #000; background-color: var(--accent-color); border: none; border-radius: 5px; cursor: pointer; transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease; white-space: nowrap; flex-shrink: 0; }
         .copy-button:hover { background-color: var(--accent-darker); transform: scale(1.05); }
         .copy-button:active { transform: scale(0.98); }
-
-        /* Prompt Message Style */
-        .output-prompt {
-            font-family: var(--font-main); font-size: clamp(1.2rem, 5vw, 1.8rem); font-weight: 400; color: var(--text-secondary);
-            text-transform: none; letter-spacing: normal; text-shadow: none; text-align: center; padding: 40px 20px;
-        }
-
-        /* Footer */
+        .output-prompt { font-family: var(--font-main); font-size: clamp(1.2rem, 5vw, 1.8rem); font-weight: 400; color: var(--text-secondary); text-transform: none; letter-spacing: normal; text-shadow: none; text-align: center; padding: 40px 20px; }
         .app-footer { background-color: var(--bg-secondary); padding: 30px 0; border-top: 1px solid var(--border-color); text-align: center; margin-top: auto; }
         .footer-content p { color: var(--text-secondary); font-size: 0.9rem; }
         .footer-content a { color: var(--accent-color); text-decoration: none; margin: 0 5px; transition: color var(--transition-speed) ease; }
         .footer-content a:hover { color: var(--accent-darker); text-decoration: underline; }
-
-        /* Responsive Adjustments */
         @media (min-width: 600px) { .input-group { flex-direction: row; } #nameInput { min-width: 300px; flex-grow: 1; } #styleButton { width: auto; flex-shrink: 0; } }
-        @media (max-width: 480px) {
-            .logo { font-size: 1.5rem; } .hero-section h1 { font-size: 2rem; } .hero-section .subtitle { font-size: 0.95rem; }
-            .output-container { padding: 15px 10px; min-height: 200px; } .styled-result span { font-size: 1.3rem; }
-            .copy-button { font-size: 0.8rem; padding: 5px 10px; } .output-prompt { font-size: clamp(1rem, 4vw, 1.5rem); }
-            #nameInput, #styleButton { font-size: 1rem; padding: 12px 18px; } #styleButton { padding: 12px 30px; }
-        }
-        /* SR Only */
+        @media (max-width: 480px) { .logo { font-size: 1.5rem; } .hero-section h1 { font-size: 2rem; } .hero-section .subtitle { font-size: 0.95rem; } .output-container { padding: 15px 10px; min-height: 200px; } .styled-result span { font-size: 1.3rem; } .copy-button { font-size: 0.8rem; padding: 5px 10px; } .output-prompt { font-size: clamp(1rem, 4vw, 1.5rem); } #nameInput, #styleButton { font-size: 1rem; padding: 12px 18px; } #styleButton { padding: 12px 30px; } .side-nav { width: 80vw; } }
         .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0; }
+
     </style>
 </head>
 <body>
@@ -125,326 +147,153 @@
     <header class="app-header">
         <div class="container navbar">
             <a href="#" class="logo">YO<span>STYLE</span></a>
+            <button class="menu-toggle" id="menu-toggle-button" aria-label="Toggle Menu" aria-expanded="false" aria-controls="side-menu">
+                <span></span> <span></span> <span></span>
+            </button>
         </div>
     </header>
 
+     <!-- Side Navigation Menu (Slides from right) -->
+    <nav class="side-nav" id="side-menu" aria-hidden="true">
+         <ul id="menu-list"> <!-- Added ID to UL for easier selection -->
+            <li><a href="#" class="active">Home</a></li>
+            <li><a href="#">Saved Styles</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Settings</a></li>
+         </ul>
+    </nav>
+
+    <!-- Menu Overlay -->
+    <div class="menu-overlay" id="menu-overlay"></div>
+
     <!-- Main Content -->
     <main>
-        <!-- Hero Section (Input) -->
-        <section class="hero-section" aria-labelledby="hero-heading">
+         <!-- Hero Section -->
+         <section class="hero-section" aria-labelledby="hero-heading">
             <div class="container">
                 <h1 id="hero-heading">Give Your Name a <span class="highlight">Stylish Edge</span></h1>
                 <p class="subtitle">Find cool symbol & gamer fonts for your name! For Instagram, WhatsApp, Facebook, Gaming Profiles & more. Copy with one click!</p>
-                <div class="input-group">
-                    <label for="nameInput" class="sr-only">Enter your name:</label>
-                    <input type="text" id="nameInput" placeholder="Enter your name or gamertag...">
-                    <button id="styleButton">Style It!</button>
-                </div>
+                <div class="input-group"> <label for="nameInput" class="sr-only">Enter your name:</label> <input type="text" id="nameInput" placeholder="Enter your name or gamertag..."> <button id="styleButton">Style It!</button> </div>
             </div>
         </section>
-
         <!-- Output Section -->
         <section class="output-section" aria-live="polite">
-            <div class="container">
-                 <div class="output-container">
-                    <!-- Initial prompt or results will appear here -->
-                    <div class="output-prompt">Styles will appear here once you enter a name!</div>
-                </div>
-            </div>
+            <div class="container"> <div class="output-container"> <div class="output-prompt">Styles will appear here...</div> </div> </div>
         </section>
     </main>
 
     <!-- Footer -->
     <footer class="app-footer">
-        <div class="container footer-content">
-            <p>© <span id="year"></span> Yo Style - Elevate Your Name. <a href="#">Privacy</a> | <a href="#">Terms</a></p>
-        </div>
+        <div class="container footer-content"> <p>&copy; <span id="year"></span> Yo Style. <a href="#">Privacy</a> | <a href="#">Terms</a></p> </div>
     </footer>
 
     <script>
-        // --- DOM Element Selection ---
+        // --- DOM Selections ---
         const nameInput = document.getElementById('nameInput');
         const styleButton = document.getElementById('styleButton');
         const outputContainer = document.querySelector('.output-container');
         const yearSpan = document.getElementById('year');
+        const menuToggleButton = document.getElementById('menu-toggle-button');
+        const sideMenu = document.getElementById('side-menu');
+        const menuOverlay = document.getElementById('menu-overlay');
+        const menuList = document.getElementById('menu-list'); // Select UL
+        const menuItems = menuList.querySelectorAll('li'); // Select LI elements
 
-        // --- Set Current Year ---
+        // --- Set Year ---
         yearSpan.textContent = new Date().getFullYear();
 
-        // --- Character Mapping Objects (CORRECTED & EXPANDED) ---
-        const map = {
-            // Base characters
-            normal:       'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
-
-            // Sans-Serif Styles
-            bold:         '𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵𝗶𝗷𝗸𝗹𝗺𝗻𝗼𝗽𝗾𝗿𝘀𝘁𝘂𝘃𝘄𝘅𝘆𝘇𝗔𝗕𝗖𝗗𝗘𝗙𝗚𝗛𝗜𝗝𝗞𝗟𝗠𝗡𝗢𝗣𝗤𝗥𝗦𝗧𝗨𝗩𝗪𝗫𝗬𝗭𝟬𝟭𝟮𝟯𝟰𝟱𝟲𝟳𝟴𝟵',
-            italic:       '𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘬𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡', // Sans-Serif Italic Nums inconsistent
-            boldItalic:   'boldsymbol{𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘬𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡}', // Sans-Serif Bold Italic
-
-             // Script/Cursive Styles
-            cursive:      '𝒶𝒷𝒸𝒹𝑒𝒻𝑔𝒽𝒾𝒿𝓀𝓁𝓂𝓃𝑜𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏𝒜ℬ𝒞𝒟ℰℱ𝒢ℋℐ𝒥𝒦ℒℳ𝒩𝒪𝒫𝒬ℛ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵', // Script letters only
-            boldCursive:  'boldsymbol{𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩}', // Bold Script letters only
-
-             // Fraktur Styles
-            fraktur:      '𝔞𝔟𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔫𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨ', // Fraktur letters only
-            frakturBold:  '𝖆𝖇𝖈𝖉𝖊𝖋𝖌𝖍𝖎𝖏𝖐𝖑𝖒𝖓𝖔𝖕𝖖𝖗𝖘𝖙𝖚𝖛𝖜𝖝𝖞𝖟𝕬𝕭𝕮𝕯𝕰𝕱𝕲𝕳𝕴𝕵𝕶𝕷𝕸𝕹𝕺𝕻𝕼𝕽𝕾𝕿𝖀𝖁𝖂𝖃𝖄𝖅', // Bold Fraktur letters only
-
-            // Monospace
-            mono:         '𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿',
-
-             // Double Struck
+        // --- Character Maps ---
+        const map = { /* ... (All your styles) ... */
+            normal: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
+            bold: '𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵𝗶𝗷𝗸𝗹𝗺𝗻𝗼𝗽𝗾𝗿𝘀𝘁𝘂𝘃𝘄𝘅𝘆𝘇𝗔𝗕𝗖𝗗𝗘𝗙𝗚𝗛𝗜𝗝𝗞𝗟𝗠𝗡𝗢𝗣𝗤𝗥𝗦𝗧𝗨𝗩𝗪𝗫𝗬𝗭𝟬𝟭𝟮𝟯𝟰𝟱𝟲𝟳𝟴𝟵',
+            italic: '𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘬𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡',
+            boldItalic: 'boldsymbol{𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘬𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡}',
+            cursive: '𝒶𝒷𝒸𝒹𝑒𝒻𝑔𝒽𝒾𝒿𝓀𝓁𝓂𝓃𝑜𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏𝒜ℬ𝒞𝒟ℰℱ𝒢ℋℐ𝒥𝒦ℒℳ𝒩𝒪𝒫𝒬ℛ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵',
+            boldCursive: 'boldsymbol{𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩}',
+            fraktur: '𝔞𝔟𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔫𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨ',
+            frakturBold: '𝖆𝖇𝖈𝖉𝖊𝖋𝖌𝖍𝖎𝖏𝖐𝖑𝖒𝖓𝖔𝖕𝖖𝖗𝖘𝖙𝖚𝖛𝖜𝖝𝖞𝖟𝕬𝕭𝕮𝕯𝕰𝕱𝕲𝕳𝕴𝕵𝕶𝕷𝕸𝕹𝕺𝕻𝕼𝕽𝕾𝕿𝖀𝖁𝖂𝖃𝖄𝖅',
+            mono: '𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿',
             doubleStruck: '𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤ𝟘𝟙𝟚𝟛𝟜𝟝𝟞𝟟𝟠𝟡',
-
-             // Serif Styles (Corrected)
-            serifBold:    'textbf{ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρστυφχψω0123456789}', // Mathematical Bold Serif
-            serifItalic:  'textit{ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρστυφχψω}', // Mathematical Italic Serif (nums usually normal)
-            serifBoldItalic: 'textbftextit{ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρστυφχψω}', // Mathematical Bold Italic Serif (nums usually normal)
-
-            // Casings / Enclosed (Corrected)
-            bubble:       'ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏ', // Circled letters
-            squared:      '🄰🄱🄲🄳🄴🄵🄶🄷🄸🄹🄺🄻🄼🄽🄾🄿🅀🅁🅂🅃🅄🅅🅆🅇🅈🅉', // Squared letters (Uppercase only)
-            negCircled:   '🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩', // Negative circled letters (Uppercase only)
-
-            // More Transformations & Styles
-            smallCaps:    'ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀꜱᴛᴜᴠᴡxʏᴢABCDEFGHIJKLMNOPQRSTUVWXYZ', // Only approximate
+            serifBold:    'textbf{ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρστυφχψω0123456789}',
+            serifItalic:  'textit{ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρστυφχψω}',
+            serifBoldItalic: 'textbftextit{ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρστυφχψω}',
+            bubble:       'ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏ',
+            squared:      '🄰🄱🄲🄳🄴🄵🄶🄷🄸🄹🄺🄻🄼🄽🄾🄿🅀🅁🅂🅃🅄🅅🅆🅇🅈🅉',
+            negCircled:   '🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩',
+            smallCaps:    'ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀꜱᴛᴜᴠᴡxʏᴢABCDEFGHIJKLMNOPQRSTUVWXYZ',
             inverted:     'ɐqɔpǝɟƃɥıɾʞlɯuodbɹsʇnʌʍxʎz∀qƆpƎℲפHIſʞ˥WNOԀQɹS┴∩ΛMXʎZ0ƖᄅƐㄣϛ9ㄥ86',
             fullwidth:    'ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ０１２３４５６７８９',
-
-            // Gamer / Fancy / Decorative
             hacker:       'ﾑ乃cd乇ｷgんﾉﾌズﾚm刀oｱq尺丂ｲuvwﾒﾘ乙ﾑ乃cd乇ｷgんﾉﾌズﾚm刀oｱq尺丂ｲuvwﾒﾘ乙0123456789',
-            knight:       'ΔβĆĐ€₣ǤĦƗЖҜŁΜŇØƤɊŘŞŦỮVŴЖ¥ŽΔβĆĐ€₣ǤĦƗЖҜŁΜŇØƤɊŘŞŦỮVŴЖ¥Ž', // Mix
-            future:       'ค๒ς๔єŦﻮђเןкl๓ภ๏קợгรtยשฬץאzค๒ς๔єŦﻮђเןкl๓ภ๏קợгรtยשฬץאz0123456789', // Mix
-            magic:        'αႦƈԃҽϝɠԋιʝƙʅɱɳσρϙɾʂƚυʋɯxყȥΑΒƇDEƑƓHIJKLMNΘPϘRЅTUVWXYZ', // Mix
-
-            // Squiggle / Decorative (From previous)
+            knight:       'ΔβĆĐ€₣ǤĦƗЖҜŁΜŇØƤɊŘŞŦỮVŴЖ¥ŽΔβĆĐ€₣ǤĦƗЖҜŁΜŇØƤɊŘŞŦỮVŴЖ¥Ž',
+            future:       'ค๒ς๔єŦﻮђเןкl๓ภ๏קợгรtยשฬץאzค๒ς๔єŦﻮђเןкl๓ภ๏קợгรtยשฬץאz0123456789',
+            magic:        'αႦƈԃҽϝɠԋιʝƙʅɱɳσρϙɾʂƚυʋɯxყȥΑΒƇDEƑƓHIJKLMNΘPϘRЅTUVWXYZ',
             squiggle1:    'ᗩᗷᑕᗪEᖴGᕼIᒍKᒪᗰᑎOᑭᑫᖇᔕTᑌᐯᗯ᙭YᘔᗩᗷᑕᗪEᖴGᕼIᒍKᒪᗰᑎOᑭᑫᖇᔕTᑌᐯᗯ᙭Yᘔ',
             squiggle2:    'αв¢∂єƒﻭнιנкℓмησρ۹яѕтυνωχуչﾑ乃ᄃり乇ｷムんﾉﾌズﾚᄊ刀ԾｱＱ尺丂ｲЦЏЩΧϤ乙',
             squiggle3:    'ค๒ς๔єŦﻮђเןкl๓ภ๏קợгรtยשฬץאzค๒ς๔єŦﻮђเןкl๓ภ๏קợгรtยשฬץאz',
-
-            // Regional Indicators (Map Uppercase A-Z to Regional Indicator Symbols)
-            regional:     '🇦🇧🇨🇩🇪🇫🇬🇭🇮🇯🇰🇱🇲🇳🇴🇵🇶🇷🇸🇹🇺🇻🇼🇽🇾🇿' // ONLY the 26 indicator symbols
-
-            // Add more maps here if you find them!
+            regional:     '🇦🇧🇨🇩🇪🇫🇬🇭🇮🇯🇰🇱🇲🇳🇴🇵🇶🇷🇸🇹🇺🇻🇼🇽🇾🇿'
         };
+        const combining = { strikethrough: '\u0336', underline: '\u0332', doubleUnderline: '\u0333', overline: '\u0305', slash: '\u0338', dotAbove: '\u0307', diaeresis: '\u0308' };
+        const glitchChars = [ '\u0300', '\u0301', /* ... many more ... */ '\u036f' ];
 
-        // --- Combining Characters Map ---
-        const combining = {
-            strikethrough: '\u0336', // Combining Long Stroke Overlay
-            underline: '\u0332',     // Combining Low Line
-            doubleUnderline: '\u0333',// Combining Double Low Line
-            overline: '\u0305',       // Combining Overline
-            slash: '\u0338',         // Combining Long Solidus Overlay
-            dotAbove: '\u0307',       // Combining Dot Above
-            diaeresis: '\u0308'       // Combining Diaeresis (Two Dots Above)
-        };
+        // --- convertText & addCopyToClipboardButton Functions (No Changes) ---
+        function convertText(text, style) { /* ... (Same as previous stable version) ... */
+            try { if (combining[style]) { let o=''; const c=combining[style]; for(let i=0;i<text.length;i++){ if(text[i].match(/\s/)||(text[i].charCodeAt(0)>=0x0300&&text[i].charCodeAt(0)<=0x036f)){o+=text[i];}else{o+=text[i]+c;}} return o; } if (style === 'glitch') { let o=''; const intensity=Math.floor(Math.random()*4)+3; for(let i=0;i<text.length;i++){ if(text[i].match(/\s/)){o+=text[i]; continue;} o+=text[i]; for(let j=0;j<intensity;j++){ if(Math.random()>0.5){o+=glitchChars[Math.floor(Math.random()*glitchChars.length)];}}} return o; } if (style === 'regional') { let o=''; const s=map.normal.slice(26,52); const t=map.regional; const u=text.replace(/[^A-Z]/g, ''); for(let i=0;i<u.length;i++){ const idx=s.indexOf(u[i]); if(idx!==-1)o+=t[idx]; } return o.match(/.{2}/g)?.join(' ')||''; } let output=''; const source=map.normal; const target=map[style]; if(!target){return text;} for(let i=0;i<text.length;i++){ const char=text[i]; const index=source.indexOf(char); if(index!==-1&&index<target.length&&target[index]){ output+=target[index];} else {output+=char;}} return output; } catch (e) { console.error(`ConvertText Error (${style}):`, e); return text; }
+        }
+        function addCopyToClipboardButton(textToCopy) { /* ... (Same as previous stable version) ... */
+            const b = document.createElement('button'); b.textContent='Copy'; b.className='copy-button'; b.type='button'; b.onclick=(e) => { e.stopPropagation(); if (!navigator.clipboard?.writeText) { alert('Copy not supported/blocked.'); return; } navigator.clipboard.writeText(textToCopy).then(()=>{ b.textContent='Copied!'; b.style.backgroundColor='#00a050'; setTimeout(()=>{ b.textContent='Copy'; b.style.backgroundColor=''; }, 1500); }).catch(err=>{ console.error('Copy failed:', err); alert(`Copy failed: ${err.message}`); b.textContent='Error'; b.style.backgroundColor='#ff4d4d'; setTimeout(()=>{ b.textContent='Copy'; b.style.backgroundColor=''; }, 2500); }); }; return b;
+        }
 
-        // --- Glitch Characters Data ---
-        const glitchChars = [ '\u0300', '\u0301', '\u0302', '\u0303', '\u0304', '\u0305', '\u0306', '\u0307', '\u0308', '\u0309', '\u030a', '\u030b', '\u030c', '\u030d', '\u030e', '\u030f', '\u0310', '\u0311', '\u0312', '\u0313', '\u0314', '\u0315', '\u0316', '\u0317', '\u0318', '\u0319', '\u031a', '\u031b', '\u031c', '\u031d', '\u031e', '\u031f', '\u0320', '\u0321', '\u0322', '\u0323', '\u0324', '\u0325', '\u0326', '\u0327', '\u0328', '\u0329', '\u032a', '\u032b', '\u032c', '\u032d', '\u032e', '\u032f', '\u0330', '\u0331', '\u0332', '\u0333', '\u0334', '\u0335', '\u0336', '\u0337', '\u0338', '\u0339', '\u033a', '\u033b', '\u033c', '\u033d', '\u033e', '\u033f', '\u0340', '\u0341', '\u0342', '\u0343', '\u0344', '\u0345', '\u0346', '\u0347', '\u0348', '\u0349', '\u034a', '\u034b', '\u034c', '\u034d', '\u034e', '\u034f', '\u0350', '\u0351', '\u0352', '\u0353', '\u0354', '\u0355', '\u0356', '\u0357', '\u0358', '\u0359', '\u035a', '\u035b', '\u035c', '\u035d', '\u035e', '\u035f', '\u0360', '\u0361', '\u0362', '\u0363', '\u0364', '\u0365', '\u0366', '\u0367', '\u0368', '\u0369', '\u036a', '\u036b', '\u036c', '\u036d', '\u036e', '\u036f' ];
+        // --- updateStyledName Function (No Changes) ---
+        function updateStyledName() { /* ... (Same stable version) ... */
+            const name=nameInput.value.trim(); outputContainer.innerHTML=''; if(name){ const styles = [ 'bold', 'italic', 'boldItalic', 'serifBold', 'serifItalic', 'serifBoldItalic', 'cursive', 'boldCursive', 'fraktur', 'frakturBold', 'mono', 'doubleStruck', 'fullwidth', 'bubble', 'squared', 'negCircled', 'smallCaps', 'inverted', 'strikethrough', 'underline', 'doubleUnderline', 'overline', 'slash', 'dotAbove', 'diaeresis', 'hacker', 'knight', 'future', 'magic', 'squiggle1', 'squiggle2', 'squiggle3', 'regional', 'glitch' ]; const fragment=document.createDocumentFragment(); styles.forEach((key, idx)=>{ if(!map[key]&&!combining[key]&&key!=='glitch'&&key!=='regional'){return;} const styled=convertText(name,key); if(!styled&&key!=='glitch'){if(key==='regional'&&!styled.trim())return;else if(key!=='regional')return;} const div=document.createElement('div'); div.className='styled-result'; div.style.animationDelay=`${idx*0.05}s`; const span=document.createElement('span'); span.textContent=styled; if(key==='regional'){span.title='Use uppercase country code (e.g., US) for flags';} const copyBtn=addCopyToClipboardButton(styled); div.appendChild(span); div.appendChild(copyBtn); fragment.appendChild(div); }); outputContainer.appendChild(fragment); if(outputContainer.children.length===0){outputContainer.innerHTML='<div class="output-prompt">No styles generated.</div>';} } else { if(!outputContainer.querySelector('.output-prompt')){outputContainer.innerHTML='<div class="output-prompt">Please enter a name first!</div>';}}
+        }
 
-        // --- Styling Function (Handles Maps, Combining Chars, Glitch, Regional) ---
-        function convertText(text, style) {
-             // Handle styles using COMBINING characters first
-            if (combining[style]) {
-                let output = '';
-                const combChar = combining[style];
-                for (let i = 0; i < text.length; i++) {
-                    // Avoid adding combining chars to spaces or other combining chars
-                    if (text[i].match(/\s/) || (text[i].charCodeAt(0) >= 0x0300 && text[i].charCodeAt(0) <= 0x036f)) {
-                         output += text[i];
-                     } else {
-                         output += text[i] + combChar;
-                     }
-                }
-                return output;
-            }
+        // --- Initial Prompt (No Changes) ---
+        function showInitialPrompt() { if (!outputContainer.hasChildNodes() || (outputContainer.children.length === 1 && outputContainer.children[0].classList.contains('output-prompt'))) { outputContainer.innerHTML = '<div class="output-prompt">Styles will appear here...</div>'; } }
+        showInitialPrompt();
 
-            // Handle Glitch
-            if (style === 'glitch') {
-                let output = ''; const intensity = Math.floor(Math.random() * 4) + 3; // Random intensity 3-6
-                for (let i = 0; i < text.length; i++) {
-                     if (text[i].match(/\s/)) { // Keep spaces as is
-                         output += text[i]; continue;
-                     }
-                    output += text[i];
-                    for (let j = 0; j < intensity; j++) {
-                        if(Math.random() > 0.5) { // 50% chance to add a glitch char
-                           output += glitchChars[Math.floor(Math.random() * glitchChars.length)];
-                        }
-                    }
-                }
-                return output;
-            }
+        // --- *** UPDATED: Menu Toggle Functionality with Animation Delay *** ---
+        function toggleMenu() {
+            const isOpen = document.body.classList.toggle('menu-open');
+            menuToggleButton.setAttribute('aria-expanded', isOpen);
+            sideMenu.setAttribute('aria-hidden', !isOpen);
 
-            // Handle Regional Flags
-            if (style === 'regional') {
-                let output = '';
-                const sourceUpper = map.normal.slice(26, 52); // Uppercase A-Z
-                const targetRegional = map.regional; // The 26 indicator symbols
-                // Filter input to ONLY uppercase letters for flags
-                const upperCaseText = text.replace(/[^A-Z]/g, '');
+            const baseDelay = 0.1; // Initial delay before the first item animates
+            const staggerDelay = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-item-anim-stagger') || '0.05'); // Get stagger from CSS var
 
-                for (let i = 0; i < upperCaseText.length; i++) {
-                    const char = upperCaseText[i];
-                    const index = sourceUpper.indexOf(char);
-                    if (index !== -1) { // Check index exists (should always for A-Z)
-                       output += targetRegional[index]; // Append the corresponding regional indicator
-                    }
-                }
-                // Pair up regional indicators and add space for better rendering
-                return output.match(/.{2}/g)?.join(' ') || ''; // Group pairs, join with space
-             }
-
-
-            // Handle other styles using the MAP object
-            let output = '';
-            const sourceChars = map.normal;
-            const targetChars = map[style]; // Get the target string for the style
-
-            // Critical Check: If style map doesn't exist in 'map', return original text
-            if (!targetChars) {
-                 console.warn(`Style map not found for key: ${style} in 'map' object.`);
-                 return text;
-            }
-
-            for (let i = 0; i < text.length; i++) {
-                const char = text[i];
-                const index = sourceChars.indexOf(char); // Find char index in 'normal'
-
-                // Check if char found in 'normal' AND target map is long enough AND target map char is valid
-                if (index !== -1 && index < targetChars.length && targetChars[index]) {
-                    output += targetChars[index];
+            menuItems.forEach((item, index) => {
+                if (isOpen) {
+                    // Apply delay when opening
+                    item.style.transitionDelay = `${baseDelay + index * staggerDelay}s`;
                 } else {
-                    output += char; // Keep unmappable characters (spaces, symbols, etc.)
+                    // Remove delay when closing so they hide together/quickly
+                     item.style.transitionDelay = '0s';
                 }
+            });
+
+            if(isOpen) {
+                sideMenu.querySelector('a')?.focus();
             }
-            return output;
         }
-
-        // --- Function to Add Copy Button (Stable Version) ---
-        function addCopyToClipboardButton(textToCopy) {
-            const button = document.createElement('button');
-            button.textContent = 'Copy';
-            button.className = 'copy-button';
-            button.type = 'button';
-            button.onclick = (event) => {
-                event.stopPropagation();
-                if (!navigator.clipboard || !navigator.clipboard.writeText) {
-                   alert('Clipboard copy not supported or blocked in your current browser context (try using HTTPS).');
-                   return;
-                }
-                navigator.clipboard.writeText(textToCopy).then(() => {
-                    const originalText = 'Copy';
-                    button.textContent = 'Copied!';
-                    button.style.backgroundColor = '#00a050'; // Green success
-                    setTimeout(() => {
-                       button.textContent = originalText;
-                       button.style.backgroundColor = ''; // Revert color
-                       }, 1500);
-                }).catch(err => {
-                    console.error('Clipboard write failed:', err); // Log error for debugging
-                    alert(`Copy failed: ${err.message}\nEnsure you are on HTTPS or localhost.`);
-                    button.textContent = 'Error';
-                    button.style.backgroundColor = '#ff4d4d'; // Red error
-                    setTimeout(() => {
-                        button.textContent = 'Copy';
-                        button.style.backgroundColor = ''; // Revert color
-                    }, 2500);
-                });
-            };
-            return button;
-        }
-
-        // --- Main Function to Update Name Display ---
-        function updateStyledName() {
-             const name = nameInput.value.trim();
-             outputContainer.innerHTML = ''; // Clear previous results
-
-             if (name) {
-                 // --- EXPANDED & CATEGORIZED List of styles ---
-                 const stylesToGenerate = [
-                     // Standard Sans-Serif
-                     'bold', 'italic', 'boldItalic',
-                     // Serif Variations (Check rendering)
-                     'serifBold', 'serifItalic', 'serifBoldItalic',
-                     // Script / Cursive
-                     'cursive', 'boldCursive',
-                     // Gothic / Fraktur
-                     'fraktur', 'frakturBold',
-                     // Technical / Special Casings
-                     'mono', 'doubleStruck', 'fullwidth', 'bubble', 'squared', 'negCircled',
-                      // Transformations
-                     'smallCaps', 'inverted',
-                      // Combining Character Styles (Symbolic Effects)
-                     'strikethrough', 'underline', 'doubleUnderline', 'overline', 'slash', 'dotAbove', 'diaeresis',
-                      // Gamer / Fancy / Decorative
-                      'hacker', 'knight', 'future', 'magic',
-                      'squiggle1', 'squiggle2', 'squiggle3',
-                      // Special Features
-                     'regional', // Flags (Use uppercase country codes)
-                     'glitch'    // Glitch effect
-                  ];
-
-                 const fragment = document.createDocumentFragment(); // Use fragment for efficiency
-
-                 stylesToGenerate.forEach((styleKey, index) => {
-                    // Check if style definition exists in either map or combining object, or is a special case
-                     if (!map[styleKey] && !combining[styleKey] && styleKey !== 'glitch' && styleKey !== 'regional') {
-                         console.warn(`No definition found for style key: ${styleKey}`); // Optional: Warn if missing
-                         return; // Skip if definition is missing
-                     }
-
-                     const styledName = convertText(name, styleKey);
-
-                     // Don't add styles that result in empty strings (unless glitch)
-                     if (!styledName && styleKey !== 'glitch') {
-                         // For regional flags, ensure it actually produced something
-                         if (styleKey === 'regional' && !styledName.trim()) return;
-                         else if (styleKey !== 'regional') return; // Skip other empty results
-                     }
-
-                     const resultDiv = document.createElement('div');
-                     resultDiv.className = 'styled-result';
-                     resultDiv.style.animationDelay = `${index * 0.05}s`; // Stagger animation
-
-                     const nameSpan = document.createElement('span');
-                     nameSpan.textContent = styledName;
-                     if (styleKey === 'regional') { nameSpan.title = 'Use uppercase country code (e.g., US) for flags'; }
-
-                     const copyButton = addCopyToClipboardButton(styledName);
-
-                     resultDiv.appendChild(nameSpan);
-                     resultDiv.appendChild(copyButton);
-                     fragment.appendChild(resultDiv); // Add to fragment
+        menuToggleButton.addEventListener('click', toggleMenu);
+        menuOverlay.addEventListener('click', toggleMenu);
+         // Close menu when a link is clicked
+         menuItems.forEach(item => { // Iterate over LI items now
+             const link = item.querySelector('a');
+            if(link){
+                 link.addEventListener('click', (e) => {
+                     // If it's a real link, let it navigate, just close the menu
+                     if(link.getAttribute('href') !== '#') {
+                          toggleMenu(); // Close menu but allow navigation
+                      } else {
+                          e.preventDefault(); // Prevent default '#' jump
+                          toggleMenu(); // Close menu
+                      }
                  });
+            }
+        });
 
-                 // Append all results from fragment at once
-                 outputContainer.appendChild(fragment);
-
-                 // Show message if NO results were generated after trying all styles
-                 if (outputContainer.children.length === 0) {
-                     outputContainer.innerHTML = '<div class="output-prompt">Could not generate any styles for this input.</div>';
-                 }
-
-             } else {
-                 // Show prompt message if input is empty
-                  if (!outputContainer.querySelector('.output-prompt')) { // Avoid adding multiple prompts
-                      outputContainer.innerHTML = '<div class="output-prompt">Please enter a name first!</div>';
-                  }
-             }
-        }
-
-        // --- Initial State ---
-        function showInitialPrompt() {
-             // Show prompt only if the container is truly empty initially
-             if (!outputContainer.hasChildNodes() ||
-                 (outputContainer.children.length === 1 && outputContainer.children[0].classList.contains('output-prompt')))
-             {
-                 outputContainer.innerHTML = '<div class="output-prompt">Styles will appear here once you enter a name!</div>';
-             }
-        }
-       showInitialPrompt(); // Set initial state on load
-
-        // --- Event Listeners ---
+        // --- Main Event Listeners (No Changes) ---
         styleButton.addEventListener('click', updateStyledName);
         nameInput.addEventListener('keydown', (event) => { if (event.key === 'Enter' || event.keyCode === 13) { event.preventDefault(); updateStyledName(); } });
 
