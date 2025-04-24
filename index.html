@@ -62,22 +62,20 @@
         /* --- Side Navigation Menu (Right Side) --- */
         .side-nav {
             position: fixed; top: 0; right: 0; left: auto; width: var(--nav-width); height: 100%;
-            background-color: var(--bg-nav); padding: 80px 20px 20px; /* More top padding */
+            background-color: var(--bg-nav); padding: 80px 20px 20px;
             transform: translateX(100%); transition: transform var(--transition-speed) ease-in-out;
             z-index: 1150; overflow-y: auto; border-left: 1px solid var(--border-color);
         }
         .side-nav ul { list-style: none; }
         .side-nav li {
-            /* --- ANIMATION: Initial State --- */
-            opacity: 0;
-            transform: translateX(30px); /* Start slightly to the right */
-            transition: opacity calc(var(--transition-speed) * 0.8) ease, transform calc(var(--transition-speed) * 0.8) ease; /* Slower transition for items */
-            transition-delay: 0s; /* Default delay overridden by JS */
+            opacity: 0; transform: translateX(30px);
+            transition: opacity calc(var(--transition-speed) * 0.8) ease, transform calc(var(--transition-speed) * 0.8) ease;
+            transition-delay: 0s;
         }
         .side-nav a {
             color: var(--text-primary); text-decoration: none; font-size: 1.1rem;
             padding: 10px 5px; display: block; transition: color var(--transition-speed) ease, background-color var(--transition-speed) ease;
-            border-radius: 5px; margin-bottom: 10px; /* Added margin */
+            border-radius: 5px; margin-bottom: 10px;
         }
         .side-nav a:hover, .side-nav a.active { color: var(--accent-color); background-color: rgba(255, 255, 255, 0.05); }
 
@@ -91,24 +89,16 @@
          body.menu-open .menu-overlay { opacity: 1; visibility: visible; transition-delay: 0s; }
 
         /* --- Styles when Menu is OPEN --- */
-        body.menu-open .side-nav {
-            transform: translateX(0); /* Slide menu in */
-        }
-         /* --- ANIMATION: Final State for Items --- */
-         body.menu-open .side-nav li {
-            opacity: 1;
-            transform: translateX(0); /* Slide item into place */
-             /* Transition delay will be set by JavaScript */
-        }
-         /* Hamburger -> X Animation */
-         body.menu-open .menu-toggle span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
-         body.menu-open .menu-toggle span:nth-child(2) { opacity: 0; }
-         body.menu-open .menu-toggle span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+        body.menu-open .side-nav { transform: translateX(0); }
+        body.menu-open .side-nav li { opacity: 1; transform: translateX(0); }
+        body.menu-open .menu-toggle span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        body.menu-open .menu-toggle span:nth-child(2) { opacity: 0; }
+        body.menu-open .menu-toggle span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
 
         /* --- Main Content Area --- */
         main { flex-grow: 1; padding: 40px 0; }
 
-        /* ... (rest of your existing CSS for hero, input, output, footer, etc.) ... */
+        /* --- Hero Section & Input Group --- */
         .hero-section { text-align: center; padding: 40px 0; display: flex; flex-direction: column; align-items: center; }
         .hero-section h1 { font-size: clamp(2.5rem, 6vw, 3.8rem); font-weight: 700; margin-bottom: 15px; max-width: 800px; }
         .hero-section h1 .highlight { color: var(--accent-color); }
@@ -120,21 +110,32 @@
         #styleButton { font-family: var(--font-main); padding: 15px 40px; font-size: 1.1rem; font-weight: 700; color: #000; background-color: var(--accent-color); border: none; border-radius: 8px; cursor: pointer; transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); white-space: nowrap; appearance: none; -webkit-appearance: none; }
         #styleButton:hover { background-color: var(--accent-darker); transform: translateY(-3px); box-shadow: 0 6px 15px var(--shadow-dark); }
         #styleButton:active { transform: translateY(0); box-shadow: 0 2px 5px var(--shadow-dark); }
+
+        /* --- Output Section --- */
         .output-section { padding: 40px 0; width: 100%; display: flex; justify-content: center; }
         .output-container { background-color: var(--bg-secondary); padding: 20px 15px; border-radius: 15px; min-height: 250px; width: 100%; max-width: 800px; border: 1px solid var(--border-color); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); overflow-y: auto; max-height: 60vh; }
+        .output-notice {
+            font-size: 0.85rem; color: var(--text-secondary); text-align: center;
+            padding: 10px 15px 0; margin-bottom: -10px; /* Adjust spacing */
+            border-bottom: 1px dashed var(--border-color); padding-bottom: 10px;
+        }
         .styled-result { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; padding: 12px 10px; border-bottom: 1px solid var(--border-color); opacity: 0; animation: fadeInResult 0.5s ease forwards; }
         .styled-result:last-child { border-bottom: none; }
         @keyframes fadeInResult { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .styled-result span { font-size: 1.6rem; line-height: 1.4; word-break: break-word; flex-grow: 1; }
+        .styled-result span { font-size: 1.6rem; line-height: 1.4; word-break: break-word; flex-grow: 1; font-variant-ligatures: none; /* Try disabling ligatures just in case */ }
         .styled-result span[title] { cursor: help; }
         .copy-button { font-family: var(--font-main); padding: 6px 12px; font-size: 0.85rem; font-weight: 600; color: #000; background-color: var(--accent-color); border: none; border-radius: 5px; cursor: pointer; transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease; white-space: nowrap; flex-shrink: 0; }
         .copy-button:hover { background-color: var(--accent-darker); transform: scale(1.05); }
         .copy-button:active { transform: scale(0.98); }
         .output-prompt { font-family: var(--font-main); font-size: clamp(1.2rem, 5vw, 1.8rem); font-weight: 400; color: var(--text-secondary); text-transform: none; letter-spacing: normal; text-shadow: none; text-align: center; padding: 40px 20px; }
+
+        /* --- Footer --- */
         .app-footer { background-color: var(--bg-secondary); padding: 30px 0; border-top: 1px solid var(--border-color); text-align: center; margin-top: auto; }
         .footer-content p { color: var(--text-secondary); font-size: 0.9rem; }
         .footer-content a { color: var(--accent-color); text-decoration: none; margin: 0 5px; transition: color var(--transition-speed) ease; }
         .footer-content a:hover { color: var(--accent-darker); text-decoration: underline; }
+
+        /* --- Responsive Adjustments --- */
         @media (min-width: 600px) { .input-group { flex-direction: row; } #nameInput { min-width: 300px; flex-grow: 1; } #styleButton { width: auto; flex-shrink: 0; } }
         @media (max-width: 480px) { .logo { font-size: 1.5rem; } .hero-section h1 { font-size: 2rem; } .hero-section .subtitle { font-size: 0.95rem; } .output-container { padding: 15px 10px; min-height: 200px; } .styled-result span { font-size: 1.3rem; } .copy-button { font-size: 0.8rem; padding: 5px 10px; } .output-prompt { font-size: clamp(1rem, 4vw, 1.5rem); } #nameInput, #styleButton { font-size: 1rem; padding: 12px 18px; } #styleButton { padding: 12px 30px; } .side-nav { width: 80vw; } }
         .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0; }
@@ -153,9 +154,9 @@
         </div>
     </header>
 
-     <!-- Side Navigation Menu (Slides from right) -->
+     <!-- Side Navigation Menu -->
     <nav class="side-nav" id="side-menu" aria-hidden="true">
-         <ul id="menu-list"> <!-- Added ID to UL for easier selection -->
+         <ul id="menu-list">
             <li><a href="#" class="active">Home</a></li>
             <li><a href="#">Saved Styles</a></li>
             <li><a href="#">About</a></li>
@@ -178,13 +179,19 @@
         </section>
         <!-- Output Section -->
         <section class="output-section" aria-live="polite">
-            <div class="container"> <div class="output-container"> <div class="output-prompt">Styles will appear here...</div> </div> </div>
+            <div class="container">
+                <div class="output-container">
+                    <!-- Optional Notice: uncomment if needed -->
+                    <!-- <div class="output-notice">Note: Some styles might not display correctly on all devices.</div> -->
+                    <div class="output-prompt">Styles will appear here...</div>
+                </div>
+            </div>
         </section>
     </main>
 
     <!-- Footer -->
     <footer class="app-footer">
-        <div class="container footer-content"> <p>&copy; <span id="year"></span> Yo Style. <a href="#">Privacy</a> | <a href="#">Terms</a></p> </div>
+        <div class="container footer-content"> <p>© <span id="year"></span> Yo Style. <a href="#">Privacy</a> | <a href="#">Terms</a></p> </div>
     </footer>
 
     <script>
@@ -196,106 +203,443 @@
         const menuToggleButton = document.getElementById('menu-toggle-button');
         const sideMenu = document.getElementById('side-menu');
         const menuOverlay = document.getElementById('menu-overlay');
-        const menuList = document.getElementById('menu-list'); // Select UL
-        const menuItems = menuList.querySelectorAll('li'); // Select LI elements
+        const menuList = document.getElementById('menu-list');
+        const menuItems = menuList.querySelectorAll('li');
 
         // --- Set Year ---
         yearSpan.textContent = new Date().getFullYear();
 
-        // --- Character Maps ---
-        const map = { /* ... (All your styles) ... */
+        // --- Character Maps (Re-verified & Expanded) ---
+        const map = {
+            // Base
             normal: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
+
+            // Bold Sans-Serif
             bold: '𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵𝗶𝗷𝗸𝗹𝗺𝗻𝗼𝗽𝗾𝗿𝘀𝘁𝘂𝘃𝘄𝘅𝘆𝘇𝗔𝗕𝗖𝗗𝗘𝗙𝗚𝗛𝗜𝗝𝗞𝗟𝗠𝗡𝗢𝗣𝗤𝗥𝗦𝗧𝗨𝗩𝗪𝗫𝗬𝗭𝟬𝟭𝟮𝟯𝟰𝟱𝟲𝟳𝟴𝟵',
-            italic: '𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘬𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡',
-            boldItalic: 'boldsymbol{𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘬𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡}',
+            // Italic Sans-Serif
+            italic: '𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘬𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡', // Numbers often don't have sans-serif italic unicode
+            // Bold Italic Sans-Serif
+            boldItalic: '𝙖𝙗𝙘𝙙𝙚𝙛𝙜𝙝𝙞𝙟𝙠𝙡𝙢𝙣𝙤𝙥𝙦𝙧𝙨𝙩𝙪𝙫𝙬𝙭𝙮𝙯𝘼𝘽𝘾𝘿𝙀𝙁𝙂𝙃𝙄𝙅𝙆𝙇𝙈𝙉𝙊𝙋𝙌𝙍𝙎𝙏𝙐𝙑𝙒𝙓𝙔𝙕', // No standard nums here either
+
+            // Bold Serif
+            serifBold: '𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗',
+            // Italic Serif
+            serifItalic: '𝑎𝑏𝑐𝑑𝑒𝑓𝑔ℎ𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧𝐴𝐵𝐶𝐷𝐸𝐹𝐺𝐻𝐼𝐽𝐾𝐿𝑀𝑁𝑂𝑃𝑄𝑅𝑆𝑇𝑈𝑉𝑊𝑋𝑌𝑍', // No nums
+             // Bold Italic Serif
+            serifBoldItalic: '𝒂𝒃𝒄𝒅𝒆𝒇𝒈𝒉𝒊𝒋𝒌𝒍𝒎𝒏𝒐𝒑𝒒𝒓𝒔𝒕𝒖𝒗𝒘𝒙𝒚𝒛𝑨𝑩𝑪𝑫𝑬𝑭𝑮𝑯𝑰𝑱𝑲𝑳𝑴𝑵𝑶𝑷𝑸𝑹𝑺𝑻𝑼𝑽𝑾𝑿𝒀𝒁', // No nums
+
+            // Script / Cursive
             cursive: '𝒶𝒷𝒸𝒹𝑒𝒻𝑔𝒽𝒾𝒿𝓀𝓁𝓂𝓃𝑜𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏𝒜ℬ𝒞𝒟ℰℱ𝒢ℋℐ𝒥𝒦ℒℳ𝒩𝒪𝒫𝒬ℛ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵',
-            boldCursive: 'boldsymbol{𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩}',
+            // Bold Script / Cursive
+            boldCursive: '𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩',
+
+            // Fraktur / Old English
             fraktur: '𝔞𝔟𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔫𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨ',
+            // Bold Fraktur
             frakturBold: '𝖆𝖇𝖈𝖉𝖊𝖋𝖌𝖍𝖎𝖏𝖐𝖑𝖒𝖓𝖔𝖕𝖖𝖗𝖘𝖙𝖚𝖛𝖜𝖝𝖞𝖟𝕬𝕭𝕮𝕯𝕰𝕱𝕲𝕳𝕴𝕵𝕶𝕷𝕸𝕹𝕺𝕻𝕼𝕽𝕾𝕿𝖀𝖁𝖂𝖃𝖄𝖅',
+
+            // Monospace
             mono: '𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿',
+            // Double-struck / Blackboard Bold
             doubleStruck: '𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤ𝟘𝟙𝟚𝟛𝟜𝟝𝟞𝟟𝟠𝟡',
-            serifBold:    'textbf{ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρστυφχψω0123456789}',
-            serifItalic:  'textit{ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρστυφχψω}',
-            serifBoldItalic: 'textbftextit{ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρστυφχψω}',
-            bubble:       'ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏ',
-            squared:      '🄰🄱🄲🄳🄴🄵🄶🄷🄸🄹🄺🄻🄼🄽🄾🄿🅀🅁🅂🅃🅄🅅🅆🅇🅈🅉',
-            negCircled:   '🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩',
-            smallCaps:    'ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀꜱᴛᴜᴠᴡxʏᴢABCDEFGHIJKLMNOPQRSTUVWXYZ',
+            // Fullwidth
+            fullwidth: 'ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ０１２３４５６７８９',
+
+            // Enclosed Styles
+            circled:      'ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏ①②③④⑤⑥⑦⑧⑨⓪',
+            negCircled:   '🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩', // Uppercase letters only
+            squared:      '🄰🄱🄲🄳🄴🄵🄶🄷🄸🄹🄺🄻🄼🄽🄾🄿🅀🅁🅂🅃🅄🅅🅆🅇🅈🅉', // Uppercase letters only
+            negSquared:   '🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺🅻🅼🅽🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉', // Uppercase letters only
+            parenthesized:'⒜⒝⒞⒟⒠⒡⒢⒣⒤⒥⒦⒧⒨⒩⒪⒫⒬⒭⒮⒯⒰⒱⒲⒳⒴⒵', // Lowercase letters only
+
+            // Special & Symbolic
+            smallCaps:    'ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀꜱᴛᴜᴠᴡxʏᴢABCDEFGHIJKLMNOPQRSTUVWXYZ', // Maps lower to small caps, upper stays upper
             inverted:     'ɐqɔpǝɟƃɥıɾʞlɯuodbɹsʇnʌʍxʎz∀qƆpƎℲפHIſʞ˥WNOԀQɹS┴∩ΛMXʎZ0ƖᄅƐㄣϛ9ㄥ86',
-            fullwidth:    'ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ０１２３４５６７８９',
-            hacker:       'ﾑ乃cd乇ｷgんﾉﾌズﾚm刀oｱq尺丂ｲuvwﾒﾘ乙ﾑ乃cd乇ｷgんﾉﾌズﾚm刀oｱq尺丂ｲuvwﾒﾘ乙0123456789',
-            knight:       'ΔβĆĐ€₣ǤĦƗЖҜŁΜŇØƤɊŘŞŦỮVŴЖ¥ŽΔβĆĐ€₣ǤĦƗЖҜŁΜŇØƤɊŘŞŦỮVŴЖ¥Ž',
-            future:       'ค๒ς๔єŦﻮђเןкl๓ภ๏קợгรtยשฬץאzค๒ς๔єŦﻮђเןкl๓ภ๏קợгรtยשฬץאz0123456789',
-            magic:        'αႦƈԃҽϝɠԋιʝƙʅɱɳσρϙɾʂƚυʋɯxყȥΑΒƇDEƑƓHIJKLMNΘPϘRЅTUVWXYZ',
-            squiggle1:    'ᗩᗷᑕᗪEᖴGᕼIᒍKᒪᗰᑎOᑭᑫᖇᔕTᑌᐯᗯ᙭YᘔᗩᗷᑕᗪEᖴGᕼIᒍKᒪᗰᑎOᑭᑫᖇᔕTᑌᐯᗯ᙭Yᘔ',
-            squiggle2:    'αв¢∂єƒﻭнιנкℓмησρ۹яѕтυνωχуչﾑ乃ᄃり乇ｷムんﾉﾌズﾚᄊ刀ԾｱＱ尺丂ｲЦЏЩΧϤ乙',
-            squiggle3:    'ค๒ς๔єŦﻮђเןкl๓ภ๏קợгรtยשฬץאzค๒ς๔єŦﻮђเןкl๓ภ๏קợгรtยשฬץאz',
-            regional:     '🇦🇧🇨🇩🇪🇫🇬🇭🇮🇯🇰🇱🇲🇳🇴🇵🇶🇷🇸🇹🇺🇻🇼🇽🇾🇿'
+            mirrored:     'ɒdɔbɘᎸǫʜiꞁʞlmnobqꞧƨƚuvwxʏƹAdƆbƎꟻGHIJK⅃MИOꟼỌЯƧTUVWXYZ0ƸߤƐᔭ5୧Г8९', // More extensive mirror/reversed characters (patchy coverage)
+            currency:     '₳฿₵ĐɆ₣₲ⱧłJ₭Ⱡ₥₦Ø₱QⱤ₴₮ɄV₩ӾɎⱫ₳฿₵ĐɆ₣₲ⱧłJ₭Ⱡ₥₦Ø₱QⱤ₴₮ɄV₩ӾɎⱫ',
+            symbols1:     'ልጌርᎴቿቻኗዘጎጋጕረጠክዐየዒዪነፕሁሀሠሸሃጊልጌርᎴቿቻኗዘጎጋጕረጠክዐየዒዪነፕሁሀሠሸሃጊ', // Amharic like symbols
+            symbols2:     'αв¢∂єƒﻭнιנкℓмησρ۹яѕтυνωχуչᗩᗷᑕᗪEᖴGᕼIᒍKᒪᗰᑎOᑭᑫᖇᔕTᑌᐯᗯ᙭Yᘔ', // Mixed symbols
+
+             // "Weird" / Themed - Often incomplete or using substitutes
+             hacker:       'ﾑ乃cd乇ｷgんﾉﾌズﾚm刀oｱq尺丂ｲuvwﾒﾘ乙ﾑ乃cd乇ｷgんﾉﾌズﾚm刀oｱq尺丂ｲuvwﾒﾘ乙0123456789', // Katakana mix
+             future:       'ค๒ς๔єŦﻮђเןкl๓ภ๏קợгรtยשฬץאzค๒ς๔єŦﻮђเןкl๓ภ๏קợгรtยשฬץאz0123456789', // Thai like mix
+             magic:        'αႦƈԃҽϝɠԋιʝƙʅɱɳσρϙɾʂƚυʋɯxყȥΑΒƇDEƑƓHIJKLMNΘPϘRЅTUVWXYZ', // Greek/Latin mix
+
+            // Squiggle/Wavy styles - various levels of support
+            squiggle1:    'ᗩᗷᑕᗪEᖴGᕼIᒍKᒪᗰᑎOᑭᑫᖇᔕTᑌᐯᗯ᙭YᘔᗩᗷᑕᗪEᖴGᕼIᒍKᒪᗰᑎOᑭᑫᖇᔕTᑌᐯᗯ᙭Yᘔ', // Canadian Syllabics Block based
+            squiggle2:    'คც८ძ૯Բ૭ҺɿʆқՆɱՈ૦ƿҩՐς੮υ౮ω૪עઽคც८ძ૯Բ૭ҺɿʆқՆɱՈ૦ƿҩՐς੮υ౮ω૪עઽ', // Mixed symbols wavy look
+            squiggle4:      'αɓ૮∂εƒɠɦเʝҡℓɱɳσρφɾรƭµѵωאყƶαɓ૮∂εƒɠɦเʝҡℓɱɳσρφɾรƭµѵωאყƶ', // Different mix
+            wavyJoiner:    '𝒶𝒷𝒸𝒹𝑒𝒻𝑔𝒽𝒾𝒿𝓀𝓁𝓂𝓃𝑜𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏𝒜ℬ𝒞𝒟ℰℱ𝒢ℋℐ𝒥𝒦ℒℳ𝒩𝒪𝒫𝒬ℛ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵', // Same as Cursive, but intended to be used with joiner?
+
+             // Special: Regional Indicators for Flags
+            regional: '🇦🇧🇨🇩🇪🇫🇬🇭🇮🇯🇰🇱🇲🇳🇴🇵🇶🇷🇸🇹🇺🇻🇼🇽🇾🇿', // Only A-Z maps
         };
-        const combining = { strikethrough: '\u0336', underline: '\u0332', doubleUnderline: '\u0333', overline: '\u0305', slash: '\u0338', dotAbove: '\u0307', diaeresis: '\u0308' };
-        const glitchChars = [ '\u0300', '\u0301', /* ... many more ... */ '\u036f' ];
 
-        // --- convertText & addCopyToClipboardButton Functions (No Changes) ---
-        function convertText(text, style) { /* ... (Same as previous stable version) ... */
-            try { if (combining[style]) { let o=''; const c=combining[style]; for(let i=0;i<text.length;i++){ if(text[i].match(/\s/)||(text[i].charCodeAt(0)>=0x0300&&text[i].charCodeAt(0)<=0x036f)){o+=text[i];}else{o+=text[i]+c;}} return o; } if (style === 'glitch') { let o=''; const intensity=Math.floor(Math.random()*4)+3; for(let i=0;i<text.length;i++){ if(text[i].match(/\s/)){o+=text[i]; continue;} o+=text[i]; for(let j=0;j<intensity;j++){ if(Math.random()>0.5){o+=glitchChars[Math.floor(Math.random()*glitchChars.length)];}}} return o; } if (style === 'regional') { let o=''; const s=map.normal.slice(26,52); const t=map.regional; const u=text.replace(/[^A-Z]/g, ''); for(let i=0;i<u.length;i++){ const idx=s.indexOf(u[i]); if(idx!==-1)o+=t[idx]; } return o.match(/.{2}/g)?.join(' ')||''; } let output=''; const source=map.normal; const target=map[style]; if(!target){return text;} for(let i=0;i<text.length;i++){ const char=text[i]; const index=source.indexOf(char); if(index!==-1&&index<target.length&&target[index]){ output+=target[index];} else {output+=char;}} return output; } catch (e) { console.error(`ConvertText Error (${style}):`, e); return text; }
+        // Combining Diacritical Marks (Adds marks ABOVE/BELOW/THROUGH the preceding character)
+        const combining = {
+            // Lines
+            strikethrough: '\u0336',       // Strike through
+            strikethroughLong: '\u0337',   // Longer strike through
+            strikethroughDouble: '\u0338', // Double strike through (slash)
+            underline: '\u0332',           // Underline
+            doubleUnderline: '\u0333',   // Double underline
+            overline: '\u0305',           // Overline
+            doubleOverline: '\u033F',    // Double Overline
+            underlineOverline: '\u035E', // Underline and Overline
+
+            // Marks Below
+            dotBelow: '\u0323',           // Dot below
+            ringBelow: '\u0325',         // Ring below
+            tildeBelow: '\u0330',       // Tilde below
+            seagullBelow: '\u033C',      // Seagull below
+            plusBelow: '\u031F',         // Plus sign below
+            minusBelow: '\u0320',       // Minus sign below
+
+            // Marks Above
+            dotAbove: '\u0307',           // Dot above
+            diaeresis: '\u0308',         // Two dots above
+            ringAbove: '\u030A',         // Ring above (degree)
+            tildeAbove: '\u0303',       // Tilde above
+            acuteAbove: '\u0301',        // Acute accent ´
+            graveAbove: '\u0300',        // Grave accent `
+            caronAbove: '\u030C',        // Caron/háček ˇ
+            arrowAbove: '\u20D7',       // Right arrow above ->
+
+             // Enclosing Marks (May require specific font support)
+             encloseCircle: '\u20DD',     // Enclosing circle
+             encloseSquare: '\u20DE',     // Enclosing square
+             encloseDiamond: '\u20DF',   // Enclosing diamond
+
+             // Other Effects
+             xAbove: '\u033D',             // X above
+             zigzagAbove: '\u035B',       // Zigzag above (limited support)
+        };
+
+        // Characters for Glitch effect (Includes many combining marks)
+        const glitchChars = [
+          '\u0300', '\u0301', '\u0302', '\u0303', '\u0304', '\u0305', '\u0306', '\u0307', '\u0308', '\u0309', '\u030a',
+          '\u030b', '\u030c', '\u030d', '\u030e', '\u030f', '\u0310', '\u0311', '\u0312', '\u0313', '\u0314', '\u0315',
+          '\u0316', '\u0317', '\u0318', '\u0319', '\u031a', '\u031b', '\u031c', '\u031d', '\u031e', '\u031f', '\u0320',
+          '\u0321', '\u0322', '\u0323', '\u0324', '\u0325', '\u0326', '\u0327', '\u0328', '\u0329', '\u032a', '\u032b',
+          '\u032c', '\u032d', '\u032e', '\u032f', '\u0330', '\u0331', '\u0332', '\u0333', '\u0334', '\u0335', '\u0336',
+          '\u0337', '\u0338', '\u0339', '\u033a', '\u033b', '\u033c', '\u033d', '\u033e', '\u033f', '\u0340', '\u0341',
+          '\u0342', '\u0343', '\u0344', '\u0345', '\u0346', '\u0347', '\u0348', '\u0349', '\u034a', '\u034b', '\u034c',
+          '\u034d', '\u034e', '\u034f', '\u0350', '\u0351', '\u0352', '\u0353', '\u0354', '\u0355', '\u0356', '\u0357',
+          '\u0358', '\u0359', '\u035a', '\u035b', '\u035c', '\u035d', '\u035e', '\u035f', '\u0360', '\u0361', '\u0362',
+          '\u0363', '\u0364', '\u0365', '\u0366', '\u0367', '\u0368', '\u0369', '\u036a', '\u036b', '\u036c', '\u036d',
+          '\u036e', '\u036f',
+          '\u20D0', '\u20D1', '\u20D2', '\u20D3', '\u20D4', '\u20D5', '\u20D6', '\u20D7', '\u20D8', '\u20D9', '\u20DA',
+          '\u20DB', '\u20DC', '\u20DD', '\u20DE', '\u20DF', '\u20E0', '\u20E1', '\u20E2', '\u20E3', '\u20E4', '\u20E5',
+          '\u20E6', '\u20E7', '\u20E8', '\u20E9', '\u20EA', '\u20EB', '\u20EC', '\u20ED', '\u20EE', '\u20EF', '\u20F0' // More combining marks
+        ];
+
+
+        // --- convertText Function (Handles different style types) ---
+        function convertText(text, style) {
+            try {
+                // 1. Combining Marks
+                if (combining[style]) {
+                    let outputText = '';
+                    const combiningChar = combining[style];
+                    for (let i = 0; i < text.length; i++) {
+                        // Avoid applying mark after space or another combining mark (usually)
+                        if (text[i].match(/\s/) || (text[i].charCodeAt(0) >= 0x0300 && text[i].charCodeAt(0) <= 0x036f) || (text[i].charCodeAt(0) >= 0x20D0 && text[i].charCodeAt(0) <= 0x20FF) ) {
+                             outputText += text[i];
+                        } else {
+                            outputText += text[i] + combiningChar;
+                        }
+                    }
+                    return outputText;
+                }
+
+                // 2. Glitch Effect
+                if (style === 'glitch') {
+                    let outputText = '';
+                    const baseIntensity = 2; // Min glitch chars
+                    const randomIntensity = Math.floor(Math.random() * 5); // Add 0-4 more
+                    const totalIntensity = baseIntensity + randomIntensity;
+
+                    for (let i = 0; i < text.length; i++) {
+                         if (text[i].match(/\s/)) { outputText += text[i]; continue; } // Keep space
+
+                         outputText += text[i]; // Original char
+
+                         // Add random glitch characters
+                        let addedGlitches = 0;
+                        while (addedGlitches < totalIntensity) {
+                            if(Math.random() > 0.3) { // Apply glitch chars probabilistically
+                                outputText += glitchChars[Math.floor(Math.random() * glitchChars.length)];
+                            }
+                            addedGlitches++;
+                        }
+                    }
+                    return outputText;
+                }
+
+                // 3. Regional Indicators (Flags)
+                if (style === 'regional') {
+                     let outputText = '';
+                     const base = 'A'.charCodeAt(0);
+                     const regionalBase = 0x1F1E6; // Unicode start for regional indicators
+                     const inputText = text.toUpperCase().replace(/[^A-Z]/g, ''); // Only A-Z uppercase
+
+                     for (let i = 0; i < inputText.length; i++) {
+                         outputText += String.fromCodePoint(regionalBase + (inputText.charCodeAt(i) - base));
+                     }
+                     // Add space between pairs for better flag rendering
+                     return outputText.match(/.{1,2}/g)?.join(' ') || '';
+                 }
+
+                 // 4. Standard Character Mapping
+                const sourceChars = map.normal;
+                const targetChars = map[style];
+
+                // If the style doesn't exist in the map, return original text
+                if (!targetChars) {
+                    console.warn(`Style map not found for: ${style}`);
+                    return text;
+                 }
+
+                let outputText = '';
+                for (let i = 0; i < text.length; i++) {
+                    const char = text[i];
+                    const index = sourceChars.indexOf(char);
+
+                    // If character is in our source map AND there's a corresponding char in the target map
+                    if (index !== -1 && index < targetChars.length && targetChars[index]) {
+                        outputText += targetChars[index];
+                    } else {
+                        // Otherwise, keep the original character
+                        outputText += char;
+                    }
+                }
+                return outputText;
+
+            } catch (e) {
+                console.error(`Error converting text for style "${style}":`, e);
+                return text; // Return original text on any error
+            }
         }
-        function addCopyToClipboardButton(textToCopy) { /* ... (Same as previous stable version) ... */
-            const b = document.createElement('button'); b.textContent='Copy'; b.className='copy-button'; b.type='button'; b.onclick=(e) => { e.stopPropagation(); if (!navigator.clipboard?.writeText) { alert('Copy not supported/blocked.'); return; } navigator.clipboard.writeText(textToCopy).then(()=>{ b.textContent='Copied!'; b.style.backgroundColor='#00a050'; setTimeout(()=>{ b.textContent='Copy'; b.style.backgroundColor=''; }, 1500); }).catch(err=>{ console.error('Copy failed:', err); alert(`Copy failed: ${err.message}`); b.textContent='Error'; b.style.backgroundColor='#ff4d4d'; setTimeout(()=>{ b.textContent='Copy'; b.style.backgroundColor=''; }, 2500); }); }; return b;
+
+        // --- addCopyToClipboardButton Function (Improved Fallback/Error Handling) ---
+        function addCopyToClipboardButton(textToCopy) {
+            const button = document.createElement('button');
+            button.textContent = 'Copy';
+            button.className = 'copy-button';
+            button.type = 'button';
+
+            button.onclick = (event) => {
+                event.stopPropagation(); // Prevent event bubbling
+
+                const showFeedback = (message, success = true) => {
+                    button.textContent = message;
+                    button.style.backgroundColor = success ? 'var(--accent-darker)' : '#ff4d4d'; // Use CSS var or red
+                    button.disabled = true; // Prevent rapid clicks
+                    setTimeout(() => {
+                        button.textContent = 'Copy';
+                        button.style.backgroundColor = '';
+                        button.disabled = false;
+                    }, success ? 1500 : 2500);
+                };
+
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        showFeedback('Copied!');
+                    }).catch(err => {
+                        console.error('Async Copy failed:', err);
+                        // Try fallback if rejected (e.g., due to focus issues)
+                        try {
+                            const textArea = document.createElement("textarea");
+                            textArea.value = textToCopy;
+                            textArea.style.position = "fixed"; textArea.style.left = "-9999px";
+                            document.body.appendChild(textArea);
+                            textArea.focus(); textArea.select();
+                            document.execCommand('copy');
+                            document.body.removeChild(textArea);
+                            showFeedback('Copied (FB)!'); // Indicate fallback success
+                        } catch (fallbackErr) {
+                             console.error('Fallback Copy failed:', fallbackErr);
+                            showFeedback('Copy Failed!', false);
+                             // Optionally show an alert too: alert('Could not copy text automatically.');
+                        }
+                    });
+                } else {
+                     // Fallback for older browsers or insecure contexts
+                     try {
+                         const textArea = document.createElement("textarea");
+                         textArea.value = textToCopy;
+                         textArea.style.position = "fixed"; textArea.style.left = "-9999px";
+                         document.body.appendChild(textArea);
+                         textArea.focus(); textArea.select();
+                         document.execCommand('copy');
+                         document.body.removeChild(textArea);
+                         showFeedback('Copied!');
+                     } catch (err) {
+                         console.error('ExecCommand Copy failed:', err);
+                         showFeedback('Copy Failed!', false);
+                         // alert('Copying not supported or failed. Please copy manually.');
+                     }
+                }
+            };
+            return button;
         }
 
-        // --- updateStyledName Function (No Changes) ---
-        function updateStyledName() { /* ... (Same stable version) ... */
-            const name=nameInput.value.trim(); outputContainer.innerHTML=''; if(name){ const styles = [ 'bold', 'italic', 'boldItalic', 'serifBold', 'serifItalic', 'serifBoldItalic', 'cursive', 'boldCursive', 'fraktur', 'frakturBold', 'mono', 'doubleStruck', 'fullwidth', 'bubble', 'squared', 'negCircled', 'smallCaps', 'inverted', 'strikethrough', 'underline', 'doubleUnderline', 'overline', 'slash', 'dotAbove', 'diaeresis', 'hacker', 'knight', 'future', 'magic', 'squiggle1', 'squiggle2', 'squiggle3', 'regional', 'glitch' ]; const fragment=document.createDocumentFragment(); styles.forEach((key, idx)=>{ if(!map[key]&&!combining[key]&&key!=='glitch'&&key!=='regional'){return;} const styled=convertText(name,key); if(!styled&&key!=='glitch'){if(key==='regional'&&!styled.trim())return;else if(key!=='regional')return;} const div=document.createElement('div'); div.className='styled-result'; div.style.animationDelay=`${idx*0.05}s`; const span=document.createElement('span'); span.textContent=styled; if(key==='regional'){span.title='Use uppercase country code (e.g., US) for flags';} const copyBtn=addCopyToClipboardButton(styled); div.appendChild(span); div.appendChild(copyBtn); fragment.appendChild(div); }); outputContainer.appendChild(fragment); if(outputContainer.children.length===0){outputContainer.innerHTML='<div class="output-prompt">No styles generated.</div>';} } else { if(!outputContainer.querySelector('.output-prompt')){outputContainer.innerHTML='<div class="output-prompt">Please enter a name first!</div>';}}
+
+        // --- updateStyledName Function (Generates and Displays Styles) ---
+        function updateStyledName() {
+            const name = nameInput.value.trim();
+            // Clear previous results AND any initial prompt
+            outputContainer.innerHTML = '';
+
+            // Add the notice about device compatibility if results are generated
+            const noticeDiv = document.createElement('div');
+            noticeDiv.className = 'output-notice';
+            noticeDiv.textContent = 'Note: Some styles might not display correctly on all devices/browsers.';
+
+            if (name) {
+                outputContainer.appendChild(noticeDiv); // Add the notice first
+
+                // Define the order of styles to display
+                const styles = [
+                    // Basic Variations
+                    'bold', 'italic', 'boldItalic',
+                    'serifBold', 'serifItalic', 'serifBoldItalic',
+                    // Script & Fraktur
+                    'cursive', 'boldCursive', 'fraktur', 'frakturBold',
+                    // Mono & Special Format
+                    'mono', 'doubleStruck', 'fullwidth', 'smallCaps',
+                    // Enclosed
+                    'circled', 'negCircled', 'squared', 'negSquared', 'parenthesized',
+                     // Inverted & Mirrored
+                    'inverted', 'mirrored',
+                     // Symbolic & Themed
+                    'currency', 'symbols1', 'symbols2', 'hacker', 'future', 'magic',
+                     // Squiggles/Wavy
+                    'squiggle1', 'squiggle2', 'squiggle4', //'wavyJoiner', // Often looks same as cursive
+                    // Combining: Lines Below
+                    'underline', 'doubleUnderline',
+                     // Combining: Lines Through
+                    'strikethrough', 'strikethroughLong', 'strikethroughDouble',
+                     // Combining: Lines Above
+                     'overline', 'doubleOverline', 'underlineOverline', // Combined
+                    // Combining: Marks Below
+                    'dotBelow', 'ringBelow', 'tildeBelow', 'seagullBelow', 'plusBelow', 'minusBelow',
+                    // Combining: Marks Above
+                    'dotAbove', 'diaeresis', 'ringAbove', 'tildeAbove', 'acuteAbove', 'graveAbove', 'caronAbove', 'arrowAbove', 'xAbove', 'zigzagAbove',
+                    // Combining: Enclosing (Support Varies GREATLY)
+                    // 'encloseCircle', 'encloseSquare', 'encloseDiamond', // Often don't work well / overlap poorly
+                    // Special Effects
+                    'regional', 'glitch'
+                ];
+
+                const fragment = document.createDocumentFragment();
+                let stylesGeneratedCount = 0;
+
+                styles.forEach((key, index) => {
+                    // Check if the style definition exists (basic sanity check)
+                     if (!map[key] && !combining[key] && key !== 'glitch' && key !== 'regional') {
+                        console.warn(`Style definition missing for key: "${key}"`);
+                        return; // Skip if definition missing
+                    }
+
+                    const styledText = convertText(name, key);
+
+                    // Don't display empty results (unless it's glitch which might be validly empty on weird input?)
+                    // Special check for regional flags needing non-empty trimmed output
+                    if (!styledText && key !== 'glitch') {
+                         if(key === 'regional' && !styledText.trim()){ return; }
+                         else if(key !== 'regional') { return; }
+                     }
+
+
+                    const resultDiv = document.createElement('div');
+                    resultDiv.className = 'styled-result';
+                    resultDiv.style.animationDelay = `${stylesGeneratedCount * 0.04}s`; // Stagger animation
+
+                    const textSpan = document.createElement('span');
+                    textSpan.textContent = styledText;
+                     if (key === 'regional') {
+                         textSpan.title = 'Shows flags for uppercase country codes (e.g., US, IN). Font support required.';
+                     }
+                      if (key === 'mirrored' || key.includes('symbol')) {
+                         textSpan.title = 'Character support may be limited or inconsistent.';
+                     }
+                      if (Object.keys(combining).includes(key) && key.includes('enclose')) {
+                           textSpan.title = 'Enclosing marks may not display correctly on all systems.';
+                       }
+
+                    const copyButton = addCopyToClipboardButton(styledText);
+
+                    resultDiv.appendChild(textSpan);
+                    resultDiv.appendChild(copyButton);
+                    fragment.appendChild(resultDiv);
+                    stylesGeneratedCount++; // Increment counter only for styles added
+                });
+
+                // Append all results
+                 outputContainer.appendChild(fragment);
+
+                // If no styles were applicable after filtering/conversion
+                 if (stylesGeneratedCount === 0) {
+                    // Remove the notice if nothing was generated
+                    const existingNotice = outputContainer.querySelector('.output-notice');
+                    if(existingNotice) existingNotice.remove();
+                    // Show a relevant prompt
+                    outputContainer.innerHTML = '<div class="output-prompt">No applicable styles found for this input.</div>';
+                 }
+
+            } else {
+                // If the input name is empty, show the initial prompt
+                 outputContainer.innerHTML = '<div class="output-prompt">Please enter a name first!</div>';
+            }
         }
 
-        // --- Initial Prompt (No Changes) ---
-        function showInitialPrompt() { if (!outputContainer.hasChildNodes() || (outputContainer.children.length === 1 && outputContainer.children[0].classList.contains('output-prompt'))) { outputContainer.innerHTML = '<div class="output-prompt">Styles will appear here...</div>'; } }
-        showInitialPrompt();
+        // --- Initial Prompt Display ---
+        function showInitialPrompt() {
+             // Show prompt only if container is truly empty or only has the prompt itself
+            if (!outputContainer.hasChildNodes() || (outputContainer.children.length === 1 && outputContainer.children[0].classList.contains('output-prompt'))) {
+                 outputContainer.innerHTML = '<div class="output-prompt">Styles will appear here...</div>';
+             }
+        }
+        showInitialPrompt(); // Run on page load
 
-        // --- *** UPDATED: Menu Toggle Functionality with Animation Delay *** ---
+
+         // --- Menu Toggle Functionality (Same as before) ---
         function toggleMenu() {
             const isOpen = document.body.classList.toggle('menu-open');
             menuToggleButton.setAttribute('aria-expanded', isOpen);
             sideMenu.setAttribute('aria-hidden', !isOpen);
-
-            const baseDelay = 0.1; // Initial delay before the first item animates
-            const staggerDelay = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-item-anim-stagger') || '0.05'); // Get stagger from CSS var
-
+            const baseDelay = 0.1;
+            const staggerDelay = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-item-anim-stagger') || '0.05');
             menuItems.forEach((item, index) => {
-                if (isOpen) {
-                    // Apply delay when opening
-                    item.style.transitionDelay = `${baseDelay + index * staggerDelay}s`;
-                } else {
-                    // Remove delay when closing so they hide together/quickly
-                     item.style.transitionDelay = '0s';
-                }
+                 item.style.transitionDelay = isOpen ? `${baseDelay + index * staggerDelay}s` : '0s';
             });
-
-            if(isOpen) {
-                sideMenu.querySelector('a')?.focus();
-            }
+            if (isOpen) { sideMenu.querySelector('a, button')?.focus(); }
+             else { menuToggleButton.focus(); }
         }
         menuToggleButton.addEventListener('click', toggleMenu);
         menuOverlay.addEventListener('click', toggleMenu);
-         // Close menu when a link is clicked
-         menuItems.forEach(item => { // Iterate over LI items now
+        menuItems.forEach(item => {
              const link = item.querySelector('a');
-            if(link){
-                 link.addEventListener('click', (e) => {
-                     // If it's a real link, let it navigate, just close the menu
-                     if(link.getAttribute('href') !== '#') {
-                          toggleMenu(); // Close menu but allow navigation
-                      } else {
-                          e.preventDefault(); // Prevent default '#' jump
-                          toggleMenu(); // Close menu
-                      }
-                 });
+             if(link){
+                  link.addEventListener('click', (e) => {
+                       if(link.getAttribute('href') === '#') e.preventDefault();
+                       toggleMenu();
+                  });
             }
         });
+         document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && document.body.classList.contains('menu-open')) toggleMenu();
+        });
 
-        // --- Main Event Listeners (No Changes) ---
+        // --- Main Event Listeners ---
         styleButton.addEventListener('click', updateStyledName);
-        nameInput.addEventListener('keydown', (event) => { if (event.key === 'Enter' || event.keyCode === 13) { event.preventDefault(); updateStyledName(); } });
+        nameInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.keyCode === 13) {
+                 event.preventDefault();
+                 updateStyledName();
+             }
+         });
 
     </script>
 
