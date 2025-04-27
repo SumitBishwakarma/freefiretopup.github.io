@@ -6,21 +6,43 @@
     <title>Expandable Tracker App (Full Width)</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <style>
-        /* --- Inside the <style> tag --- */
+        /* --- গুগল ফন্টস ইম্পোর্ট --- */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
-        /* --- Color Palette --- */
+        /* --- কালার ভ্যারিয়েবল --- */
         :root {
-            --primary-color: #6d28d9; --primary-light: #c4b5fd; --primary-lighter: #ede9fe; --primary-bg: #f5f3ff; --text-dark: #111827; --text-medium: #4b5563; --text-light: #f9fafb; --border-color: #e5e7eb; --border-stronger: #d1d5db; --container-bg: #ffffff; --hover-bg: var(--primary-lighter); --header-bg-month: #f9fafb; --header-bg-name: var(--primary-lighter); --icon-color: #9ca3af; --icon-hover-color: var(--primary-color);
-            --btn-action-bg: var(--primary-color); --btn-action-hover-bg: #5b21b6; --btn-img-bg: #10b981; --btn-img-hover-bg: #059669; --btn-delete-bg: #ef4444; --btn-delete-hover-bg: #dc2626; --btn-disabled-bg: #e5e7eb;
+            --primary-color: #6d28d9;
+            --primary-light: #c4b5fd;
+            --primary-lighter: #ede9fe;
+            --primary-bg: #f5f3ff;
+            --text-dark: #111827;
+            --text-medium: #4b5563;
+            --text-light: #f9fafb;
+            --border-color: #e5e7eb;
+            --border-stronger: #d1d5db;
+            --container-bg: #ffffff;
+            --hover-bg: var(--primary-lighter);
+            --header-bg-month: #f9fafb;
+            --header-bg-name: var(--primary-lighter);
+            --icon-color: #9ca3af;
+            --icon-hover-color: var(--primary-color);
+            --btn-action-bg: var(--primary-color);
+            --btn-action-hover-bg: #5b21b6;
+            --btn-img-bg: #10b981;
+            --btn-img-hover-bg: #059669;
+            --btn-delete-bg: #ef4444;
+            --btn-delete-hover-bg: #dc2626;
+            --btn-disabled-bg: #e5e7eb;
         }
 
-        /* --- Base & Layout --- */
-        *, *::before, *::after { box-sizing: border-box; }
+        /* --- বেস এবং লেআউট স্টাইল --- */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
         body {
             font-family: 'Poppins', sans-serif;
             margin: 0;
-            padding: 15px; /* Minimal body padding */
+            padding: 15px; /* বডিতে সামান্য প্যাডিং */
             background-color: var(--primary-bg);
             color: var(--text-dark);
             display: flex;
@@ -32,67 +54,331 @@
         }
         .tracker-container {
             width: 100%;
-            /* Removed fixed max-width, using viewport width instead */
-            max-width: 96vw; /* Takes up 96% of the screen width */
+            max-width: 96vw; /* স্ক্রিনের 96% প্রস্থ ব্যবহার করবে */
             background-color: var(--container-bg);
             padding: 25px 30px;
             border-radius: 16px;
             box-shadow: 0 8px 20px rgba(109, 40, 217, 0.08), 0 4px 8px rgba(109, 40, 217, 0.06);
         }
-        .header-area { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; position: relative; }
-        h1.tracker-title { text-align: center; color: var(--primary-color); margin: 0 auto; padding: 0 40px; font-size: 24px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .settings-icon { position: absolute; right: 0px; top: 50%; transform: translateY(-50%); font-size: 24px; color: var(--icon-color); cursor: pointer; transition: color 0.3s ease, transform 0.3s ease; padding: 4px; flex-shrink: 0; line-height: 1; }
-        .settings-icon:hover { color: var(--icon-hover-color); transform: translateY(-50%) rotate(45deg); }
-        .settings-icon.active { transform: translateY(-50%) rotate(90deg); color: var(--icon-hover-color); }
+        .header-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        h1.tracker-title {
+            text-align: center;
+            color: var(--primary-color);
+            margin: 0 auto;
+            padding: 0 40px; /* আইকনের জন্য জায়গা রাখতে */
+            font-size: 24px;
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .settings-icon {
+            position: absolute;
+            right: 0px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 24px;
+            color: var(--icon-color);
+            cursor: pointer;
+            transition: color 0.3s ease, transform 0.3s ease;
+            padding: 4px;
+            flex-shrink: 0;
+            line-height: 1;
+        }
+        .settings-icon:hover {
+            color: var(--icon-hover-color);
+            transform: translateY(-50%) rotate(45deg);
+        }
+        .settings-icon.active {
+            transform: translateY(-50%) rotate(90deg);
+            color: var(--icon-hover-color);
+        }
 
-        /* --- Settings Menu --- */
-        .settings-menu { margin-bottom: 20px; padding: 15px; border: 1px solid var(--border-color); background-color: #fdfdff; border-radius: 10px; display: flex; flex-direction: column; gap: 15px; max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.4s ease-out, opacity 0.3s ease-in-out, padding 0.4s ease-out, margin-bottom 0.4s ease-out; }
-        .settings-menu.open { max-height: 500px; opacity: 1; padding: 15px; margin-bottom: 20px; }
-        .tracker-select-group { display: flex; align-items: center; gap: 8px; width: 100%; }
-        .tracker-select-group label { font-weight: 600; color: var(--text-medium); white-space: nowrap; font-size: 13px; }
-        .tracker-select-group select { padding: 8px 10px; border: 1px solid var(--border-stronger); border-radius: 6px; font-family: inherit; font-size: 13px; flex-grow: 1; min-width: 140px; cursor: pointer; background-color: #fff; }
-        .action-buttons { display: flex; flex-wrap: wrap; gap: 8px; width: 100%; justify-content: center; }
-        .settings-menu .btn { padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; transition: all 0.2s ease; color: var(--text-light); box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
-        .settings-menu .btn:disabled { background-color: var(--btn-disabled-bg) !important; color: #9ca3af !important; cursor: not-allowed; box-shadow: none; transform: none; }
-        .settings-menu .btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 3px 6px rgba(0,0,0,0.08); }
-        .settings-menu .btn:active:not(:disabled) { transform: translateY(0px) scale(0.98); box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
-        .btn-create { background-color: var(--btn-action-bg); } .btn-create:hover:not(:disabled) { background-color: var(--btn-action-hover-bg); }
-        .btn-rename { background-color: var(--btn-action-bg); } .btn-rename:hover:not(:disabled) { background-color: var(--btn-action-hover-bg); }
-        .btn-delete { background-color: var(--btn-delete-bg); } .btn-delete:hover:not(:disabled) { background-color: var(--btn-delete-hover-bg); }
-        .btn-download-image { background-color: var(--btn-img-bg); } .btn-download-image:hover:not(:disabled) { background-color: var(--btn-img-hover-bg); }
+        /* --- সেটিংস মেনু স্টাইল --- */
+        .settings-menu {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            background-color: #fdfdff;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            /* প্রাথমিকভাবে লুকানো */
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.4s ease-out, opacity 0.3s ease-in-out, padding 0.4s ease-out, margin-bottom 0.4s ease-out;
+        }
+        .settings-menu.open {
+            max-height: 500px; /* খোলা অবস্থায় উচ্চতা */
+            opacity: 1;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .tracker-select-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+        }
+        .tracker-select-group label {
+            font-weight: 600;
+            color: var(--text-medium);
+            white-space: nowrap;
+            font-size: 13px;
+        }
+        .tracker-select-group select {
+            padding: 8px 10px;
+            border: 1px solid var(--border-stronger);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 13px;
+            flex-grow: 1;
+            min-width: 140px;
+            cursor: pointer;
+            background-color: #fff;
+        }
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            width: 100%;
+            justify-content: center;
+        }
+        .settings-menu .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            color: var(--text-light);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .settings-menu .btn:disabled {
+            background-color: var(--btn-disabled-bg) !important;
+            color: #9ca3af !important;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+        .settings-menu .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.08);
+        }
+        .settings-menu .btn:active:not(:disabled) {
+            transform: translateY(0px) scale(0.98);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .btn-create { background-color: var(--btn-action-bg); }
+        .btn-create:hover:not(:disabled) { background-color: var(--btn-action-hover-bg); }
+        .btn-rename { background-color: var(--btn-action-bg); }
+        .btn-rename:hover:not(:disabled) { background-color: var(--btn-action-hover-bg); }
+        .btn-delete { background-color: var(--btn-delete-bg); }
+        .btn-delete:hover:not(:disabled) { background-color: var(--btn-delete-hover-bg); }
+        .btn-download-image { background-color: var(--btn-img-bg); }
+        .btn-download-image:hover:not(:disabled) { background-color: var(--btn-img-hover-bg); }
 
-        /* --- Table Styling --- */
-        .table-wrapper { overflow-x: auto; margin-top: 15px; border-radius: 10px; border: 1px solid var(--border-color); }
-        .tracker-table { width: 100%; /* Table itself is full width of wrapper */ /* min-width: 750px; /* Can remove if not needed */ border-collapse: collapse; table-layout: fixed; }
-        .tracker-table th, .tracker-table td { border-right: none; border-left: none; border-top: none; border-bottom: 1px solid var(--border-color); padding: 12px 15px; vertical-align: middle; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; transition: background-color 0.2s ease; }
-        .tracker-table tr:last-child td { border-bottom: none; }
-        /* Header Styling */
-        .tracker-table thead th { font-weight: 600; color: var(--text-medium); position: sticky; top: 0; z-index: 10; background-color: #fdfdfd; border-bottom: 2px solid var(--border-stronger); text-align: center; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .tracker-table thead th:first-child { text-align: left; background-color: #fcfcfc; color: var(--text-dark); font-weight: 600; text-transform: none; letter-spacing: 0; font-size: 13px; width: 120px; position: sticky; left: 0; z-index: 11; }
-        .tracker-table th.name-header { background-color: var(--header-bg-name); color: var(--primary-color); width: 110px; cursor: pointer; transition: background-color 0.2s ease; }
-        .tracker-table th.name-header:hover { background-color: var(--primary-light); color: #fff; }
-        .tracker-table th.name-header:focus-within { outline: 2px solid var(--primary-color); outline-offset: -1px; background-color: #fff; color: var(--text-dark); overflow: visible; white-space: normal; z-index: 11; box-shadow: 0 0 0 3px var(--primary-lighter); border-radius: 4px; }
-        .tracker-table th.add-column-cell { width: 50px; background-color: #f9fafb; padding: 0; vertical-align: middle; border-bottom: 2px solid var(--border-stronger); }
-        button#add-column-btn { width: 100%; height: 100%; border: none; background: #e0e7ff; color: var(--primary-color); font-size: 20px; font-weight: bold; cursor: pointer; transition: background-color 0.2s ease; display: flex; align-items: center; justify-content: center; padding: 10px 0; }
-        button#add-column-btn:hover { background-color: var(--primary-light); color: #fff; }
+        /* --- টেবিল স্টাইল --- */
+        .table-wrapper {
+            overflow-x: auto; /* টেবিল চওড়া হলে স্ক্রল করার সুবিধা */
+            margin-top: 15px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+        .tracker-table {
+            width: 100%; /* র‍্যাপারের পুরো প্রস্থ নেবে */
+            border-collapse: collapse;
+            table-layout: fixed; /* কলামের প্রস্থ সমান রাখতে সাহায্য করে */
+        }
+        .tracker-table th, .tracker-table td {
+            border-right: none;
+            border-left: none;
+            border-top: none;
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 15px;
+            vertical-align: middle;
+            font-size: 14px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap; /* লেখা এক লাইনে থাকবে */
+            transition: background-color 0.2s ease;
+        }
+        .tracker-table tr:last-child td {
+            border-bottom: none; /* শেষ সারির নিচে বর্ডার থাকবে না */
+        }
+        /* হেডার স্টাইল */
+        .tracker-table thead th {
+            font-weight: 600;
+            color: var(--text-medium);
+            position: sticky; /* স্ক্রল করার সময় হেডার উপরে আটকে থাকবে */
+            top: 0;
+            z-index: 10;
+            background-color: #fdfdfd;
+            border-bottom: 2px solid var(--border-stronger);
+            text-align: center;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        /* প্রথম হেডার (Month) স্টাইল */
+        .tracker-table thead th:first-child {
+            text-align: left;
+            background-color: #fcfcfc;
+            color: var(--text-dark);
+            font-weight: 600;
+            text-transform: none;
+            letter-spacing: 0;
+            font-size: 13px;
+            width: 120px; /* নির্দিষ্ট প্রস্থ */
+            position: sticky; /* স্ক্রল করার সময় বামে আটকে থাকবে */
+            left: 0;
+            z-index: 11; /* হেডারের উপরে থাকবে */
+        }
+        /* Name হেডার স্টাইল */
+        .tracker-table th.name-header {
+            background-color: var(--header-bg-name);
+            color: var(--primary-color);
+            width: 110px; /* Name কলামের প্রস্থ */
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        .tracker-table th.name-header:hover {
+            background-color: var(--primary-light);
+            color: #fff;
+        }
+        /* Name হেডার এডিট করার সময় স্টাইল */
+        .tracker-table th.name-header:focus-within {
+             outline: 2px solid var(--primary-color);
+             outline-offset: -1px;
+             background-color: #fff;
+             color: var(--text-dark);
+             overflow: visible; /* পুরো লেখা দেখানোর জন্য */
+             white-space: normal; /* লেখা একাধিক লাইনে আসতে পারে */
+             z-index: 11;
+             box-shadow: 0 0 0 3px var(--primary-lighter);
+             border-radius: 4px;
+        }
+        /* কলাম যোগ করার বাটন সেল */
+        .tracker-table th.add-column-cell {
+            width: 50px;
+            background-color: #f9fafb;
+            padding: 0;
+            vertical-align: middle;
+            border-bottom: 2px solid var(--border-stronger);
+        }
+        button#add-column-btn {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #e0e7ff;
+            color: var(--primary-color);
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 0;
+        }
+        button#add-column-btn:hover {
+            background-color: var(--primary-light);
+            color: #fff;
+        }
 
-        /* Body Cell Styling */
-        .tracker-table tbody td { text-align: left; color: var(--text-medium); }
-        .tracker-table td:first-child { font-weight: 500; color: var(--text-dark); background-color: #fff; border-right: 1px solid var(--border-color); position: sticky; left: 0; z-index: 1; }
-        .tracker-table td.checkbox-cell { text-align: center; width: 70px; padding: 8px; }
-        .tracker-table tr td:last-child { background-color: #f9fafb; border-bottom: 1px solid var(--border-color); }
-        .tracker-table tr:last-child td:last-child { border-bottom: none; }
-        /* Hover */
-        .tracker-table tbody tr:hover td { background-color: var(--hover-bg); }
-        .tracker-table tbody tr:hover td:first-child { background-color: #fff; }
-        .tracker-table tbody tr:hover td:last-child { background-color: #f1f3f5; }
+        /* বডি সেল স্টাইল */
+        .tracker-table tbody td {
+            text-align: left;
+            color: var(--text-medium);
+        }
+        /* প্রথম কলাম (Month) স্টাইল */
+        .tracker-table td:first-child {
+            font-weight: 500;
+            color: var(--text-dark);
+            background-color: #fff;
+            border-right: 1px solid var(--border-color);
+            position: sticky; /* স্ক্রল করার সময় বামে আটকে থাকবে */
+            left: 0;
+            z-index: 1; /* ডেটা সেলের উপরে থাকবে */
+        }
+        /* চেকবক্স সেল স্টাইল */
+        .tracker-table td.checkbox-cell {
+            text-align: center;
+            width: 70px;
+            padding: 8px;
+        }
+        /* শেষ কলাম (Add button এর নিচে) */
+         .tracker-table tr td:last-child {
+            background-color: #f9fafb;
+            border-bottom: 1px solid var(--border-color);
+         }
+         .tracker-table tr:last-child td:last-child {
+             border-bottom: none;
+         }
+        /* হোভার এফেক্ট */
+        .tracker-table tbody tr:hover td {
+            background-color: var(--hover-bg);
+        }
+        .tracker-table tbody tr:hover td:first-child { /* Month কলাম হোভারে সাদা থাকবে */
+            background-color: #fff;
+        }
+         .tracker-table tbody tr:hover td:last-child { /* শেষ কলাম হোভারে ভিন্ন রঙ */
+            background-color: #f1f3f5;
+         }
 
-        /* Custom Checkbox */
-        .tracker-table input[type="checkbox"] { appearance: none; -webkit-appearance: none; -moz-appearance: none; margin: 0; padding: 0; display: inline-block; vertical-align: middle; position: relative; cursor: pointer; width: 18px; height: 18px; background-color: #fff; border: 2px solid var(--border-stronger); border-radius: 5px; transition: background-color 0.2s ease, border-color 0.2s ease; }
-        .tracker-table input[type="checkbox"]:checked { background-color: var(--primary-color); border-color: var(--primary-color); }
-        .tracker-table input[type="checkbox"]::after { content: ''; display: block; position: absolute; top: 1px; left: 5px; width: 4px; height: 9px; border: solid white; border-width: 0 2px 2px 0; transform: rotate(45deg) scale(0); opacity: 0; transition: transform 0.2s ease-in-out, opacity 0.2s ease; }
-        .tracker-table input[type="checkbox"]:checked::after { transform: rotate(45deg) scale(1); opacity: 1; }
-        .tracker-table input[type="checkbox"]:focus-visible { outline: 2px solid var(--primary-light); outline-offset: 2px; }
+        /* কাস্টম চেকবক্স স্টাইল */
+        .tracker-table input[type="checkbox"] {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            margin: 0;
+            padding: 0;
+            display: inline-block;
+            vertical-align: middle;
+            position: relative;
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+            background-color: #fff;
+            border: 2px solid var(--border-stronger);
+            border-radius: 5px;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+        .tracker-table input[type="checkbox"]:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        .tracker-table input[type="checkbox"]::after { /* টিক চিহ্ন */
+            content: '';
+            display: block;
+            position: absolute;
+            top: 1px;
+            left: 5px;
+            width: 4px;
+            height: 9px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg) scale(0);
+            opacity: 0;
+            transition: transform 0.2s ease-in-out, opacity 0.2s ease;
+        }
+        .tracker-table input[type="checkbox"]:checked::after {
+            transform: rotate(45deg) scale(1);
+            opacity: 1;
+        }
+        .tracker-table input[type="checkbox"]:focus-visible { /* কিবোর্ড ফোকাস স্টাইল */
+             outline: 2px solid var(--primary-light);
+             outline-offset: 2px;
+        }
     </style>
 </head>
 <body>
@@ -132,17 +418,27 @@
                 </tr>
             </thead>
             <tbody id="tracker-body">
-                 <!-- Rows Jan-Dec added by JS logic or initial HTML if preferred -->
-                  <tr> <td>January</td> <td class="checkbox-cell"><input type="checkbox" id="chk-0-1"></td> <td class="checkbox-cell"><input type="checkbox" id="chk-0-2"></td> <td class="checkbox-cell"><input type="checkbox" id="chk-0-3"></td> <td class="checkbox-cell"><input type="checkbox" id="chk-0-4"></td> <td class="checkbox-cell"><input type="checkbox" id="chk-0-5"></td> <td></td> </tr> <tr><td>February</td><td class="checkbox-cell"><input type="checkbox" id="chk-1-1"></td><td class="checkbox-cell"><input type="checkbox" id="chk-1-2"></td><td class="checkbox-cell"><input type="checkbox" id="chk-1-3"></td><td class="checkbox-cell"><input type="checkbox" id="chk-1-4"></td><td class="checkbox-cell"><input type="checkbox" id="chk-1-5"></td><td></td></tr> <tr><td>March</td><td class="checkbox-cell"><input type="checkbox" id="chk-2-1"></td><td class="checkbox-cell"><input type="checkbox" id="chk-2-2"></td><td class="checkbox-cell"><input type="checkbox" id="chk-2-3"></td><td class="checkbox-cell"><input type="checkbox" id="chk-2-4"></td><td class="checkbox-cell"><input type="checkbox" id="chk-2-5"></td><td></td></tr> <tr><td>April</td><td class="checkbox-cell"><input type="checkbox" id="chk-3-1"></td><td class="checkbox-cell"><input type="checkbox" id="chk-3-2"></td><td class="checkbox-cell"><input type="checkbox" id="chk-3-3"></td><td class="checkbox-cell"><input type="checkbox" id="chk-3-4"></td><td class="checkbox-cell"><input type="checkbox" id="chk-3-5"></td><td></td></tr> <tr><td>May</td><td class="checkbox-cell"><input type="checkbox" id="chk-4-1"></td><td class="checkbox-cell"><input type="checkbox" id="chk-4-2"></td><td class="checkbox-cell"><input type="checkbox" id="chk-4-3"></td><td class="checkbox-cell"><input type="checkbox" id="chk-4-4"></td><td class="checkbox-cell"><input type="checkbox" id="chk-4-5"></td><td></td></tr> <tr><td>June</td><td class="checkbox-cell"><input type="checkbox" id="chk-5-1"></td><td class="checkbox-cell"><input type="checkbox" id="chk-5-2"></td><td class="checkbox-cell"><input type="checkbox" id="chk-5-3"></td><td class="checkbox-cell"><input type="checkbox" id="chk-5-4"></td><td class="checkbox-cell"><input type="checkbox" id="chk-5-5"></td><td></td></tr> <tr><td>July</td><td class="checkbox-cell"><input type="checkbox" id="chk-6-1"></td><td class="checkbox-cell"><input type="checkbox" id="chk-6-2"></td><td class="checkbox-cell"><input type="checkbox" id="chk-6-3"></td><td class="checkbox-cell"><input type="checkbox" id="chk-6-4"></td><td class="checkbox-cell"><input type="checkbox" id="chk-6-5"></td><td></td></tr> <tr><td>August</td><td class="checkbox-cell"><input type="checkbox" id="chk-7-1"></td><td class="checkbox-cell"><input type="checkbox" id="chk-7-2"></td><td class="checkbox-cell"><input type="checkbox" id="chk-7-3"></td><td class="checkbox-cell"><input type="checkbox" id="chk-7-4"></td><td class="checkbox-cell"><input type="checkbox" id="chk-7-5"></td><td></td></tr> <tr><td>September</td><td class="checkbox-cell"><input type="checkbox" id="chk-8-1"></td><td class="checkbox-cell"><input type="checkbox" id="chk-8-2"></td><td class="checkbox-cell"><input type="checkbox" id="chk-8-3"></td><td class="checkbox-cell"><input type="checkbox" id="chk-8-4"></td><td class="checkbox-cell"><input type="checkbox" id="chk-8-5"></td><td></td></tr> <tr><td>October</td><td class="checkbox-cell"><input type="checkbox" id="chk-9-1"></td><td class="checkbox-cell"><input type="checkbox" id="chk-9-2"></td><td class="checkbox-cell"><input type="checkbox" id="chk-9-3"></td><td class="checkbox-cell"><input type="checkbox" id="chk-9-4"></td><td class="checkbox-cell"><input type="checkbox" id="chk-9-5"></td><td></td></tr> <tr><td>November</td><td class="checkbox-cell"><input type="checkbox" id="chk-10-1"></td><td class="checkbox-cell"><input type="checkbox" id="chk-10-2"></td><td class="checkbox-cell"><input type="checkbox" id="chk-10-3"></td><td class="checkbox-cell"><input type="checkbox" id="chk-10-4"></td><td class="checkbox-cell"><input type="checkbox" id="chk-10-5"></td><td></td></tr> <tr><td>December</td><td class="checkbox-cell"><input type="checkbox" id="chk-11-1"></td><td class="checkbox-cell"><input type="checkbox" id="chk-11-2"></td><td class="checkbox-cell"><input type="checkbox" id="chk-11-3"></td><td class="checkbox-cell"><input type="checkbox" id="chk-11-4"></td><td class="checkbox-cell"><input type="checkbox" id="chk-11-5"></td><td></td></tr>
+                 <tr> <td>January</td> <td class="checkbox-cell"><input type="checkbox" id="chk-0-1"></td> <td class="checkbox-cell"><input type="checkbox" id="chk-0-2"></td> <td class="checkbox-cell"><input type="checkbox" id="chk-0-3"></td> <td class="checkbox-cell"><input type="checkbox" id="chk-0-4"></td> <td class="checkbox-cell"><input type="checkbox" id="chk-0-5"></td> <td></td> </tr>
+                  <tr><td>February</td><td class="checkbox-cell"><input type="checkbox" id="chk-1-1"></td><td class="checkbox-cell"><input type="checkbox" id="chk-1-2"></td><td class="checkbox-cell"><input type="checkbox" id="chk-1-3"></td><td class="checkbox-cell"><input type="checkbox" id="chk-1-4"></td><td class="checkbox-cell"><input type="checkbox" id="chk-1-5"></td><td></td></tr>
+                  <tr><td>March</td><td class="checkbox-cell"><input type="checkbox" id="chk-2-1"></td><td class="checkbox-cell"><input type="checkbox" id="chk-2-2"></td><td class="checkbox-cell"><input type="checkbox" id="chk-2-3"></td><td class="checkbox-cell"><input type="checkbox" id="chk-2-4"></td><td class="checkbox-cell"><input type="checkbox" id="chk-2-5"></td><td></td></tr>
+                  <tr><td>April</td><td class="checkbox-cell"><input type="checkbox" id="chk-3-1"></td><td class="checkbox-cell"><input type="checkbox" id="chk-3-2"></td><td class="checkbox-cell"><input type="checkbox" id="chk-3-3"></td><td class="checkbox-cell"><input type="checkbox" id="chk-3-4"></td><td class="checkbox-cell"><input type="checkbox" id="chk-3-5"></td><td></td></tr>
+                  <tr><td>May</td><td class="checkbox-cell"><input type="checkbox" id="chk-4-1"></td><td class="checkbox-cell"><input type="checkbox" id="chk-4-2"></td><td class="checkbox-cell"><input type="checkbox" id="chk-4-3"></td><td class="checkbox-cell"><input type="checkbox" id="chk-4-4"></td><td class="checkbox-cell"><input type="checkbox" id="chk-4-5"></td><td></td></tr>
+                  <tr><td>June</td><td class="checkbox-cell"><input type="checkbox" id="chk-5-1"></td><td class="checkbox-cell"><input type="checkbox" id="chk-5-2"></td><td class="checkbox-cell"><input type="checkbox" id="chk-5-3"></td><td class="checkbox-cell"><input type="checkbox" id="chk-5-4"></td><td class="checkbox-cell"><input type="checkbox" id="chk-5-5"></td><td></td></tr>
+                  <tr><td>July</td><td class="checkbox-cell"><input type="checkbox" id="chk-6-1"></td><td class="checkbox-cell"><input type="checkbox" id="chk-6-2"></td><td class="checkbox-cell"><input type="checkbox" id="chk-6-3"></td><td class="checkbox-cell"><input type="checkbox" id="chk-6-4"></td><td class="checkbox-cell"><input type="checkbox" id="chk-6-5"></td><td></td></tr>
+                  <tr><td>August</td><td class="checkbox-cell"><input type="checkbox" id="chk-7-1"></td><td class="checkbox-cell"><input type="checkbox" id="chk-7-2"></td><td class="checkbox-cell"><input type="checkbox" id="chk-7-3"></td><td class="checkbox-cell"><input type="checkbox" id="chk-7-4"></td><td class="checkbox-cell"><input type="checkbox" id="chk-7-5"></td><td></td></tr>
+                  <tr><td>September</td><td class="checkbox-cell"><input type="checkbox" id="chk-8-1"></td><td class="checkbox-cell"><input type="checkbox" id="chk-8-2"></td><td class="checkbox-cell"><input type="checkbox" id="chk-8-3"></td><td class="checkbox-cell"><input type="checkbox" id="chk-8-4"></td><td class="checkbox-cell"><input type="checkbox" id="chk-8-5"></td><td></td></tr>
+                  <tr><td>October</td><td class="checkbox-cell"><input type="checkbox" id="chk-9-1"></td><td class="checkbox-cell"><input type="checkbox" id="chk-9-2"></td><td class="checkbox-cell"><input type="checkbox" id="chk-9-3"></td><td class="checkbox-cell"><input type="checkbox" id="chk-9-4"></td><td class="checkbox-cell"><input type="checkbox" id="chk-9-5"></td><td></td></tr>
+                  <tr><td>November</td><td class="checkbox-cell"><input type="checkbox" id="chk-10-1"></td><td class="checkbox-cell"><input type="checkbox" id="chk-10-2"></td><td class="checkbox-cell"><input type="checkbox" id="chk-10-3"></td><td class="checkbox-cell"><input type="checkbox" id="chk-10-4"></td><td class="checkbox-cell"><input type="checkbox" id="chk-10-5"></td><td></td></tr>
+                  <tr><td>December</td><td class="checkbox-cell"><input type="checkbox" id="chk-11-1"></td><td class="checkbox-cell"><input type="checkbox" id="chk-11-2"></td><td class="checkbox-cell"><input type="checkbox" id="chk-11-3"></td><td class="checkbox-cell"><input type="checkbox" id="chk-11-4"></td><td class="checkbox-cell"><input type="checkbox" id="chk-11-5"></td><td></td></tr>
              </tbody>
         </table>
     </div>
 </div>
 
 <script>
-    // --- FULL JAVASCRIPT (same as the last provided "add column" version) ---
+    // --- সম্পূর্ণ জাভাস্ক্রিপ্ট কোড ---
     document.addEventListener('DOMContentLoaded', function() {
-        // References
+        // DOM এলিমেন্টের রেফারেন্স
         const settingsBtn = document.getElementById('settings-btn');
         const settingsOptionsDiv = document.getElementById('settings-options');
         const trackerSelect = document.getElementById('tracker-select');
@@ -151,63 +447,560 @@
         const deleteTrackerBtn = document.getElementById('delete-tracker-btn');
         const downloadImageBtn = document.getElementById('download-image-btn');
         const addColumnBtn = document.getElementById('add-column-btn');
-        const captureArea = document.getElementById('tracker-capture-area');
-        const tableWrapper = document.getElementById('table-scroll-wrapper');
-        const pageTitleElement = document.querySelector('h1.tracker-title');
-        const theadRow = document.getElementById('header-row');
-        const tbody = document.getElementById('tracker-body');
+        const captureArea = document.getElementById('tracker-capture-area'); // ইমেজ ক্যাপচারের এলাকা
+        const tableWrapper = document.getElementById('table-scroll-wrapper'); // টেবিল স্ক্রল র‍্যাপার
+        const pageTitleElement = document.querySelector('h1.tracker-title'); // পেজের টাইটেল
+        const theadRow = document.getElementById('header-row'); // টেবিল হেডার রো
+        const tbody = document.getElementById('tracker-body'); // টেবিল বডি
 
-        // Keys & Global State
-        const masterListKey = 'myTrackers_list_v1';
-        const activeTrackerKeyPreference = 'myTrackers_activeKey_v1';
-        let currentTrackerKey = null;
+        // লোকাল স্টোরেজ কী এবং গ্লোবাল স্টেট
+        const masterListKey = 'myTrackers_list_v1'; // সব ট্র্যাকারের তালিকা স্টোর করার কী
+        const activeTrackerKeyPreference = 'myTrackers_activeKey_v1'; // সক্রিয় ট্র্যাকারের কী স্টোর করার কী
+        let currentTrackerKey = null; // বর্তমানে কোন ট্র্যাকার সক্রিয় আছে তার কী
 
-        // Tracker List Management
-        function getTrackers() { const listJSON = localStorage.getItem(masterListKey); try { const list = JSON.parse(listJSON); return Array.isArray(list) && list.length > 0 ? list : createDefaultTrackerList(); } catch (e) { return createDefaultTrackerList(); } }
-        function saveTrackers(trackerList) { localStorage.setItem(masterListKey, JSON.stringify(trackerList)); populateTrackerSelect(trackerList); }
-        function createDefaultTrackerList() { const defaultKey = generateUniqueKey('default_'); const defaultList = [{ key: defaultKey, name: 'My First Tracker', colCount: 5 }]; localStorage.setItem(masterListKey, JSON.stringify(defaultList)); let setAsActive = false; if(!getActiveTrackerKey()) {setActiveTrackerKey(defaultKey); setAsActive = true;} if (!localStorage.getItem(defaultKey)) { saveCurrentStateData({ headers: {}, checks: {}, columnCount: 5 }, defaultKey); } if(setAsActive){currentTrackerKey = defaultKey;} return defaultList; }
-        function generateUniqueKey(prefix = 'tracker_') { return prefix + Date.now() + '_' + Math.random().toString(36).substr(2, 5); }
-        function getActiveTrackerKey() { return localStorage.getItem(activeTrackerKeyPreference); }
-        function setActiveTrackerKey(key) { currentTrackerKey = key; localStorage.setItem(activeTrackerKeyPreference, key); if (trackerSelect) { trackerSelect.value = key; } }
+        // ট্র্যাকার তালিকা ম্যানেজমেন্ট ফাংশন
+        // লোকাল স্টোরেজ থেকে সব ট্র্যাকারের তালিকা আনে, না থাকলে ডিফল্ট তৈরি করে
+        function getTrackers() {
+            const listJSON = localStorage.getItem(masterListKey);
+            try {
+                const list = JSON.parse(listJSON);
+                // তালিকাটি একটি অ্যারে এবং খালি না হলে সেটি রিটার্ন করে, নাহলে ডিফল্ট তালিকা তৈরি করে
+                return Array.isArray(list) && list.length > 0 ? list : createDefaultTrackerList();
+            } catch (e) {
+                // কোনো এরর হলে ডিফল্ট তালিকা তৈরি করে
+                return createDefaultTrackerList();
+            }
+        }
+        // ট্র্যাকারের তালিকা লোকাল স্টোরেজে সেভ করে এবং ড্রপডাউন আপডেট করে
+        function saveTrackers(trackerList) {
+            localStorage.setItem(masterListKey, JSON.stringify(trackerList));
+            populateTrackerSelect(trackerList); // ড্রপডাউন আপডেট করে
+        }
+        // ডিফল্ট ট্র্যাকার তালিকা তৈরি করে যদি কোনো তালিকা না থাকে
+        function createDefaultTrackerList() {
+            const defaultKey = generateUniqueKey('default_'); // ইউনিক কী তৈরি
+            const defaultList = [{ key: defaultKey, name: 'My First Tracker', colCount: 5 }]; // ডিফল্ট তালিকা
+            localStorage.setItem(masterListKey, JSON.stringify(defaultList)); // সেভ করে
+            let setAsActive = false;
+            // যদি কোনো সক্রিয় ট্র্যাকার আগে থেকে সেট করা না থাকে, তবে এটিকে সক্রিয় করে
+            if(!getActiveTrackerKey()) {
+                setActiveTrackerKey(defaultKey);
+                setAsActive = true; // flag set করা হলো যে এটাকেই active করা হয়েছে
+            }
+             // যদি এই ডিফল্ট ট্র্যাকারের ডেটা না থাকে, তবে খালি ডেটা সেভ করে
+            if (!localStorage.getItem(defaultKey)) {
+                 saveCurrentStateData({ headers: {}, checks: {}, columnCount: 5 }, defaultKey);
+             }
+             // যদি এই step এ active করা হয়ে থাকে
+             if(setAsActive){
+                currentTrackerKey = defaultKey; // global variable আপডেট
+             }
+            return defaultList; // ডিফল্ট তালিকা রিটার্ন করে
+        }
+        // ইউনিক কী জেনারেট করার ফাংশন
+        function generateUniqueKey(prefix = 'tracker_') {
+            return prefix + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
+        }
+        // সক্রিয় ট্র্যাকারের কী লোকাল স্টোরেজ থেকে আনে
+        function getActiveTrackerKey() {
+            return localStorage.getItem(activeTrackerKeyPreference);
+        }
+        // একটি ট্র্যাকারের কী-কে সক্রিয় হিসেবে সেট করে
+        function setActiveTrackerKey(key) {
+            currentTrackerKey = key; // গ্লোবাল ভ্যারিয়েবল আপডেট
+            localStorage.setItem(activeTrackerKeyPreference, key); // লোকাল স্টোরেজে সেভ
+            if (trackerSelect) {
+                trackerSelect.value = key; // ড্রপডাউনে সিলেক্ট করে
+            }
+        }
 
-        // State Management
-        function getStateDataForKey(trackerKey) { const dataJSON = localStorage.getItem(trackerKey); try { const data = JSON.parse(dataJSON); const defaultData = { headers: {}, checks: {}, columnCount: 5 }; return data && typeof data === 'object' ? { ...defaultData, ...data } : defaultData; } catch (e) { return { headers: {}, checks: {}, columnCount: 5 }; } }
-        function saveCurrentStateData(data, trackerKey = currentTrackerKey) { if (!trackerKey) { console.warn("Cannot save state, no tracker key active."); return; } try { data.columnCount = document.querySelectorAll('.tracker-table thead th.name-header').length; localStorage.setItem(trackerKey, JSON.stringify(data)); } catch (error) { console.error("Error saving state for key:", trackerKey, error); } }
-        function saveCurrentUIToState() { if (!currentTrackerKey) return; const currentHeaders = document.querySelectorAll('th.name-header[contenteditable="true"]'); const currentCheckboxes = document.querySelectorAll('tbody input[type="checkbox"]'); const currentState = { headers: {}, checks: {}, columnCount: currentHeaders.length }; currentHeaders.forEach(header => { currentState.headers[header.id] = header.textContent.trim(); }); currentCheckboxes.forEach(checkbox => { currentState.checks[checkbox.id] = checkbox.checked; }); saveCurrentStateData(currentState); console.log(`UI State saved for ${currentTrackerKey} with ${currentState.columnCount} columns.`); }
+        // স্টেট (ডেটা) ম্যানেজমেন্ট ফাংশন
+        // নির্দিষ্ট ট্র্যাকারের ডেটা (হেডার, চেকবক্স, কলাম সংখ্যা) লোকাল স্টোরেজ থেকে আনে
+        function getStateDataForKey(trackerKey) {
+            const dataJSON = localStorage.getItem(trackerKey);
+            try {
+                const data = JSON.parse(dataJSON);
+                const defaultData = { headers: {}, checks: {}, columnCount: 5 }; // ডিফল্ট ডেটা স্ট্রাকচার
+                // ডেটা সঠিক হলে সেটা রিটার্ন করে, নাহলে ডিফল্ট ডেটা রিটার্ন করে
+                return data && typeof data === 'object' ? { ...defaultData, ...data } : defaultData;
+            } catch (e) {
+                // কোনো এরর হলে ডিফল্ট ডেটা রিটার্ন করে
+                return { headers: {}, checks: {}, columnCount: 5 };
+            }
+        }
+        // বর্তমান ট্র্যাকারের ডেটা লোকাল স্টোরেজে সেভ করে
+        function saveCurrentStateData(data, trackerKey = currentTrackerKey) {
+            if (!trackerKey) {
+                console.warn("Cannot save state, no tracker key active.");
+                return;
+            }
+            try {
+                // সেভ করার আগে বর্তমান কলাম সংখ্যা ডেটাতে যোগ করে
+                data.columnCount = document.querySelectorAll('.tracker-table thead th.name-header').length;
+                localStorage.setItem(trackerKey, JSON.stringify(data)); // JSON স্ট্রিং হিসেবে সেভ করে
+            } catch (error) {
+                console.error("Error saving state for key:", trackerKey, error);
+            }
+        }
+        // UI (টেবিল) থেকে বর্তমান ডেটা (হেডার টেক্সট, চেকবক্স স্ট্যাটাস) সংগ্রহ করে সেভ করে
+        function saveCurrentUIToState() {
+            if (!currentTrackerKey) return; // সক্রিয় ট্র্যাকার না থাকলে কিছু করে না
 
-        // Core UI Handlers
-        function handleHeaderInput(event) { if (event.key === 'Enter') { event.preventDefault(); event.target.blur(); } }
-        function handleHeaderFocus(event) { setTimeout(() => { try { document.execCommand('selectAll', false, null); } catch (e) { console.warn("Select all failed.") } }, 0); }
-        function handleHeaderBlur(event) { saveCurrentUIToState(); }
-        function handleCheckboxChange(event) { saveCurrentUIToState(); }
+            const currentHeaders = document.querySelectorAll('th.name-header[contenteditable="true"]');
+            const currentCheckboxes = document.querySelectorAll('tbody input[type="checkbox"]');
+            const currentState = { headers: {}, checks: {}, columnCount: currentHeaders.length }; // বর্তমান স্টেট অবজেক্ট
 
-        // Add/Remove Columns
-        function addColumnToUI(columnIndex) { const newHeaderId = `name-header-${columnIndex}`; const newTh = document.createElement('th'); newTh.id = newHeaderId; newTh.className = 'name-header'; newTh.contentEditable = 'true'; newTh.spellcheck = 'false'; newTh.textContent = `Name ${columnIndex}`; theadRow.insertBefore(newTh, document.querySelector('.add-column-cell')); newTh.addEventListener('keydown', handleHeaderInput); newTh.addEventListener('focus', handleHeaderFocus); newTh.addEventListener('blur', handleHeaderBlur); const rows = tbody.querySelectorAll('tr'); rows.forEach((row, rowIndex) => { const newTd = document.createElement('td'); newTd.className = 'checkbox-cell'; const newCheckbox = document.createElement('input'); newCheckbox.type = 'checkbox'; newCheckbox.id = `chk-${rowIndex}-${columnIndex}`; newCheckbox.addEventListener('change', handleCheckboxChange); newTd.appendChild(newCheckbox); row.insertBefore(newTd, row.lastElementChild); }); console.log(`Added UI for column ${columnIndex}`); }
-        function removeExtraColumns(currentColCount, targetColCount) { if (currentColCount <= targetColCount) return; console.log(`Removing ${currentColCount - targetColCount} extra columns.`); for (let i = currentColCount; i > targetColCount; i--) { const headerToRemove = document.getElementById(`name-header-${i}`); if (headerToRemove) headerToRemove.remove(); const cellsToRemove = tbody.querySelectorAll(`td:nth-child(${i + 1})`); cellsToRemove.forEach(cell => cell.remove()); } } // +1 because month is :nth-child(1)
-        function setupInitialColumns(savedColumnCount) { const currentColumnCount = document.querySelectorAll('.tracker-table thead th.name-header').length; if (savedColumnCount > currentColumnCount) { for (let i = currentColumnCount + 1; i <= savedColumnCount; i++) { addColumnToUI(i); } } else if (savedColumnCount < currentColumnCount) { removeExtraColumns(currentColumnCount, savedColumnCount); } document.querySelectorAll('th.name-header').forEach(th => { th.removeEventListener('keydown', handleHeaderInput); th.removeEventListener('focus', handleHeaderFocus); th.removeEventListener('blur', handleHeaderBlur); th.addEventListener('keydown', handleHeaderInput); th.addEventListener('focus', handleHeaderFocus); th.addEventListener('blur', handleHeaderBlur); }); document.querySelectorAll('tbody input[type="checkbox"]').forEach(cb => { cb.removeEventListener('change', handleCheckboxChange); cb.addEventListener('change', handleCheckboxChange); }); }
+            // সব হেডার থেকে আইডি ও টেক্সট সংগ্রহ করে
+            currentHeaders.forEach(header => {
+                currentState.headers[header.id] = header.textContent.trim();
+            });
+            // সব চেকবক্স থেকে আইডি ও স্ট্যাটাস (checked/unchecked) সংগ্রহ করে
+            currentCheckboxes.forEach(checkbox => {
+                currentState.checks[checkbox.id] = checkbox.checked;
+            });
 
-        // Load State
-        function loadStateFromKey(trackerKey) { setActiveTrackerKey(trackerKey); const data = getStateDataForKey(trackerKey); const trackers = getTrackers(); const currentTrackerInfo = trackers.find(t => t.key === trackerKey); if (pageTitleElement) { pageTitleElement.textContent = currentTrackerInfo ? currentTrackerInfo.name : "Monthly Tracker"; } setupInitialColumns(data.columnCount || 5); const currentHeaders = document.querySelectorAll('th.name-header[contenteditable="true"]'); const currentCheckboxes = document.querySelectorAll('tbody input[type="checkbox"]'); currentHeaders.forEach(header => { header.textContent = data.headers?.[header.id] || `Name ${header.id.split('-')[2]}`; }); currentCheckboxes.forEach(checkbox => { checkbox.checked = data.checks?.[checkbox.id] || false; }); console.log(`State loaded for ${currentTrackerInfo ? currentTrackerInfo.name : trackerKey}`); const canDelete = trackers.length > 1; if(deleteTrackerBtn) { deleteTrackerBtn.disabled = !canDelete; deleteTrackerBtn.title = canDelete ? "Delete" : "Cannot delete"; } if(renameTrackerBtn) { renameTrackerBtn.disabled = false; renameTrackerBtn.title = "Rename"; } }
-        // Reset UI
-        function resetUIToDefault(newTrackerName = "New Tracker") { const defaultCols = 5; removeExtraColumns(document.querySelectorAll('.tracker-table thead th.name-header').length, defaultCols); const currentHeaders = document.querySelectorAll('th.name-header[contenteditable="true"]'); const currentCheckboxes = document.querySelectorAll('tbody input[type="checkbox"]'); currentHeaders.forEach(header => { header.textContent = `Name ${header.id.split('-')[2]}`; }); currentCheckboxes.forEach(checkbox => { checkbox.checked = false; }); if(pageTitleElement) { pageTitleElement.textContent = newTrackerName; } }
+            saveCurrentStateData(currentState); // সংগ্রহ করা ডেটা সেভ করে
+            console.log(`UI State saved for ${currentTrackerKey} with ${currentState.columnCount} columns.`);
+        }
 
-        // Populate Dropdown
-        function populateTrackerSelect(trackerList) { trackerSelect.innerHTML = ''; let activeKeyExistsInList = false; if (!Array.isArray(trackerList)) { trackerList = createDefaultTrackerList(); } trackerList.forEach(tracker => { if(typeof tracker !== 'object' || !tracker.key || !tracker.name) return; const option = document.createElement('option'); option.value = tracker.key; option.textContent = tracker.name; trackerSelect.appendChild(option); if(tracker.key === currentTrackerKey) activeKeyExistsInList = true; }); if(activeKeyExistsInList) { trackerSelect.value = currentTrackerKey; } else if (trackerList.length > 0) { setActiveTrackerKey(trackerList[0].key); trackerSelect.value = currentTrackerKey; } else { const defaultList = createDefaultTrackerList(); populateTrackerSelect(defaultList); } }
+        // UI হ্যান্ডলার ফাংশন
+        // হেডার এডিট করার সময় Enter চাপলে ফোকাস সরিয়ে দেয়
+        function handleHeaderInput(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // ডিফল্ট Enter আচরণ বন্ধ করে
+                event.target.blur(); // ফোকাস সরিয়ে দেয় (যা blur ইভেন্ট ট্রিগার করে সেভ করবে)
+            }
+        }
+        // হেডারে ফোকাস করলে পুরো টেক্সট সিলেক্ট করে (এডিটের সুবিধার জন্য)
+        function handleHeaderFocus(event) {
+            setTimeout(() => { // setTimeout দরকার কারণ ফোকাস ইভেন্টের সাথে সাথে execCommand কাজ নাও করতে পারে
+                 try { document.execCommand('selectAll', false, null); } catch (e) { console.warn("Select all failed.") }
+            }, 0);
+        }
+        // হেডার থেকে ফোকাস চলে গেলে (blur) বর্তমান UI স্টেট সেভ করে
+        function handleHeaderBlur(event) {
+            saveCurrentUIToState();
+        }
+        // চেকবক্সের স্ট্যাটাস পরিবর্তন হলে বর্তমান UI স্টেট সেভ করে
+        function handleCheckboxChange(event) {
+            saveCurrentUIToState();
+        }
 
-        // Download Image
-        function downloadTrackerAsImage() { if (typeof html2canvas === 'undefined') { alert("Error: html2canvas library not loaded."); return; } console.log("Starting image capture..."); const originalWrapperOverflow = tableWrapper.style.overflow; const originalWrapperHeight = tableWrapper.style.height; const originalContainerHeight = captureArea.style.height; const settingsWasOpen = settingsOptionsDiv.classList.contains('open'); settingsOptionsDiv.classList.remove('open'); settingsOptionsDiv.style.display = 'none'; tableWrapper.style.overflow = 'visible'; tableWrapper.style.height = 'auto'; captureArea.style.height = 'auto'; captureArea.style.paddingBottom = '30px'; new Promise(resolve => setTimeout(resolve, 150)).then(() => { html2canvas(captureArea, { allowTaint: true, useCORS: true, backgroundColor: getComputedStyle(document.body).backgroundColor || '#f5f3ff', scale: 1.5 }).then(canvas => { const imageDataUrl = canvas.toDataURL('image/png'); const a = document.createElement('a'); a.href = imageDataUrl; const date = new Date(); const timestamp = `${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}`; const currentTrackerName = getTrackers().find(t => t.key === currentTrackerKey)?.name || 'tracker'; const safeName = currentTrackerName.replace(/[^a-z0-9]/gi, '_').toLowerCase(); a.download = `${safeName}_${timestamp}.png`; document.body.appendChild(a); a.click(); document.body.removeChild(a); console.log("Image download initiated."); }).catch(error => { console.error("Error capturing image:", error); alert("Sorry, there was an error generating the image."); }).finally(() => { console.log("Restoring original styles..."); tableWrapper.style.overflow = originalWrapperOverflow; tableWrapper.style.height = originalWrapperHeight; captureArea.style.height = originalContainerHeight; captureArea.style.paddingBottom = ''; if(settingsWasOpen) { settingsOptionsDiv.style.display = 'flex'; void settingsOptionsDiv.offsetWidth; settingsOptionsDiv.classList.add('open'); } else { settingsOptionsDiv.style.display = 'none'; } }); }); }
+        // কলাম যোগ/বিয়োগ করার ফাংশন
+        // UI তে নতুন কলাম যোগ করে (হেডার এবং সব সারিতে চেকবক্স সেল)
+        function addColumnToUI(columnIndex) {
+            // নতুন হেডার সেল তৈরি
+            const newHeaderId = `name-header-${columnIndex}`;
+            const newTh = document.createElement('th');
+            newTh.id = newHeaderId;
+            newTh.className = 'name-header';
+            newTh.contentEditable = 'true';
+            newTh.spellcheck = 'false';
+            newTh.textContent = `Name ${columnIndex}`; // ডিফল্ট নাম
+            // '+' বাটনের আগে হেডারটি যোগ করে
+            theadRow.insertBefore(newTh, document.querySelector('.add-column-cell'));
+            // নতুন হেডারে ইভেন্ট লিসেনার যোগ করে
+            newTh.addEventListener('keydown', handleHeaderInput);
+            newTh.addEventListener('focus', handleHeaderFocus);
+            newTh.addEventListener('blur', handleHeaderBlur);
 
-        // Event Listeners
-        settingsBtn.addEventListener('click', function() { const isOpen = settingsOptionsDiv.classList.contains('open'); if (!isOpen) { settingsOptionsDiv.style.display = 'flex'; void settingsOptionsDiv.offsetWidth; settingsOptionsDiv.classList.add('open'); } else { settingsOptionsDiv.classList.remove('open'); } settingsBtn.classList.toggle('active'); });
-        trackerSelect.addEventListener('change', function() { const selectedKey = trackerSelect.value; if(selectedKey && selectedKey !== currentTrackerKey) { loadStateFromKey(selectedKey); } });
-        createTrackerBtn.addEventListener('click', function() { const currentTrackers = getTrackers(); const newName = prompt("Enter name:", "Tracker " + (currentTrackers.length + 1)); if (newName && newName.trim() !== '') { const newKey = generateUniqueKey(); const defaultCols = 5; currentTrackers.push({ key: newKey, name: newName.trim(), colCount: defaultCols}); saveTrackers(currentTrackers); resetUIToDefault(newName.trim()); setActiveTrackerKey(newKey); saveCurrentStateData({ headers: {}, checks: {}, columnCount: defaultCols }, newKey); loadStateFromKey(newKey); trackerSelect.value = newKey; alert(`Tracker "${newName.trim()}" created!`); } else if (newName !== null) { alert("Name cannot be empty."); } });
-        renameTrackerBtn.addEventListener('click', function() { if (!currentTrackerKey || renameTrackerBtn.disabled) return; const currentTrackers = getTrackers(); const currentTracker = currentTrackers.find(t => t.key === currentTrackerKey); if (!currentTracker) return; const newName = prompt("New name:", currentTracker.name); if (newName && newName.trim() !== '') { currentTracker.name = newName.trim(); saveTrackers(currentTrackers); if (pageTitleElement) { pageTitleElement.textContent = newName.trim();} alert(`Renamed to "${newName.trim()}"!`); } else if (newName !== null) { alert("Name cannot be empty."); } });
-        deleteTrackerBtn.addEventListener('click', function() { if (!currentTrackerKey || deleteTrackerBtn.disabled) return; const currentTrackers = getTrackers(); const currentTracker = currentTrackers.find(t => t.key === currentTrackerKey); if (!currentTracker) return; if (confirm(`DELETE "${currentTracker.name}"?`)) { localStorage.removeItem(currentTrackerKey); const updatedTrackers = currentTrackers.filter(t => t.key !== currentTrackerKey); saveTrackers(updatedTrackers); const newActiveKey = updatedTrackers[0]?.key; if(newActiveKey) { loadStateFromKey(newActiveKey); } else { initializeApp(); } } });
+            // টেবিলের প্রতিটি সারিতে নতুন চেকবক্স সেল যোগ করে
+            const rows = tbody.querySelectorAll('tr');
+            rows.forEach((row, rowIndex) => {
+                const newTd = document.createElement('td');
+                newTd.className = 'checkbox-cell';
+                const newCheckbox = document.createElement('input');
+                newCheckbox.type = 'checkbox';
+                newCheckbox.id = `chk-${rowIndex}-${columnIndex}`; // ইউনিক আইডি
+                newCheckbox.addEventListener('change', handleCheckboxChange); // ইভেন্ট লিসেনার যোগ
+                newTd.appendChild(newCheckbox);
+                // সারির শেষ সেলের (ফাঁকা সেল) আগে যোগ করে
+                row.insertBefore(newTd, row.lastElementChild);
+            });
+            console.log(`Added UI for column ${columnIndex}`);
+        }
+        // অতিরিক্ত কলাম UI থেকে মুছে ফেলে (যদি লোড করা ট্র্যাকারের কলাম সংখ্যা কম থাকে)
+        function removeExtraColumns(currentColCount, targetColCount) {
+            if (currentColCount <= targetColCount) return; // কমানোর দরকার না হলে রিটার্ন
+
+            console.log(`Removing ${currentColCount - targetColCount} extra columns.`);
+            for (let i = currentColCount; i > targetColCount; i--) {
+                // হেডার রিমুভ
+                const headerToRemove = document.getElementById(`name-header-${i}`);
+                if (headerToRemove) headerToRemove.remove();
+                // সংশ্লিষ্ট কলামের সব ডেটা সেল রিমুভ (:nth-child selector ব্যবহার করে)
+                // +1 কারণ প্রথম কলাম 'Month'
+                const cellsToRemove = tbody.querySelectorAll(`td:nth-child(${i + 1})`);
+                 cellsToRemove.forEach(cell => cell.remove());
+             }
+        }
+        // প্রাথমিক কলাম সেটআপ করে (লোড করা ডেটার কলাম সংখ্যার সাথে UI সিঙ্ক করে)
+        function setupInitialColumns(savedColumnCount) {
+            const currentColumnCount = document.querySelectorAll('.tracker-table thead th.name-header').length;
+
+            // যদি সেভ করা কলাম সংখ্যা বর্তমানের চেয়ে বেশি হয়, তবে নতুন কলাম যোগ করে
+            if (savedColumnCount > currentColumnCount) {
+                for (let i = currentColumnCount + 1; i <= savedColumnCount; i++) {
+                    addColumnToUI(i);
+                }
+            }
+            // যদি সেভ করা কলাম সংখ্যা বর্তমানের চেয়ে কম হয়, তবে অতিরিক্ত কলাম মুছে ফেলে
+            else if (savedColumnCount < currentColumnCount) {
+                removeExtraColumns(currentColumnCount, savedColumnCount);
+            }
+
+            // সব হেডার এবং চেকবক্সে ইভেন্ট লিসেনার পুনরায় যোগ করা (যদি removeExtraColumns বা addColumnToUI তে কোনো সমস্যা হয়)
+             document.querySelectorAll('th.name-header').forEach(th => {
+                th.removeEventListener('keydown', handleHeaderInput);
+                th.removeEventListener('focus', handleHeaderFocus);
+                th.removeEventListener('blur', handleHeaderBlur);
+                th.addEventListener('keydown', handleHeaderInput);
+                th.addEventListener('focus', handleHeaderFocus);
+                th.addEventListener('blur', handleHeaderBlur);
+            });
+            document.querySelectorAll('tbody input[type="checkbox"]').forEach(cb => {
+                cb.removeEventListener('change', handleCheckboxChange);
+                cb.addEventListener('change', handleCheckboxChange);
+            });
+        }
+
+        // স্টেট লোড করার ফাংশন
+        // নির্দিষ্ট ট্র্যাকারের ডেটা লোড করে UI আপডেট করে
+        function loadStateFromKey(trackerKey) {
+            setActiveTrackerKey(trackerKey); // এই কী-কে সক্রিয় হিসেবে সেট করে
+            const data = getStateDataForKey(trackerKey); // ডেটা লোড করে
+            const trackers = getTrackers(); // সব ট্র্যাকারের তালিকা আনে
+            const currentTrackerInfo = trackers.find(t => t.key === trackerKey); // বর্তমান ট্র্যাকারের তথ্য (নাম) খুঁজে বের করে
+
+            // পেজের টাইটেল আপডেট করে
+            if (pageTitleElement) {
+                pageTitleElement.textContent = currentTrackerInfo ? currentTrackerInfo.name : "Monthly Tracker";
+            }
+
+            // কলাম সংখ্যা ঠিক করে
+            setupInitialColumns(data.columnCount || 5); // ডিফল্ট ৫ যদি সেভ না থাকে
+
+            // হেডারগুলোর টেক্সট আপডেট করে
+            const currentHeaders = document.querySelectorAll('th.name-header[contenteditable="true"]');
+            currentHeaders.forEach(header => {
+                 // সেভ করা হেডার টেক্সট ব্যবহার করে, না থাকলে ডিফল্ট নাম দেয়
+                 header.textContent = data.headers?.[header.id] || `Name ${header.id.split('-')[2]}`;
+            });
+
+             // চেকবক্সগুলোর স্ট্যাটাস আপডেট করে
+            const currentCheckboxes = document.querySelectorAll('tbody input[type="checkbox"]');
+            currentCheckboxes.forEach(checkbox => {
+                 // সেভ করা স্ট্যাটাস ব্যবহার করে, না থাকলে false (unchecked)
+                 checkbox.checked = data.checks?.[checkbox.id] || false;
+            });
+
+            console.log(`State loaded for ${currentTrackerInfo ? currentTrackerInfo.name : trackerKey}`);
+
+            // ডিলিট এবং রিনেম বাটন এনাবল/ডিসাবল করে
+            const canDelete = trackers.length > 1; // যদি ১টির বেশি ট্র্যাকার থাকে তবেই ডিলিট করা যাবে
+            if(deleteTrackerBtn) {
+                 deleteTrackerBtn.disabled = !canDelete;
+                 deleteTrackerBtn.title = canDelete ? "Delete the current tracker page" : "Cannot delete the only tracker";
+            }
+            if(renameTrackerBtn) {
+                 renameTrackerBtn.disabled = false; // রিনেম বাটন সবসময় এনাবল থাকবে যখন একটি ট্র্যাকার লোড করা হয়
+                 renameTrackerBtn.title = "Rename the current tracker page";
+            }
+        }
+        // UI কে ডিফল্ট অবস্থায় রিসেট করে (নতুন ট্র্যাকার তৈরির সময় ব্যবহৃত হয়)
+        function resetUIToDefault(newTrackerName = "New Tracker") {
+            const defaultCols = 5; // ডিফল্ট কলাম সংখ্যা
+             // অতিরিক্ত কলাম মুছে ফেলে ডিফল্ট সংখ্যায় নিয়ে আসে
+            removeExtraColumns(document.querySelectorAll('.tracker-table thead th.name-header').length, defaultCols);
+
+             // হেডার টেক্সট রিসেট
+            const currentHeaders = document.querySelectorAll('th.name-header[contenteditable="true"]');
+            currentHeaders.forEach(header => {
+                header.textContent = `Name ${header.id.split('-')[2]}`;
+            });
+            // সব চেকবক্স আনচেক করে
+            const currentCheckboxes = document.querySelectorAll('tbody input[type="checkbox"]');
+            currentCheckboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            // পেজের টাইটেল আপডেট করে
+            if(pageTitleElement) {
+                pageTitleElement.textContent = newTrackerName;
+            }
+        }
+
+        // ড্রপডাউন মেনু পপুলেট করার ফাংশন
+        function populateTrackerSelect(trackerList) {
+            trackerSelect.innerHTML = ''; // আগের অপশন মুছে ফেলে
+            let activeKeyExistsInList = false; // বর্তমান সক্রিয় কী তালিকায় আছে কিনা
+
+            // যদি trackerList একটি অ্যারে না হয়, তবে ডিফল্ট তালিকা তৈরি করে নেয়
+            if (!Array.isArray(trackerList)) {
+                trackerList = createDefaultTrackerList();
+            }
+
+            // প্রতিটি ট্র্যাকারের জন্য একটি অপশন তৈরি করে ড্রপডাউনে যোগ করে
+            trackerList.forEach(tracker => {
+                // নিশ্চিত করে যে ট্র্যাকার অবজেক্টটি সঠিক ফরম্যাটে আছে
+                 if(typeof tracker !== 'object' || !tracker.key || !tracker.name) return;
+
+                const option = document.createElement('option');
+                option.value = tracker.key;
+                option.textContent = tracker.name;
+                trackerSelect.appendChild(option);
+                // যদি এই ট্র্যাকারের কী বর্তমান সক্রিয় কী-এর সমান হয়
+                if(tracker.key === currentTrackerKey) activeKeyExistsInList = true;
+            });
+
+            // যদি সক্রিয় কী তালিকায় পাওয়া যায়, তবে সেটি সিলেক্ট করে
+            if(activeKeyExistsInList) {
+                trackerSelect.value = currentTrackerKey;
+            }
+             // যদি না পাওয়া যায় (যেমন ডিলিট করার পর), এবং তালিকা খালি না হয়, তবে প্রথমটি সক্রিয় করে
+            else if (trackerList.length > 0) {
+                 setActiveTrackerKey(trackerList[0].key);
+                 trackerSelect.value = currentTrackerKey;
+             }
+             // যদি তালিকা খালি হয়ে যায় (সব ডিলিট করার পর), তবে নতুন ডিফল্ট তালিকা তৈরি করে আবার পপুলেট করে
+            else {
+                const defaultList = createDefaultTrackerList();
+                 populateTrackerSelect(defaultList);
+             }
+        }
+
+        // ট্র্যাকারকে ইমেজ হিসেবে ডাউনলোড করার ফাংশন
+        function downloadTrackerAsImage() {
+            // html2canvas লাইব্রেরি লোড হয়েছে কিনা চেক করে
+            if (typeof html2canvas === 'undefined') {
+                alert("Error: html2canvas library not loaded.");
+                return;
+            }
+            console.log("Starting image capture...");
+
+            // ক্যাপচারের আগে কিছু স্টাইল পরিবর্তন করে (যেমন স্ক্রলবার লুকানো)
+            const originalWrapperOverflow = tableWrapper.style.overflow;
+            const originalWrapperHeight = tableWrapper.style.height;
+            const originalContainerHeight = captureArea.style.height;
+             const settingsWasOpen = settingsOptionsDiv.classList.contains('open');
+
+            // সেটিংস মেনু বন্ধ করে এবং হাইড করে
+            settingsOptionsDiv.classList.remove('open');
+             settingsOptionsDiv.style.display = 'none';
+
+            // টেবিল র‍্যাপার এবং কন্টেইনারের স্টাইল সাময়িকভাবে পরিবর্তন করে পুরো টেবিল দেখানোর জন্য
+            tableWrapper.style.overflow = 'visible';
+            tableWrapper.style.height = 'auto';
+            captureArea.style.height = 'auto';
+             captureArea.style.paddingBottom = '30px'; // Ensure some padding at the bottom
+
+            // সামান্য ডিলে দেওয়া হয় যাতে স্টাইল পরিবর্তনগুলো রেন্ডার হতে পারে
+             new Promise(resolve => setTimeout(resolve, 150)).then(() => {
+                // html2canvas দিয়ে captureArea এলিমেন্টের স্ন্যাপশট নেয়
+                html2canvas(captureArea, {
+                    allowTaint: true, // Cross-origin ইমেজ ব্যবহারের অনুমতি
+                    useCORS: true, // CORS ব্যবহার করে ইমেজ লোড করার চেষ্টা
+                    backgroundColor: getComputedStyle(document.body).backgroundColor || '#f5f3ff', // ব্যাকগ্রাউন্ড কালার সেট করে
+                    scale: 1.5 // রেজোলিউশন বাড়ানোর জন্য স্কেল slightly বাড়াতে পারেন
+                }).then(canvas => {
+                    // ক্যানভাসকে PNG ইমেজ ডেটা URL-এ কনভার্ট করে
+                    const imageDataUrl = canvas.toDataURL('image/png');
+                    // একটি অদৃশ্য লিঙ্ক তৈরি করে ডাউনলোড ট্রিগার করে
+                    const a = document.createElement('a');
+                    a.href = imageDataUrl;
+
+                    // ফাইলের নাম তৈরি করে (ট্র্যাকার নাম + তারিখ)
+                    const date = new Date();
+                     const timestamp = `${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}`;
+                     const currentTrackerName = getTrackers().find(t => t.key === currentTrackerKey)?.name || 'tracker';
+                     const safeName = currentTrackerName.replace(/[^a-z0-9]/gi, '_').toLowerCase(); // ফাইলের নামের জন্য নিরাপদ স্ট্রিং
+                    a.download = `${safeName}_${timestamp}.png`; // ফাইলের নাম সেট
+
+                    document.body.appendChild(a); // লিঙ্কটি DOM-এ যোগ করে
+                    a.click(); // ক্লিক ইভেন্ট সিমুলেট করে ডাউনলোড শুরু করে
+                    document.body.removeChild(a); // লিঙ্কটি DOM থেকে সরিয়ে ফেলে
+                    console.log("Image download initiated.");
+
+                }).catch(error => {
+                    console.error("Error capturing image:", error);
+                    alert("Sorry, there was an error generating the image.");
+                }).finally(() => {
+                    // ক্যাপচারের পরে আসল স্টাইলগুলো ফিরিয়ে আনে
+                    console.log("Restoring original styles...");
+                    tableWrapper.style.overflow = originalWrapperOverflow;
+                    tableWrapper.style.height = originalWrapperHeight;
+                    captureArea.style.height = originalContainerHeight;
+                    captureArea.style.paddingBottom = ''; // Remove extra padding
+
+                     // যদি সেটিংস মেনু আগে খোলা ছিল, আবার দেখায় এবং খুলে দেয়
+                     if(settingsWasOpen) {
+                        settingsOptionsDiv.style.display = 'flex';
+                        // Force reflow before adding class back for transition
+                        void settingsOptionsDiv.offsetWidth;
+                         settingsOptionsDiv.classList.add('open');
+                    } else {
+                         settingsOptionsDiv.style.display = 'none'; // Ensure it stays hidden
+                    }
+                });
+            });
+        }
+
+        // ইভেন্ট লিসেনার সেটআপ
+        // সেটিংস বাটন ক্লিক করলে মেনু টগল করে
+        settingsBtn.addEventListener('click', function() {
+             const isOpen = settingsOptionsDiv.classList.contains('open');
+             if (!isOpen) {
+                // খোলার আগে display flex করা যাতে transition কাজ করে
+                settingsOptionsDiv.style.display = 'flex';
+                 // Force reflow to apply display before adding class
+                void settingsOptionsDiv.offsetWidth;
+                 settingsOptionsDiv.classList.add('open');
+             } else {
+                settingsOptionsDiv.classList.remove('open');
+                // Transition শেষ হওয়ার পর display none করা যেতে পারে, অথবা এখানেই করা যায়
+                // settingsOptionsDiv.addEventListener('transitionend', () => {
+                //    if (!settingsOptionsDiv.classList.contains('open')) {
+                //        settingsOptionsDiv.style.display = 'none';
+                //    }
+                // }, { once: true });
+             }
+             settingsBtn.classList.toggle('active'); // আইকনের স্টাইল টগল
+        });
+
+        // ট্র্যাকার সিলেক্ট ড্রপডাউন পরিবর্তন হলে নতুন ট্র্যাকার লোড করে
+        trackerSelect.addEventListener('change', function() {
+            const selectedKey = trackerSelect.value;
+            // যদি সিলেক্ট করা কী বর্তমান কী থেকে ভিন্ন হয় এবং ভ্যালিড হয়
+            if(selectedKey && selectedKey !== currentTrackerKey) {
+                loadStateFromKey(selectedKey); // নতুন ট্র্যাকার লোড করে
+            }
+        });
+
+        // "Create New" বাটন ক্লিক করলে নতুন ট্র্যাকার তৈরি করে
+        createTrackerBtn.addEventListener('click', function() {
+            const currentTrackers = getTrackers();
+            const newName = prompt("Enter name for the new tracker:", "Tracker " + (currentTrackers.length + 1)); // ইউজারের থেকে নাম নেয়
+
+            // যদি নাম দেওয়া হয় এবং খালি না হয়
+            if (newName && newName.trim() !== '') {
+                const newKey = generateUniqueKey(); // নতুন ইউনিক কী
+                const defaultCols = 5; // নতুন ট্র্যাকারের জন্য ডিফল্ট কলাম সংখ্যা
+                 // নতুন ট্র্যাকার অবজেক্ট তৈরি করে তালিকায় যোগ করে
+                currentTrackers.push({ key: newKey, name: newName.trim(), colCount: defaultCols});
+                saveTrackers(currentTrackers); // আপডেট করা তালিকা সেভ করে
+
+                resetUIToDefault(newName.trim()); // UI রিসেট করে
+                setActiveTrackerKey(newKey); // নতুন ট্র্যাকারকে সক্রিয় করে
+                // নতুন ট্র্যাকারের জন্য খালি স্টেট সেভ করে
+                saveCurrentStateData({ headers: {}, checks: {}, columnCount: defaultCols }, newKey);
+                loadStateFromKey(newKey); // নতুন ট্র্যাকারের ডেটা লোড করে (UI তে দেখানোর জন্য)
+                trackerSelect.value = newKey; // ড্রপডাউনে সিলেক্ট করে
+
+                alert(`Tracker "${newName.trim()}" created!`);
+            } else if (newName !== null) { // যদি ইউজার cancel না করে কিন্তু খালি নাম দেয়
+                alert("Tracker name cannot be empty.");
+            }
+        });
+
+        // "Rename" বাটন ক্লিক করলে বর্তমান ট্র্যাকারের নাম পরিবর্তন করে
+        renameTrackerBtn.addEventListener('click', function() {
+            if (!currentTrackerKey || renameTrackerBtn.disabled) return; // যদি কোনো ট্র্যাকার সক্রিয় না থাকে বা বাটন ডিসাবল থাকে
+
+            const currentTrackers = getTrackers();
+            const currentTracker = currentTrackers.find(t => t.key === currentTrackerKey); // বর্তমান ট্র্যাকার খুঁজে বের করে
+            if (!currentTracker) return; // যদি খুঁজে না পাওয়া যায়
+
+            const newName = prompt("Enter the new name:", currentTracker.name); // ইউজারের থেকে নতুন নাম নেয়
+
+            // যদি নতুন নাম দেওয়া হয় এবং খালি না হয়
+            if (newName && newName.trim() !== '') {
+                currentTracker.name = newName.trim(); // তালিকায় নাম আপডেট করে
+                saveTrackers(currentTrackers); // আপডেট করা তালিকা সেভ করে
+
+                // পেজের টাইটেল আপডেট করে
+                if (pageTitleElement) {
+                    pageTitleElement.textContent = newName.trim();
+                }
+                alert(`Tracker renamed to "${newName.trim()}"!`);
+            } else if (newName !== null) { // যদি ইউজার cancel না করে কিন্তু খালি নাম দেয়
+                alert("Name cannot be empty.");
+            }
+        });
+
+        // "Delete" বাটন ক্লিক করলে বর্তমান ট্র্যাকার মুছে ফেলে
+        deleteTrackerBtn.addEventListener('click', function() {
+            if (!currentTrackerKey || deleteTrackerBtn.disabled) return; // যদি কোনো ট্র্যাকার সক্রিয় না থাকে বা বাটন ডিসাবল থাকে
+
+            const currentTrackers = getTrackers();
+            const currentTracker = currentTrackers.find(t => t.key === currentTrackerKey);
+            if (!currentTracker) return; // যদি খুঁজে না পাওয়া যায়
+
+            // ডিলিট করার আগে কনফার্মেশন চায়
+            if (confirm(`Are you sure you want to delete the tracker "${currentTracker.name}"? This action cannot be undone.`)) {
+                // লোকাল স্টোরেজ থেকে ট্র্যাকারের ডেটা মুছে ফেলে
+                localStorage.removeItem(currentTrackerKey);
+                // ট্র্যাকারের তালিকা থেকে এটিকে বাদ দেয়
+                const updatedTrackers = currentTrackers.filter(t => t.key !== currentTrackerKey);
+                saveTrackers(updatedTrackers); // আপডেট করা তালিকা সেভ করে
+
+                // যদি আরও ট্র্যাকার থাকে, তবে প্রথমটিকে সক্রিয় করে লোড করে
+                 const newActiveKey = updatedTrackers[0]?.key;
+                if(newActiveKey) {
+                    loadStateFromKey(newActiveKey);
+                 } else {
+                    // যদি কোনো ট্র্যাকার না থাকে, তবে অ্যাপ পুনরায় ইনিশিয়ালাইজ করে (যা একটি ডিফল্ট তৈরি করবে)
+                    initializeApp();
+                 }
+             }
+        });
+
+        // "Download Image" বাটন ক্লিক করলে ইমেজ ডাউনলোড ফাংশন কল করে
         downloadImageBtn.addEventListener('click', downloadTrackerAsImage);
-        addColumnBtn.addEventListener('click', function() { const currentHeaders = document.querySelectorAll('.tracker-table thead th.name-header'); const newColumnIndex = currentHeaders.length + 1; addColumnToUI(newColumnIndex); saveCurrentUIToState(); });
 
-        // Initial App Load
-        function initializeApp() { console.log("Initializing App (v_add_column_fullwidth)..."); let keyToLoad = getActiveTrackerKey(); const trackers = getTrackers(); if (!keyToLoad || !trackers.some(t => t.key === keyToLoad)) { keyToLoad = trackers[0]?.key; } if (keyToLoad) setActiveTrackerKey(keyToLoad); else console.error("CRITICAL: No tracker key found!"); populateTrackerSelect(trackers); if (currentTrackerKey) { loadStateFromKey(currentTrackerKey); } else { /* Error Handling */ if(pageTitleElement) pageTitleElement.textContent = "Error"; } settingsOptionsDiv.classList.remove('open'); settingsOptionsDiv.style.display = 'none'; }
+        // "+" বাটন ক্লিক করলে নতুন কলাম যোগ করে এবং স্টেট সেভ করে
+        addColumnBtn.addEventListener('click', function() {
+            const currentHeaders = document.querySelectorAll('.tracker-table thead th.name-header');
+            const newColumnIndex = currentHeaders.length + 1; // নতুন কলামের ইনডেক্স
+            addColumnToUI(newColumnIndex); // UI তে কলাম যোগ করে
+            saveCurrentUIToState(); // পরিবর্তন সেভ করে
+        });
+
+        // অ্যাপ ইনিশিয়ালাইজেশন ফাংশন (পেজ লোডের সময় চলে)
+        function initializeApp() {
+            console.log("Initializing App (v_add_column_fullwidth)...");
+
+            let keyToLoad = getActiveTrackerKey(); // সর্বশেষ সক্রিয় কী খুঁজে বের করার চেষ্টা
+            const trackers = getTrackers(); // সব ট্র্যাকারের তালিকা আনে
+
+            // যদি সক্রিয় কী না পাওয়া যায় বা সেটি বর্তমান তালিকায় না থাকে
+            if (!keyToLoad || !trackers.some(t => t.key === keyToLoad)) {
+                 keyToLoad = trackers[0]?.key; // তালিকার প্রথম কী ব্যবহার করে
+            }
+
+            // যদি লোড করার জন্য একটি কী পাওয়া যায়
+            if (keyToLoad) {
+                 setActiveTrackerKey(keyToLoad); // এটিকে সক্রিয় করে
+             } else {
+                // এই অবস্থা হওয়া উচিত নয় কারণ getTrackers() সবসময় একটি তালিকা বা ডিফল্ট তৈরি করে
+                console.error("CRITICAL: No tracker key found after initialization!");
+            }
+
+            populateTrackerSelect(trackers); // ড্রপডাউন পপুলেট করে
+
+            // যদি একটি সক্রিয় কী থাকে, তবে তার ডেটা লোড করে
+            if (currentTrackerKey) {
+                 loadStateFromKey(currentTrackerKey);
+            } else {
+                 // এরর হ্যান্ডলিং বা একটি ফলব্যাক স্টেট দেখানো যেতে পারে
+                 if(pageTitleElement) pageTitleElement.textContent = "Error: No Tracker Loaded";
+                 // এখানে UI রিসেট বা অন্য কোনো ব্যবস্থা নেওয়া যেতে পারে
+             }
+
+            // নিশ্চিত করে যে সেটিংস মেনু প্রাথমিকভাবে বন্ধ এবং লুকানো থাকে
+            settingsOptionsDiv.classList.remove('open');
+             settingsOptionsDiv.style.display = 'none';
+        }
+
+        // অ্যাপ চালু করে
         initializeApp();
 
     });
