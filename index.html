@@ -2,257 +2,216 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Yo Style - Style Your Name</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expandable Tracker App (Full Width)</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <style>
+        /* --- Inside the <style> tag --- */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+        /* --- Color Palette --- */
         :root {
-            --bg-primary: #121212;
-            --bg-secondary: #1e1e1e;
-            --bg-nav: #2a2a2a;
-            --bg-bottom-nav: #242424;
-            --text-primary: #e0e0e0;
-            --text-secondary: #aaaaaa;
-            --accent-color: #00ff7f;
-            --accent-darker: #00cc66;
-            --border-color: #333333;
-            --shadow-color: rgba(0, 255, 127, 0.2);
-            --shadow-dark: rgba(0, 0, 0, 0.3);
-            --font-main: 'Poppins', sans-serif;
-            --transition-speed: 0.3s;
-            --nav-width: 260px;
-            --nav-item-anim-stagger: 0.05s;
-            --bottom-nav-height: 65px;
-            --bottom-nav-icon-size: 24px;
-            --bottom-nav-ai-label-size: 1rem;
+            --primary-color: #6d28d9; --primary-light: #c4b5fd; --primary-lighter: #ede9fe; --primary-bg: #f5f3ff; --text-dark: #111827; --text-medium: #4b5563; --text-light: #f9fafb; --border-color: #e5e7eb; --border-stronger: #d1d5db; --container-bg: #ffffff; --hover-bg: var(--primary-lighter); --header-bg-month: #f9fafb; --header-bg-name: var(--primary-lighter); --icon-color: #9ca3af; --icon-hover-color: var(--primary-color);
+            --btn-action-bg: var(--primary-color); --btn-action-hover-bg: #5b21b6; --btn-img-bg: #10b981; --btn-img-hover-bg: #059669; --btn-delete-bg: #ef4444; --btn-delete-hover-bg: #dc2626; --btn-disabled-bg: #e5e7eb;
         }
 
-        /* --- Global Reset & Base Styles --- */
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-        html { font-size: 100%; scroll-behavior: smooth; }
+        /* --- Base & Layout --- */
+        *, *::before, *::after { box-sizing: border-box; }
         body {
-            font-family: var(--font-main); background-color: var(--bg-primary); color: var(--text-primary);
-            line-height: 1.6; display: flex; flex-direction: column; min-height: 100vh; overflow-x: hidden;
-            padding-bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom));
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 15px; /* Minimal body padding */
+            background-color: var(--primary-bg);
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
-        body.menu-open { overflow-y: hidden; }
-        .container { width: 90%; max-width: 1100px; margin: 0 auto; padding: 0 15px; }
-
-        /* --- Header/Navbar --- */
-        .app-header { background-color: rgba(30, 30, 30, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); padding: 15px 0; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; left: 0; right: 0; z-index: 1000; }
-        .navbar { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 1.8rem; font-weight: 700; color: var(--accent-color); text-decoration: none; flex-shrink: 0; }
-        .logo span { color: var(--text-primary); font-weight: 400; }
-
-        /* --- Menu Toggle Button & Side Nav --- */
-        .menu-toggle { background: none; border: none; color: var(--text-primary); font-size: 1.8rem; cursor: pointer; padding: 5px; display: flex; flex-direction: column; justify-content: space-around; width: 30px; height: 25px; z-index: 1200; margin-left: 15px; }
-        .menu-toggle span { display: block; width: 100%; height: 3px; background-color: var(--text-primary); border-radius: 3px; transition: all var(--transition-speed) ease-in-out; }
-        .side-nav { position: fixed; top: 0; right: 0; left: auto; width: var(--nav-width); height: 100%; background-color: var(--bg-nav); padding: 80px 20px 20px; transform: translateX(100%); transition: transform var(--transition-speed) ease-in-out; z-index: 1150; overflow-y: auto; border-left: 1px solid var(--border-color); }
-        .side-nav ul { list-style: none; }
-        .side-nav li { opacity: 0; transform: translateX(30px); transition: opacity calc(var(--transition-speed) * 0.8) ease, transform calc(var(--transition-speed) * 0.8) ease; transition-delay: 0s; }
-        .side-nav a { color: var(--text-primary); text-decoration: none; font-size: 1.1rem; padding: 10px 5px; display: block; transition: color var(--transition-speed) ease, background-color var(--transition-speed) ease; border-radius: 5px; margin-bottom: 10px; }
-        .side-nav a:hover, .side-nav a.active { color: var(--accent-color); background-color: rgba(255, 255, 255, 0.05); }
-        .menu-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); opacity: 0; visibility: hidden; transition: opacity var(--transition-speed) ease, visibility 0s var(--transition-speed); z-index: 1100; }
-        body.menu-open .menu-overlay { opacity: 1; visibility: visible; transition-delay: 0s; }
-        body.menu-open .side-nav { transform: translateX(0); }
-        body.menu-open .side-nav li { opacity: 1; transform: translateX(0); }
-        body.menu-open .menu-toggle span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
-        body.menu-open .menu-toggle span:nth-child(2) { opacity: 0; }
-        body.menu-open .menu-toggle span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
-
-        /* --- Main Content & Output --- */
-        main { flex-grow: 1; padding: 40px 0; }
-        .hero-section { text-align: center; padding: 40px 0; display: flex; flex-direction: column; align-items: center; }
-        .hero-section h1 { font-size: clamp(2.5rem, 6vw, 3.8rem); font-weight: 700; margin-bottom: 15px; max-width: 800px; }
-        .hero-section h1 .highlight { color: var(--accent-color); }
-        .hero-section .subtitle { font-size: clamp(1rem, 3vw, 1.2rem); color: var(--text-secondary); margin-bottom: 40px; max-width: 600px; }
-        .input-group { display: flex; flex-direction: column; gap: 15px; align-items: center; width: 100%; max-width: 500px; }
-        #nameInput { font-family: var(--font-main); width: 100%; padding: 15px 20px; font-size: 1.1rem; background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease; appearance: none; -webkit-appearance: none; }
-        #nameInput::placeholder { color: #777; opacity: 1; }
-        #nameInput:focus { outline: none; border-color: var(--accent-color); box-shadow: 0 0 0 3px var(--shadow-color); }
-        #styleButton { font-family: var(--font-main); padding: 15px 40px; font-size: 1.1rem; font-weight: 700; color: #000; background-color: var(--accent-color); border: none; border-radius: 8px; cursor: pointer; transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); white-space: nowrap; appearance: none; -webkit-appearance: none; }
-        #styleButton:hover { background-color: var(--accent-darker); transform: translateY(-3px); box-shadow: 0 6px 15px var(--shadow-dark); }
-        #styleButton:active { transform: translateY(0); box-shadow: 0 2px 5px var(--shadow-dark); }
-        .output-section { padding: 40px 0; width: 100%; }
-        .output-container { background-color: var(--bg-secondary); padding: 20px 15px; border-radius: 15px; min-height: 250px; width: 100%; max-width: 800px; border: 1px solid var(--border-color); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); overflow-y: auto; max-height: 60vh; position: relative; margin-left: auto; margin-right: auto; }
-        .output-container.is-prompt-only { display: flex; align-items: center; justify-content: center; text-align: center; }
-        /* Notice always displayed below the output box - Further increased top margin */
-        .output-notice-below {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            text-align: center;
-            margin-top: 50px; /* ADJUSTED: Further Increased margin-top */
-            padding: 0 15px;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
+        .tracker-container {
+            width: 100%;
+            /* Removed fixed max-width, using viewport width instead */
+            max-width: 96vw; /* Takes up 96% of the screen width */
+            background-color: var(--container-bg);
+            padding: 25px 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(109, 40, 217, 0.08), 0 4px 8px rgba(109, 40, 217, 0.06);
         }
-        .styled-result { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; padding: 12px 10px; border-bottom: 1px solid var(--border-color); opacity: 0; animation: fadeInResult 0.5s ease forwards; }
-        .styled-result:last-child { border-bottom: none; }
-        @keyframes fadeInResult { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .styled-result span { font-size: 1.6rem; line-height: 1.4; word-break: break-word; flex-grow: 1; font-variant-ligatures: none; }
-        .styled-result span[title] { cursor: help; }
-        .copy-button { font-family: var(--font-main); padding: 6px 12px; font-size: 0.85rem; font-weight: 600; color: #000; background-color: var(--accent-color); border: none; border-radius: 5px; cursor: pointer; transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease; white-space: nowrap; flex-shrink: 0; }
-        .copy-button:hover { background-color: var(--accent-darker); transform: scale(1.05); }
-        .copy-button:active { transform: scale(0.98); }
-        .output-prompt { font-family: var(--font-main); font-size: clamp(1.2rem, 5vw, 1.8rem); font-weight: 400; color: var(--text-secondary); text-transform: none; letter-spacing: normal; text-shadow: none; padding: 20px; }
+        .header-area { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; position: relative; }
+        h1.tracker-title { text-align: center; color: var(--primary-color); margin: 0 auto; padding: 0 40px; font-size: 24px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .settings-icon { position: absolute; right: 0px; top: 50%; transform: translateY(-50%); font-size: 24px; color: var(--icon-color); cursor: pointer; transition: color 0.3s ease, transform 0.3s ease; padding: 4px; flex-shrink: 0; line-height: 1; }
+        .settings-icon:hover { color: var(--icon-hover-color); transform: translateY(-50%) rotate(45deg); }
+        .settings-icon.active { transform: translateY(-50%) rotate(90deg); color: var(--icon-hover-color); }
 
-        /* --- Bottom Navigation Styles --- */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: var(--bottom-nav-height); background-color: var(--bg-bottom-nav, var(--bg-secondary)); border-top: 1px solid var(--border-color); box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.25); display: flex; justify-content: space-around; align-items: stretch; z-index: 1050; padding-bottom: env(safe-area-inset-bottom); }
-        .nav-item { display: flex; flex-direction: column; justify-content: center; align-items: center; flex-grow: 1; padding: 6px 5px 4px; background: none; border: none; color: var(--text-secondary); font-family: var(--font-main); cursor: pointer; text-align: center; transition: color var(--transition-speed) ease; user-select: none; -webkit-tap-highlight-color: transparent; }
-        .nav-icon { width: var(--bottom-nav-icon-size); height: var(--bottom-nav-icon-size); min-height: var(--bottom-nav-icon-size); margin-bottom: 3px; display: flex; justify-content: center; align-items: center; line-height: 1; flex-shrink: 0; color: inherit; }
-        .nav-icon svg { display: block; width: 100%; height: 100%; fill: currentColor; }
-        #nav-ai .nav-label { font-size: var(--bottom-nav-ai-label-size); font-weight: 600; margin-top: auto; margin-bottom: auto; line-height: 1.2; }
-        #nav-ai .nav-icon { height: 0; margin-bottom: 0; min-height: 0; } /* Hide icon space */
-        .nav-label { font-size: 0.75rem; line-height: 1; display: block; } /* Default label size */
-        .nav-item.active { color: var(--accent-color); }
+        /* --- Settings Menu --- */
+        .settings-menu { margin-bottom: 20px; padding: 15px; border: 1px solid var(--border-color); background-color: #fdfdff; border-radius: 10px; display: flex; flex-direction: column; gap: 15px; max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.4s ease-out, opacity 0.3s ease-in-out, padding 0.4s ease-out, margin-bottom 0.4s ease-out; }
+        .settings-menu.open { max-height: 500px; opacity: 1; padding: 15px; margin-bottom: 20px; }
+        .tracker-select-group { display: flex; align-items: center; gap: 8px; width: 100%; }
+        .tracker-select-group label { font-weight: 600; color: var(--text-medium); white-space: nowrap; font-size: 13px; }
+        .tracker-select-group select { padding: 8px 10px; border: 1px solid var(--border-stronger); border-radius: 6px; font-family: inherit; font-size: 13px; flex-grow: 1; min-width: 140px; cursor: pointer; background-color: #fff; }
+        .action-buttons { display: flex; flex-wrap: wrap; gap: 8px; width: 100%; justify-content: center; }
+        .settings-menu .btn { padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; transition: all 0.2s ease; color: var(--text-light); box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .settings-menu .btn:disabled { background-color: var(--btn-disabled-bg) !important; color: #9ca3af !important; cursor: not-allowed; box-shadow: none; transform: none; }
+        .settings-menu .btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 3px 6px rgba(0,0,0,0.08); }
+        .settings-menu .btn:active:not(:disabled) { transform: translateY(0px) scale(0.98); box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .btn-create { background-color: var(--btn-action-bg); } .btn-create:hover:not(:disabled) { background-color: var(--btn-action-hover-bg); }
+        .btn-rename { background-color: var(--btn-action-bg); } .btn-rename:hover:not(:disabled) { background-color: var(--btn-action-hover-bg); }
+        .btn-delete { background-color: var(--btn-delete-bg); } .btn-delete:hover:not(:disabled) { background-color: var(--btn-delete-hover-bg); }
+        .btn-download-image { background-color: var(--btn-img-bg); } .btn-download-image:hover:not(:disabled) { background-color: var(--btn-img-hover-bg); }
 
-        /* --- Responsive Adjustments --- */
-        @media (min-width: 600px) { .input-group { flex-direction: row; } #nameInput { min-width: 300px; flex-grow: 1; } #styleButton { width: auto; flex-shrink: 0; } }
-        @media (max-width: 480px) {
-             .logo { font-size: 1.5rem; } .hero-section h1 { font-size: 2rem; } .hero-section .subtitle { font-size: 0.95rem; }
-             .output-container { padding: 15px 10px; min-height: 200px; } .styled-result span { font-size: 1.3rem; } .copy-button { font-size: 0.8rem; padding: 5px 10px; } .output-prompt { font-size: clamp(1rem, 4vw, 1.5rem); }
-             #nameInput, #styleButton { font-size: 1rem; padding: 12px 18px; } #styleButton { padding: 12px 30px; } .side-nav { width: 80vw; }
-             :root { --bottom-nav-height: 60px; --bottom-nav-icon-size: 22px; --bottom-nav-ai-label-size: 0.9rem; }
-             .nav-label { font-size: 0.7rem; }
-             .output-notice-below { margin-top: 35px; } /* Slightly less margin on mobile */
-        }
-        .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0; }
+        /* --- Table Styling --- */
+        .table-wrapper { overflow-x: auto; margin-top: 15px; border-radius: 10px; border: 1px solid var(--border-color); }
+        .tracker-table { width: 100%; /* Table itself is full width of wrapper */ /* min-width: 750px; /* Can remove if not needed */ border-collapse: collapse; table-layout: fixed; }
+        .tracker-table th, .tracker-table td { border-right: none; border-left: none; border-top: none; border-bottom: 1px solid var(--border-color); padding: 12px 15px; vertical-align: middle; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; transition: background-color 0.2s ease; }
+        .tracker-table tr:last-child td { border-bottom: none; }
+        /* Header Styling */
+        .tracker-table thead th { font-weight: 600; color: var(--text-medium); position: sticky; top: 0; z-index: 10; background-color: #fdfdfd; border-bottom: 2px solid var(--border-stronger); text-align: center; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .tracker-table thead th:first-child { text-align: left; background-color: #fcfcfc; color: var(--text-dark); font-weight: 600; text-transform: none; letter-spacing: 0; font-size: 13px; width: 120px; position: sticky; left: 0; z-index: 11; }
+        .tracker-table th.name-header { background-color: var(--header-bg-name); color: var(--primary-color); width: 110px; cursor: pointer; transition: background-color 0.2s ease; }
+        .tracker-table th.name-header:hover { background-color: var(--primary-light); color: #fff; }
+        .tracker-table th.name-header:focus-within { outline: 2px solid var(--primary-color); outline-offset: -1px; background-color: #fff; color: var(--text-dark); overflow: visible; white-space: normal; z-index: 11; box-shadow: 0 0 0 3px var(--primary-lighter); border-radius: 4px; }
+        .tracker-table th.add-column-cell { width: 50px; background-color: #f9fafb; padding: 0; vertical-align: middle; border-bottom: 2px solid var(--border-stronger); }
+        button#add-column-btn { width: 100%; height: 100%; border: none; background: #e0e7ff; color: var(--primary-color); font-size: 20px; font-weight: bold; cursor: pointer; transition: background-color 0.2s ease; display: flex; align-items: center; justify-content: center; padding: 10px 0; }
+        button#add-column-btn:hover { background-color: var(--primary-light); color: #fff; }
+
+        /* Body Cell Styling */
+        .tracker-table tbody td { text-align: left; color: var(--text-medium); }
+        .tracker-table td:first-child { font-weight: 500; color: var(--text-dark); background-color: #fff; border-right: 1px solid var(--border-color); position: sticky; left: 0; z-index: 1; }
+        .tracker-table td.checkbox-cell { text-align: center; width: 70px; padding: 8px; }
+        .tracker-table tr td:last-child { background-color: #f9fafb; border-bottom: 1px solid var(--border-color); }
+        .tracker-table tr:last-child td:last-child { border-bottom: none; }
+        /* Hover */
+        .tracker-table tbody tr:hover td { background-color: var(--hover-bg); }
+        .tracker-table tbody tr:hover td:first-child { background-color: #fff; }
+        .tracker-table tbody tr:hover td:last-child { background-color: #f1f3f5; }
+
+        /* Custom Checkbox */
+        .tracker-table input[type="checkbox"] { appearance: none; -webkit-appearance: none; -moz-appearance: none; margin: 0; padding: 0; display: inline-block; vertical-align: middle; position: relative; cursor: pointer; width: 18px; height: 18px; background-color: #fff; border: 2px solid var(--border-stronger); border-radius: 5px; transition: background-color 0.2s ease, border-color 0.2s ease; }
+        .tracker-table input[type="checkbox"]:checked { background-color: var(--primary-color); border-color: var(--primary-color); }
+        .tracker-table input[type="checkbox"]::after { content: ''; display: block; position: absolute; top: 1px; left: 5px; width: 4px; height: 9px; border: solid white; border-width: 0 2px 2px 0; transform: rotate(45deg) scale(0); opacity: 0; transition: transform 0.2s ease-in-out, opacity 0.2s ease; }
+        .tracker-table input[type="checkbox"]:checked::after { transform: rotate(45deg) scale(1); opacity: 1; }
+        .tracker-table input[type="checkbox"]:focus-visible { outline: 2px solid var(--primary-light); outline-offset: 2px; }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header class="app-header"> <div class="container navbar"> <a href="#" class="logo">YO<span>STYLE</span></a> <button class="menu-toggle" id="menu-toggle-button" aria-label="Toggle Menu" aria-expanded="false" aria-controls="side-menu"> <span></span> <span></span> <span></span> </button> </div> </header>
-    <!-- Side Navigation Menu -->
-    <nav class="side-nav" id="side-menu" aria-hidden="true"> <ul id="menu-list"> <li><a href="#" class="active">Home</a></li> <li><a href="#">Saved Styles</a></li> <li><a href="#">About</a></li> <li><a href="#">Settings</a></li> </ul> </nav>
-    <!-- Menu Overlay -->
-    <div class="menu-overlay" id="menu-overlay"></div>
-    <!-- Main Content -->
-    <main>
-        <section class="hero-section" aria-labelledby="hero-heading"> <div class="container"> <h1 id="hero-heading">Give Your Name a <span class="highlight">Stylish Edge</span></h1> <p class="subtitle">Find cool symbol & gamer fonts for your name! For Instagram, WhatsApp, Facebook, Gaming Profiles & more. Copy with one click!</p> <div class="input-group"> <label for="nameInput" class="sr-only">Enter your name:</label> <input type="text" id="nameInput" placeholder="Enter your name or gamertag..."> <button id="styleButton">Style It!</button> </div> </div> </section>
 
-        <!-- Output Section with Container for Box and Notice Below -->
-        <section class="output-section" aria-live="polite">
-            <div class="container" id="output-area">
-                <div class="output-container"> <!-- JS will add/remove 'is-prompt-only' class -->
-                     <!-- Prompt initially shown here -->
-                    <div class="output-prompt">Styles will appear here...</div>
-                </div>
-                <!-- Static Notice Below Output Box -->
-                <div class="output-notice-below">
-                    Note: Some styles might not display correctly on all devices/browsers.
-                </div>
-            </div>
-        </section>
-    </main>
+<div class="tracker-container" id="tracker-capture-area">
+    <div class="header-area">
+        <h1 class="tracker-title">Monthly Tracker</h1>
+        <div class="settings-icon" id="settings-btn" title="Settings">⚙</div>
+    </div>
 
-    <!-- NO FOOTER -->
+    <div class="settings-menu" id="settings-options">
+        <div class="tracker-select-group">
+            <label for="tracker-select">Current:</label>
+            <select id="tracker-select"></select>
+        </div>
+        <div class="action-buttons">
+            <button id="create-tracker-btn" class="btn btn-create" title="Create a new blank tracker page">Create New</button>
+            <button id="rename-tracker-btn" class="btn btn-rename" title="Rename the current tracker page">Rename</button>
+            <button id="delete-tracker-btn" class="btn btn-delete" title="Delete the current tracker page">Delete</button>
+            <button id="download-image-btn" class="btn btn-download-image" title="Download the current view as an image">Download Image</button>
+        </div>
+    </div>
 
-    <!-- ===== Bottom Navigation Bar ===== -->
-    <nav class="bottom-nav" aria-label="Main Navigation">
-        <button class="nav-item active" id="nav-style" aria-label="Style Generator" aria-pressed="true">
-            <span class="nav-icon" aria-hidden="true"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"> <path d="M12 2l2.54 5.66L20 8.13l-4.46 3.93L17 18.5 12 15.62 7 18.5l1.46-6.44L4 8.13l5.46-.47L12 2zm0 11.8l-2.34 1.26.45-2.63-1.92-1.78 2.64-.38L12 7.8l1.17 2.47 2.64.38-1.92 1.78.45 2.63L12 13.8z"/> </svg> </span>
-            <span class="nav-label">Style</span>
-        </button>
-        <button class="nav-item" id="nav-ai" aria-label="AI Feature" aria-pressed="false">
-            <span class="nav-icon" aria-hidden="true"></span>
-            <span class="nav-label">AI</span>
-        </button>
-    </nav>
-    <!-- ================================= -->
+    <div class="table-wrapper" id="table-scroll-wrapper">
+        <table class="tracker-table">
+            <thead>
+                 <tr id="header-row">
+                    <th>Month</th>
+                    <th id="name-header-1" class="name-header" contenteditable="true" spellcheck="false">Name 1</th>
+                    <th id="name-header-2" class="name-header" contenteditable="true" spellcheck="false">Name 2</th>
+                    <th id="name-header-3" class="name-header" contenteditable="true" spellcheck="false">Name 3</th>
+                    <th id="name-header-4" class="name-header" contenteditable="true" spellcheck="false">Name 4</th>
+                    <th id="name-header-5" class="name-header" contenteditable="true" spellcheck="false">Name 5</th>
+                    <th class="add-column-cell">
+                        <button id="add-column-btn" title="Add Name Column">+</button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="tracker-body">
+                 <!-- Rows Jan-Dec added by JS logic or initial HTML if preferred -->
+                  <tr> <td>January</td> <td class="checkbox-cell"><input type="checkbox" id="chk-0-1"></td> <td class="checkbox-cell"><input type="checkbox" id="chk-0-2"></td> <td class="checkbox-cell"><input type="checkbox" id="chk-0-3"></td> <td class="checkbox-cell"><input type="checkbox" id="chk-0-4"></td> <td class="checkbox-cell"><input type="checkbox" id="chk-0-5"></td> <td></td> </tr> <tr><td>February</td><td class="checkbox-cell"><input type="checkbox" id="chk-1-1"></td><td class="checkbox-cell"><input type="checkbox" id="chk-1-2"></td><td class="checkbox-cell"><input type="checkbox" id="chk-1-3"></td><td class="checkbox-cell"><input type="checkbox" id="chk-1-4"></td><td class="checkbox-cell"><input type="checkbox" id="chk-1-5"></td><td></td></tr> <tr><td>March</td><td class="checkbox-cell"><input type="checkbox" id="chk-2-1"></td><td class="checkbox-cell"><input type="checkbox" id="chk-2-2"></td><td class="checkbox-cell"><input type="checkbox" id="chk-2-3"></td><td class="checkbox-cell"><input type="checkbox" id="chk-2-4"></td><td class="checkbox-cell"><input type="checkbox" id="chk-2-5"></td><td></td></tr> <tr><td>April</td><td class="checkbox-cell"><input type="checkbox" id="chk-3-1"></td><td class="checkbox-cell"><input type="checkbox" id="chk-3-2"></td><td class="checkbox-cell"><input type="checkbox" id="chk-3-3"></td><td class="checkbox-cell"><input type="checkbox" id="chk-3-4"></td><td class="checkbox-cell"><input type="checkbox" id="chk-3-5"></td><td></td></tr> <tr><td>May</td><td class="checkbox-cell"><input type="checkbox" id="chk-4-1"></td><td class="checkbox-cell"><input type="checkbox" id="chk-4-2"></td><td class="checkbox-cell"><input type="checkbox" id="chk-4-3"></td><td class="checkbox-cell"><input type="checkbox" id="chk-4-4"></td><td class="checkbox-cell"><input type="checkbox" id="chk-4-5"></td><td></td></tr> <tr><td>June</td><td class="checkbox-cell"><input type="checkbox" id="chk-5-1"></td><td class="checkbox-cell"><input type="checkbox" id="chk-5-2"></td><td class="checkbox-cell"><input type="checkbox" id="chk-5-3"></td><td class="checkbox-cell"><input type="checkbox" id="chk-5-4"></td><td class="checkbox-cell"><input type="checkbox" id="chk-5-5"></td><td></td></tr> <tr><td>July</td><td class="checkbox-cell"><input type="checkbox" id="chk-6-1"></td><td class="checkbox-cell"><input type="checkbox" id="chk-6-2"></td><td class="checkbox-cell"><input type="checkbox" id="chk-6-3"></td><td class="checkbox-cell"><input type="checkbox" id="chk-6-4"></td><td class="checkbox-cell"><input type="checkbox" id="chk-6-5"></td><td></td></tr> <tr><td>August</td><td class="checkbox-cell"><input type="checkbox" id="chk-7-1"></td><td class="checkbox-cell"><input type="checkbox" id="chk-7-2"></td><td class="checkbox-cell"><input type="checkbox" id="chk-7-3"></td><td class="checkbox-cell"><input type="checkbox" id="chk-7-4"></td><td class="checkbox-cell"><input type="checkbox" id="chk-7-5"></td><td></td></tr> <tr><td>September</td><td class="checkbox-cell"><input type="checkbox" id="chk-8-1"></td><td class="checkbox-cell"><input type="checkbox" id="chk-8-2"></td><td class="checkbox-cell"><input type="checkbox" id="chk-8-3"></td><td class="checkbox-cell"><input type="checkbox" id="chk-8-4"></td><td class="checkbox-cell"><input type="checkbox" id="chk-8-5"></td><td></td></tr> <tr><td>October</td><td class="checkbox-cell"><input type="checkbox" id="chk-9-1"></td><td class="checkbox-cell"><input type="checkbox" id="chk-9-2"></td><td class="checkbox-cell"><input type="checkbox" id="chk-9-3"></td><td class="checkbox-cell"><input type="checkbox" id="chk-9-4"></td><td class="checkbox-cell"><input type="checkbox" id="chk-9-5"></td><td></td></tr> <tr><td>November</td><td class="checkbox-cell"><input type="checkbox" id="chk-10-1"></td><td class="checkbox-cell"><input type="checkbox" id="chk-10-2"></td><td class="checkbox-cell"><input type="checkbox" id="chk-10-3"></td><td class="checkbox-cell"><input type="checkbox" id="chk-10-4"></td><td class="checkbox-cell"><input type="checkbox" id="chk-10-5"></td><td></td></tr> <tr><td>December</td><td class="checkbox-cell"><input type="checkbox" id="chk-11-1"></td><td class="checkbox-cell"><input type="checkbox" id="chk-11-2"></td><td class="checkbox-cell"><input type="checkbox" id="chk-11-3"></td><td class="checkbox-cell"><input type="checkbox" id="chk-11-4"></td><td class="checkbox-cell"><input type="checkbox" id="chk-11-5"></td><td></td></tr>
+             </tbody>
+        </table>
+    </div>
+</div>
 
-    <script>
-        // --- DOM Selections ---
-        const nameInput = document.getElementById('nameInput');
-        const styleButton = document.getElementById('styleButton');
-        const outputArea = document.getElementById('output-area');
-        const outputContainer = outputArea.querySelector('.output-container'); // Select the inner container
-        const menuToggleButton = document.getElementById('menu-toggle-button');
-        const sideMenu = document.getElementById('side-menu');
-        const menuOverlay = document.getElementById('menu-overlay');
-        const menuList = document.getElementById('menu-list');
-        const menuItems = menuList.querySelectorAll('li');
-        const bottomNavItems = document.querySelectorAll('.bottom-nav .nav-item');
+<script>
+    // --- FULL JAVASCRIPT (same as the last provided "add column" version) ---
+    document.addEventListener('DOMContentLoaded', function() {
+        // References
+        const settingsBtn = document.getElementById('settings-btn');
+        const settingsOptionsDiv = document.getElementById('settings-options');
+        const trackerSelect = document.getElementById('tracker-select');
+        const createTrackerBtn = document.getElementById('create-tracker-btn');
+        const renameTrackerBtn = document.getElementById('rename-tracker-btn');
+        const deleteTrackerBtn = document.getElementById('delete-tracker-btn');
+        const downloadImageBtn = document.getElementById('download-image-btn');
+        const addColumnBtn = document.getElementById('add-column-btn');
+        const captureArea = document.getElementById('tracker-capture-area');
+        const tableWrapper = document.getElementById('table-scroll-wrapper');
+        const pageTitleElement = document.querySelector('h1.tracker-title');
+        const theadRow = document.getElementById('header-row');
+        const tbody = document.getElementById('tracker-body');
 
-        // --- Character Maps & Combining (Full Maps) ---
-        const map = { normal: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', bold: '𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵𝗶𝗷𝗸𝗹𝗺𝗻𝗼𝗽𝗾𝗿𝘀𝘁𝘂𝘃𝘄𝘅𝘆𝘇𝗔𝗕𝗖𝗗𝗘𝗙𝗚𝗛𝗜𝗝𝗞𝗟𝗠𝗡𝗢𝗣𝗤𝗥𝗦𝗧𝗨𝗩𝗪𝗫𝗬𝗭𝟬𝟭𝟮𝟯𝟰𝟱𝟲𝟳𝟴𝟵', italic: '𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘬𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡', boldItalic: '𝙖𝙗𝙘𝙙𝙚𝙛𝙜𝙝𝙞𝙟𝙠𝙡𝙢𝙣𝙤𝙥𝙦𝙧𝙨𝙩𝙪𝙫𝙬𝙭𝙮𝙯𝘼𝘽𝘾𝘿𝙀𝙁𝙂𝙃𝙄𝙅𝙆𝙇𝙈𝙉𝙊𝙋𝙌𝙍𝙎𝙏𝙐𝙑𝙒𝙓𝙔𝙕', serifBold: '𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗', serifItalic: '𝑎𝑏𝑐𝑑𝑒𝑓𝑔ℎ𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧𝐴𝐵𝐶𝐷𝐸𝐹𝐺𝐻𝐼𝐽𝐾𝐿𝑀𝑁𝑂𝑃𝑄𝑅𝑆𝑇𝑈𝑉𝑊𝑋𝑌𝑍', serifBoldItalic: '𝒂𝒃𝒄𝒅𝒆𝒇𝒈𝒉𝒊𝒋𝒌𝒍𝒎𝒏𝒐𝒑𝒒𝒓𝒔𝒕𝒖𝒗𝒘𝒙𝒚𝒛𝑨𝑩𝑪𝑫𝑬𝑭𝑮𝑯𝑰𝑱𝑲𝑳𝑴𝑵𝑶𝑷𝑸𝑹𝑺𝑻𝑼𝑽𝑾𝑿𝒀𝒁', cursive: '𝒶𝒷𝒸𝒹𝑒𝒻𝑔𝒽𝒾𝒿𝓀𝓁𝓂𝓃𝑜𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏𝒜ℬ𝒞𝒟ℰℱ𝒢ℋℐ𝒥𝒦ℒℳ𝒩𝒪𝒫𝒬ℛ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵', boldCursive: '𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩', fraktur: '𝔞𝔟𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔫𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨ', frakturBold: '𝖆𝖇𝖈𝖉𝖊𝖋𝖌𝖍𝖎𝖏𝖐𝖑𝖒𝖓𝖔𝕻𝖖𝖗𝖘𝖙𝖚𝖛𝖜𝖝𝖞𝖟𝕬𝕭𝕮𝕯𝕰𝕱𝕲𝕳𝕴𝕵𝕶𝕷𝕸𝕹𝕺𝕻𝕼𝕽𝕾𝕿𝖀𝖁𝖂𝖃𝖄𝖅', mono: '𝚊𝚋𝚌𝚍𝚎𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿', doubleStruck: '𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤ𝟘𝟙𝟚𝟛𝟜𝟝𝟞𝟟𝟠𝟡', fullwidth: 'ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ０１２３４５６７８９', circled: 'ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏ①②③④⑤⑥⑦⑧⑨⓪', negCircled: '🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩', squared: '🄰🄱🄲🄳🄴🄵🄶🄷🄸🄹🄺🄻🄼🄽🄾🄿🅀🅁🅂🅃🅄🅅🅆🅇🅈🅉', negSquared: '🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺🅻🅼🅽🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉', parenthesized:'⒜⒝⒞⒟⒠⒡⒢⒣⒤⒥⒦⒧⒨⒩⒪⒫⒬⒭⒮⒯⒰⒱⒲⒳⒴⒵', smallCaps: 'ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀꜱᴛᴜᴠᴡxʏᴢABCDEFGHIJKLMNOPQRSTUVWXYZ', inverted: 'ɐqɔpǝɟƃɥıɾʞlɯuodbɹsʇnʌʍxʎz∀qƆpƎℲפHIſʞ˥WNOԀQɹS┴∩ΛMXʎZ0ƖᄅƐㄣϛ9ㄥ86', mirrored: 'ɒdɔbɘᎸǫʜiꞁʞlmnobqꞧƨƚuvwxʏƹAdƆbƎꟻGHIJK⅃MИOꟼỌЯƧTUVWXYZ0ƸߤƐᔭ5୧Г8९', currency: '₳฿₵ĐɆ₣₲ⱧłJ₭Ⱡ₥₦Ø₱QⱤ₴₮ɄV₩ӾɎⱫ₳฿₵ĐɆ₣₲ⱧłJ₭Ⱡ₥₦Ø₱QⱤ₴₮ɄV₩ӾɎⱫ', symbols1: 'ልጌርᎴቿቻኗዘጎጋጕረጠክዐየዒዪነፕሁሀሠሸሃጊልጌርᎴቿቻኗዘጎጋጕረጠክዐየዒዪነፕሁሀሠሸሃጊ', symbols2: 'αв¢∂єƒﻭнιנкℓмησρ۹яѕтυνωχуչᗩᗷᑕᗪEᖴGᕼIᒍKᒪᗰᑎOᑭᑫᖇᔕTᑌᐯᗯ᙭Yᘔ', hacker: 'ﾑ乃cd乇ｷgんﾉﾌズﾚm刀oｱq尺丂ｲuvwﾒﾘ乙ﾑ乃cd乇ｷgんﾉﾌズﾚm刀oｱq尺丂ｲuvwﾒﾘ乙0123456789', future: 'ค๒ς๔єŦﻮђเןкl๓ภ๏קợгรtยשฬץאzค๒ς๔єŦﻮђเןкl๓ภ๏קợгรtยשฬץאz0123456789', magic: 'αႦƈԃҽϝɠԋιʝƙʅɱɳσρϙɾʂƚυʋɯxყȥΑΒƇDEƑƓHIJKLMNΘPϘRЅTUVWXYZ', squiggle1: 'ᗩᗷᑕᗪEᖴGᕼIᒍKᒪᗰᑎOᑭᑫᖇᔕTᑌᐯᗯ᙭YᘔᗩᗷᑕᗪEᖴGᕼIᒍKᒪᗰᑎOᑭᑫᖇᔕTᑌᐯᗯ᙭Yᘔ', squiggle2: 'คც८ძ૯Բ૭ҺɿʆқՆɱՈ૦ƿҩՐς੮υ౮ω૪עઽคც८ძ૯Բ૭ҺɿʆқՆɱՈ૦ƿҩՐς੮υ౮ω૪עઽ', squiggle4: 'αɓ૮∂εƒɠɦเʝҡℓɱɳσρφɾรƭµѵωאყƶαɓ૮∂εƒɠɦเʝҡℓɱɳσρφɾรƭµѵωאყƶ', regional: '🇦🇧🇨🇩🇪🇫🇬🇭🇮🇯🇰🇱🇲🇳🇴🇵🇶🇷🇸🇹🇺🇻🇼🇽🇾🇿', };
-        const combining = { strikethrough:'\u0336',strikethroughLong:'\u0337',strikethroughDouble:'\u0338',underline:'\u0332',doubleUnderline:'\u0333',overline:'\u0305',doubleOverline:'\u033F',underlineOverline:'\u035E',dotBelow:'\u0323',ringBelow:'\u0325',tildeBelow:'\u0330',seagullBelow:'\u033C',plusBelow:'\u031F',minusBelow:'\u0320',dotAbove:'\u0307',diaeresis:'\u0308',ringAbove:'\u030A',tildeAbove:'\u0303',acuteAbove:'\u0301',graveAbove:'\u0300',caronAbove:'\u030C',arrowAbove:'\u20D7',xAbove:'\u033D',zigzagAbove:'\u035B',};
-        const glitchChars = ['\u0300','\u0301','\u0302','\u0303','\u0304','\u0305','\u0306','\u0307','\u0308','\u0309','\u030a','\u030b','\u030c','\u030d','\u030e','\u030f','\u0310','\u0311','\u0312','\u0313','\u0314','\u0315','\u0316','\u0317','\u0318','\u0319','\u031a','\u031b','\u031c','\u031d','\u031e','\u031f','\u0320','\u0321','\u0322','\u0323','\u0324','\u0325','\u0326','\u0327','\u0328','\u0329','\u032a','\u032b','\u032c','\u032d','\u032e','\u032f','\u0330','\u0331','\u0332','\u0333','\u0334','\u0335','\u0336','\u0337','\u0338','\u0339','\u033a','\u033b','\u033c','\u033d','\u033e','\u033f','\u0340','\u0341','\u0342','\u0343','\u0344','\u0345','\u0346','\u0347','\u0348','\u0349','\u034a','\u034b','\u034c','\u034d','\u034e','\u034f','\u0350','\u0351','\u0352','\u0353','\u0354','\u0355','\u0356','\u0357','\u0358','\u0359','\u035a','\u035b','\u035c','\u035d','\u035e','\u035f','\u0360','\u0361','\u0362','\u0363','\u0364','\u0365','\u0366','\u0367','\u0368','\u0369','\u036a','\u036b','\u036c','\u036d','\u036e','\u036f','\u20D0','\u20D1','\u20D2','\u20D3','\u20D4','\u20D5','\u20D6','\u20D7','\u20D8','\u20D9','\u20DA','\u20DB','\u20DC','\u20DD','\u20DE','\u20DF','\u20E0','\u20E1','\u20E2','\u20E3','\u20E4','\u20E5','\u20E6','\u20E7','\u20E8','\u20E9','\u20EA','\u20EB','\u20EC','\u20ED','\u20EE','\u20EF','\u20F0'];
+        // Keys & Global State
+        const masterListKey = 'myTrackers_list_v1';
+        const activeTrackerKeyPreference = 'myTrackers_activeKey_v1';
+        let currentTrackerKey = null;
 
-        // --- COMPLETE convertText Function ---
-        function convertText(text, style) { try { if (combining[style]) { let o = '', c = combining[style]; for (let i = 0; i < text.length; i++) { if (text[i].match(/\s/) || (text[i].charCodeAt(0) >= 0x0300 && text[i].charCodeAt(0) <= 0x036f) || (text[i].charCodeAt(0) >= 0x20D0 && text[i].charCodeAt(0) <= 0x20FF)) { o += text[i]; } else { o += text[i] + c; } } return o; } if (style === 'glitch') { let o = '', I = Math.floor(Math.random() * 5) + 2; for (let i = 0; i < text.length; i++) { if (text[i].match(/\s/)) { o += text[i]; continue; } o += text[i]; let g = 0; while (g < I) { if (Math.random() > 0.3) o += glitchChars[Math.floor(Math.random() * glitchChars.length)]; g++; } } return o; } if (style === 'regional') { let o = '', B = 'A'.charCodeAt(0), R = 0x1F1E6, t = text.toUpperCase().replace(/[^A-Z]/g, ''); for (let i = 0; i < t.length; i++) o += String.fromCodePoint(R + (t.charCodeAt(i) - B)); return o.match(/.{1,2}/g)?.join(' ') || ''; } const s = map.normal; const t = map[style]; if (!t) { console.warn(`Style map not found for: ${style}`); return text; } let o = ''; for (let i = 0; i < text.length; i++) { const c = text[i]; const index = s.indexOf(c); if (index !== -1 && index < t.length && t[index]) { o += t[index]; } else { o += c; } } return o; } catch (e) { console.error(`Error converting text for style "${style}":`, e); return text; } }
-        // --- COMPLETE addCopyToClipboardButton Function ---
-        function addCopyToClipboardButton(textToCopy) { const button = document.createElement('button'); button.textContent='Copy'; button.className='copy-button'; button.type='button'; button.onclick=(e)=>{ e.stopPropagation(); const feedback=(m,s=true)=>{button.textContent=m; button.style.backgroundColor=s?'var(--accent-darker)':'#ff4d4d'; button.disabled=true; setTimeout(()=>{button.textContent='Copy';button.style.backgroundColor='';button.disabled=false;},s?1500:2500);}; if(navigator.clipboard?.writeText){ navigator.clipboard.writeText(textToCopy).then(()=>feedback('Copied!')).catch(err=>{console.error('Async Copy fail:',err);try{const ta=document.createElement("textarea");ta.value=textToCopy;ta.style.position="fixed";ta.style.left="-9999px";document.body.appendChild(ta);ta.focus();ta.select();document.execCommand('copy');document.body.removeChild(ta);feedback('Copied (FB)!');}catch(fbErr){console.error('Fallback fail:',fbErr);feedback('Copy Fail!',false);}}); }else{ try{const ta=document.createElement("textarea");ta.value=textToCopy;ta.style.position="fixed";ta.style.left="-9999px";document.body.appendChild(ta);ta.focus();ta.select();document.execCommand('copy');document.body.removeChild(ta);feedback('Copied!');}catch(err){console.error('Exec fail:',err);feedback('Copy Fail!',false);}} }; return button; }
+        // Tracker List Management
+        function getTrackers() { const listJSON = localStorage.getItem(masterListKey); try { const list = JSON.parse(listJSON); return Array.isArray(list) && list.length > 0 ? list : createDefaultTrackerList(); } catch (e) { return createDefaultTrackerList(); } }
+        function saveTrackers(trackerList) { localStorage.setItem(masterListKey, JSON.stringify(trackerList)); populateTrackerSelect(trackerList); }
+        function createDefaultTrackerList() { const defaultKey = generateUniqueKey('default_'); const defaultList = [{ key: defaultKey, name: 'My First Tracker', colCount: 5 }]; localStorage.setItem(masterListKey, JSON.stringify(defaultList)); let setAsActive = false; if(!getActiveTrackerKey()) {setActiveTrackerKey(defaultKey); setAsActive = true;} if (!localStorage.getItem(defaultKey)) { saveCurrentStateData({ headers: {}, checks: {}, columnCount: 5 }, defaultKey); } if(setAsActive){currentTrackerKey = defaultKey;} return defaultList; }
+        function generateUniqueKey(prefix = 'tracker_') { return prefix + Date.now() + '_' + Math.random().toString(36).substr(2, 5); }
+        function getActiveTrackerKey() { return localStorage.getItem(activeTrackerKeyPreference); }
+        function setActiveTrackerKey(key) { currentTrackerKey = key; localStorage.setItem(activeTrackerKeyPreference, key); if (trackerSelect) { trackerSelect.value = key; } }
 
-        // --- **UPDATED** updateStyledName Function (Manages centering class) ---
-        function updateStyledName() {
-            const name = nameInput.value.trim();
-            outputContainer.innerHTML = ''; // Clear previous results inside the box
+        // State Management
+        function getStateDataForKey(trackerKey) { const dataJSON = localStorage.getItem(trackerKey); try { const data = JSON.parse(dataJSON); const defaultData = { headers: {}, checks: {}, columnCount: 5 }; return data && typeof data === 'object' ? { ...defaultData, ...data } : defaultData; } catch (e) { return { headers: {}, checks: {}, columnCount: 5 }; } }
+        function saveCurrentStateData(data, trackerKey = currentTrackerKey) { if (!trackerKey) { console.warn("Cannot save state, no tracker key active."); return; } try { data.columnCount = document.querySelectorAll('.tracker-table thead th.name-header').length; localStorage.setItem(trackerKey, JSON.stringify(data)); } catch (error) { console.error("Error saving state for key:", trackerKey, error); } }
+        function saveCurrentUIToState() { if (!currentTrackerKey) return; const currentHeaders = document.querySelectorAll('th.name-header[contenteditable="true"]'); const currentCheckboxes = document.querySelectorAll('tbody input[type="checkbox"]'); const currentState = { headers: {}, checks: {}, columnCount: currentHeaders.length }; currentHeaders.forEach(header => { currentState.headers[header.id] = header.textContent.trim(); }); currentCheckboxes.forEach(checkbox => { currentState.checks[checkbox.id] = checkbox.checked; }); saveCurrentStateData(currentState); console.log(`UI State saved for ${currentTrackerKey} with ${currentState.columnCount} columns.`); }
 
-            if (name) {
-                outputContainer.classList.remove('is-prompt-only'); // Remove centering class for results
-                const styles = [ 'bold','italic','boldItalic','serifBold','serifItalic','serifBoldItalic','cursive','boldCursive','fraktur','frakturBold','mono','doubleStruck','fullwidth','smallCaps','circled','negCircled','squared','negSquared','parenthesized','inverted','mirrored','currency','symbols1','symbols2','hacker','future','magic','squiggle1','squiggle2','squiggle4','underline','doubleUnderline','strikethrough','strikethroughLong','strikethroughDouble','overline','doubleOverline','underlineOverline','dotBelow','ringBelow','tildeBelow','seagullBelow','plusBelow','minusBelow','dotAbove','diaeresis','ringAbove','tildeAbove','acuteAbove','graveAbove','caronAbove','arrowAbove','xAbove','zigzagAbove','regional','glitch' ];
-                const fragment = document.createDocumentFragment();
-                let count = 0;
+        // Core UI Handlers
+        function handleHeaderInput(event) { if (event.key === 'Enter') { event.preventDefault(); event.target.blur(); } }
+        function handleHeaderFocus(event) { setTimeout(() => { try { document.execCommand('selectAll', false, null); } catch (e) { console.warn("Select all failed.") } }, 0); }
+        function handleHeaderBlur(event) { saveCurrentUIToState(); }
+        function handleCheckboxChange(event) { saveCurrentUIToState(); }
 
-                styles.forEach((key, index) => {
-                     if (!map[key] && !combining[key] && key !== 'glitch' && key !== 'regional') { return; }
-                     const styledText = convertText(name, key);
-                     if (!styledText && key !== 'glitch') { if(key === 'regional' && !styledText.trim()){ return; } else if(key !== 'regional') { return; } }
-                     const resultDiv = document.createElement('div'); resultDiv.className = 'styled-result'; resultDiv.style.animationDelay = `${count * 0.04}s`;
-                     const textSpan = document.createElement('span'); textSpan.textContent = styledText;
-                     if (key === 'regional') { textSpan.title = 'Shows flags for uppercase country codes. Font support required.'; }
-                     if (key === 'mirrored' || key.includes('symbol') || key.includes('squiggle')) { textSpan.title = 'Character support may be limited or inconsistent.'; }
-                     resultDiv.appendChild(textSpan); resultDiv.appendChild(addCopyToClipboardButton(styledText)); fragment.appendChild(resultDiv); count++;
-                 });
+        // Add/Remove Columns
+        function addColumnToUI(columnIndex) { const newHeaderId = `name-header-${columnIndex}`; const newTh = document.createElement('th'); newTh.id = newHeaderId; newTh.className = 'name-header'; newTh.contentEditable = 'true'; newTh.spellcheck = 'false'; newTh.textContent = `Name ${columnIndex}`; theadRow.insertBefore(newTh, document.querySelector('.add-column-cell')); newTh.addEventListener('keydown', handleHeaderInput); newTh.addEventListener('focus', handleHeaderFocus); newTh.addEventListener('blur', handleHeaderBlur); const rows = tbody.querySelectorAll('tr'); rows.forEach((row, rowIndex) => { const newTd = document.createElement('td'); newTd.className = 'checkbox-cell'; const newCheckbox = document.createElement('input'); newCheckbox.type = 'checkbox'; newCheckbox.id = `chk-${rowIndex}-${columnIndex}`; newCheckbox.addEventListener('change', handleCheckboxChange); newTd.appendChild(newCheckbox); row.insertBefore(newTd, row.lastElementChild); }); console.log(`Added UI for column ${columnIndex}`); }
+        function removeExtraColumns(currentColCount, targetColCount) { if (currentColCount <= targetColCount) return; console.log(`Removing ${currentColCount - targetColCount} extra columns.`); for (let i = currentColCount; i > targetColCount; i--) { const headerToRemove = document.getElementById(`name-header-${i}`); if (headerToRemove) headerToRemove.remove(); const cellsToRemove = tbody.querySelectorAll(`td:nth-child(${i + 1})`); cellsToRemove.forEach(cell => cell.remove()); } } // +1 because month is :nth-child(1)
+        function setupInitialColumns(savedColumnCount) { const currentColumnCount = document.querySelectorAll('.tracker-table thead th.name-header').length; if (savedColumnCount > currentColumnCount) { for (let i = currentColumnCount + 1; i <= savedColumnCount; i++) { addColumnToUI(i); } } else if (savedColumnCount < currentColumnCount) { removeExtraColumns(currentColumnCount, savedColumnCount); } document.querySelectorAll('th.name-header').forEach(th => { th.removeEventListener('keydown', handleHeaderInput); th.removeEventListener('focus', handleHeaderFocus); th.removeEventListener('blur', handleHeaderBlur); th.addEventListener('keydown', handleHeaderInput); th.addEventListener('focus', handleHeaderFocus); th.addEventListener('blur', handleHeaderBlur); }); document.querySelectorAll('tbody input[type="checkbox"]').forEach(cb => { cb.removeEventListener('change', handleCheckboxChange); cb.addEventListener('change', handleCheckboxChange); }); }
 
-                 outputContainer.appendChild(fragment);
+        // Load State
+        function loadStateFromKey(trackerKey) { setActiveTrackerKey(trackerKey); const data = getStateDataForKey(trackerKey); const trackers = getTrackers(); const currentTrackerInfo = trackers.find(t => t.key === trackerKey); if (pageTitleElement) { pageTitleElement.textContent = currentTrackerInfo ? currentTrackerInfo.name : "Monthly Tracker"; } setupInitialColumns(data.columnCount || 5); const currentHeaders = document.querySelectorAll('th.name-header[contenteditable="true"]'); const currentCheckboxes = document.querySelectorAll('tbody input[type="checkbox"]'); currentHeaders.forEach(header => { header.textContent = data.headers?.[header.id] || `Name ${header.id.split('-')[2]}`; }); currentCheckboxes.forEach(checkbox => { checkbox.checked = data.checks?.[checkbox.id] || false; }); console.log(`State loaded for ${currentTrackerInfo ? currentTrackerInfo.name : trackerKey}`); const canDelete = trackers.length > 1; if(deleteTrackerBtn) { deleteTrackerBtn.disabled = !canDelete; deleteTrackerBtn.title = canDelete ? "Delete" : "Cannot delete"; } if(renameTrackerBtn) { renameTrackerBtn.disabled = false; renameTrackerBtn.title = "Rename"; } }
+        // Reset UI
+        function resetUIToDefault(newTrackerName = "New Tracker") { const defaultCols = 5; removeExtraColumns(document.querySelectorAll('.tracker-table thead th.name-header').length, defaultCols); const currentHeaders = document.querySelectorAll('th.name-header[contenteditable="true"]'); const currentCheckboxes = document.querySelectorAll('tbody input[type="checkbox"]'); currentHeaders.forEach(header => { header.textContent = `Name ${header.id.split('-')[2]}`; }); currentCheckboxes.forEach(checkbox => { checkbox.checked = false; }); if(pageTitleElement) { pageTitleElement.textContent = newTrackerName; } }
 
-                 if (count === 0) {
-                    // No results found, show prompt centered
-                    outputContainer.classList.add('is-prompt-only');
-                    outputContainer.innerHTML = '<div class="output-prompt">No applicable styles found for this input.</div>';
-                 }
+        // Populate Dropdown
+        function populateTrackerSelect(trackerList) { trackerSelect.innerHTML = ''; let activeKeyExistsInList = false; if (!Array.isArray(trackerList)) { trackerList = createDefaultTrackerList(); } trackerList.forEach(tracker => { if(typeof tracker !== 'object' || !tracker.key || !tracker.name) return; const option = document.createElement('option'); option.value = tracker.key; option.textContent = tracker.name; trackerSelect.appendChild(option); if(tracker.key === currentTrackerKey) activeKeyExistsInList = true; }); if(activeKeyExistsInList) { trackerSelect.value = currentTrackerKey; } else if (trackerList.length > 0) { setActiveTrackerKey(trackerList[0].key); trackerSelect.value = currentTrackerKey; } else { const defaultList = createDefaultTrackerList(); populateTrackerSelect(defaultList); } }
 
-            } else {
-                // Input is empty, show prompt centered
-                outputContainer.classList.add('is-prompt-only');
-                outputContainer.innerHTML = '<div class="output-prompt">Please enter a name first!</div>';
-            }
-            // Static notice below doesn't need JS interaction for showing/hiding
-        }
+        // Download Image
+        function downloadTrackerAsImage() { if (typeof html2canvas === 'undefined') { alert("Error: html2canvas library not loaded."); return; } console.log("Starting image capture..."); const originalWrapperOverflow = tableWrapper.style.overflow; const originalWrapperHeight = tableWrapper.style.height; const originalContainerHeight = captureArea.style.height; const settingsWasOpen = settingsOptionsDiv.classList.contains('open'); settingsOptionsDiv.classList.remove('open'); settingsOptionsDiv.style.display = 'none'; tableWrapper.style.overflow = 'visible'; tableWrapper.style.height = 'auto'; captureArea.style.height = 'auto'; captureArea.style.paddingBottom = '30px'; new Promise(resolve => setTimeout(resolve, 150)).then(() => { html2canvas(captureArea, { allowTaint: true, useCORS: true, backgroundColor: getComputedStyle(document.body).backgroundColor || '#f5f3ff', scale: 1.5 }).then(canvas => { const imageDataUrl = canvas.toDataURL('image/png'); const a = document.createElement('a'); a.href = imageDataUrl; const date = new Date(); const timestamp = `${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}`; const currentTrackerName = getTrackers().find(t => t.key === currentTrackerKey)?.name || 'tracker'; const safeName = currentTrackerName.replace(/[^a-z0-9]/gi, '_').toLowerCase(); a.download = `${safeName}_${timestamp}.png`; document.body.appendChild(a); a.click(); document.body.removeChild(a); console.log("Image download initiated."); }).catch(error => { console.error("Error capturing image:", error); alert("Sorry, there was an error generating the image."); }).finally(() => { console.log("Restoring original styles..."); tableWrapper.style.overflow = originalWrapperOverflow; tableWrapper.style.height = originalWrapperHeight; captureArea.style.height = originalContainerHeight; captureArea.style.paddingBottom = ''; if(settingsWasOpen) { settingsOptionsDiv.style.display = 'flex'; void settingsOptionsDiv.offsetWidth; settingsOptionsDiv.classList.add('open'); } else { settingsOptionsDiv.style.display = 'none'; } }); }); }
 
-        // --- **UPDATED** Initial Prompt Display (Adds centering class) ---
-        function showInitialPrompt() {
-             const isEmpty = !outputContainer.hasChildNodes() || (outputContainer.children.length === 1 && outputContainer.children[0].classList.contains('output-prompt'));
-             if (isEmpty) {
-                 outputContainer.innerHTML = '<div class="output-prompt">Styles will appear here...</div>';
-                 outputContainer.classList.add('is-prompt-only'); // Ensure centering class
-             } else {
-                 outputContainer.classList.remove('is-prompt-only'); // Ensure results are not centered
-             }
-             // Static notice below doesn't need JS interaction here
-        }
-        showInitialPrompt(); // Run on page load
+        // Event Listeners
+        settingsBtn.addEventListener('click', function() { const isOpen = settingsOptionsDiv.classList.contains('open'); if (!isOpen) { settingsOptionsDiv.style.display = 'flex'; void settingsOptionsDiv.offsetWidth; settingsOptionsDiv.classList.add('open'); } else { settingsOptionsDiv.classList.remove('open'); } settingsBtn.classList.toggle('active'); });
+        trackerSelect.addEventListener('change', function() { const selectedKey = trackerSelect.value; if(selectedKey && selectedKey !== currentTrackerKey) { loadStateFromKey(selectedKey); } });
+        createTrackerBtn.addEventListener('click', function() { const currentTrackers = getTrackers(); const newName = prompt("Enter name:", "Tracker " + (currentTrackers.length + 1)); if (newName && newName.trim() !== '') { const newKey = generateUniqueKey(); const defaultCols = 5; currentTrackers.push({ key: newKey, name: newName.trim(), colCount: defaultCols}); saveTrackers(currentTrackers); resetUIToDefault(newName.trim()); setActiveTrackerKey(newKey); saveCurrentStateData({ headers: {}, checks: {}, columnCount: defaultCols }, newKey); loadStateFromKey(newKey); trackerSelect.value = newKey; alert(`Tracker "${newName.trim()}" created!`); } else if (newName !== null) { alert("Name cannot be empty."); } });
+        renameTrackerBtn.addEventListener('click', function() { if (!currentTrackerKey || renameTrackerBtn.disabled) return; const currentTrackers = getTrackers(); const currentTracker = currentTrackers.find(t => t.key === currentTrackerKey); if (!currentTracker) return; const newName = prompt("New name:", currentTracker.name); if (newName && newName.trim() !== '') { currentTracker.name = newName.trim(); saveTrackers(currentTrackers); if (pageTitleElement) { pageTitleElement.textContent = newName.trim();} alert(`Renamed to "${newName.trim()}"!`); } else if (newName !== null) { alert("Name cannot be empty."); } });
+        deleteTrackerBtn.addEventListener('click', function() { if (!currentTrackerKey || deleteTrackerBtn.disabled) return; const currentTrackers = getTrackers(); const currentTracker = currentTrackers.find(t => t.key === currentTrackerKey); if (!currentTracker) return; if (confirm(`DELETE "${currentTracker.name}"?`)) { localStorage.removeItem(currentTrackerKey); const updatedTrackers = currentTrackers.filter(t => t.key !== currentTrackerKey); saveTrackers(updatedTrackers); const newActiveKey = updatedTrackers[0]?.key; if(newActiveKey) { loadStateFromKey(newActiveKey); } else { initializeApp(); } } });
+        downloadImageBtn.addEventListener('click', downloadTrackerAsImage);
+        addColumnBtn.addEventListener('click', function() { const currentHeaders = document.querySelectorAll('.tracker-table thead th.name-header'); const newColumnIndex = currentHeaders.length + 1; addColumnToUI(newColumnIndex); saveCurrentUIToState(); });
 
-        // --- Side Menu Toggle Functionality ---
-        function toggleMenu() { const isOpen=document.body.classList.toggle('menu-open'); menuToggleButton.setAttribute('aria-expanded',isOpen); sideMenu.setAttribute('aria-hidden',!isOpen); const dly=0.1, stg=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-item-anim-stagger')||'0.05'); menuItems.forEach((item,i)=>{item.style.transitionDelay=isOpen?`${dly+i*stg}s`:'0s';}); if(isOpen)sideMenu.querySelector('a, button')?.focus(); else menuToggleButton.focus(); }
-        menuToggleButton.addEventListener('click', toggleMenu);
-        menuOverlay.addEventListener('click', toggleMenu);
-        menuItems.forEach(item=>{const l=item.querySelector('a'); if(l)l.addEventListener('click',(e)=>{if(l.getAttribute('href')==='#')e.preventDefault(); toggleMenu();});});
-        document.addEventListener('keydown',(e)=>{if(e.key==='Escape'&&document.body.classList.contains('menu-open'))toggleMenu();});
+        // Initial App Load
+        function initializeApp() { console.log("Initializing App (v_add_column_fullwidth)..."); let keyToLoad = getActiveTrackerKey(); const trackers = getTrackers(); if (!keyToLoad || !trackers.some(t => t.key === keyToLoad)) { keyToLoad = trackers[0]?.key; } if (keyToLoad) setActiveTrackerKey(keyToLoad); else console.error("CRITICAL: No tracker key found!"); populateTrackerSelect(trackers); if (currentTrackerKey) { loadStateFromKey(currentTrackerKey); } else { /* Error Handling */ if(pageTitleElement) pageTitleElement.textContent = "Error"; } settingsOptionsDiv.classList.remove('open'); settingsOptionsDiv.style.display = 'none'; }
+        initializeApp();
 
-        // --- Main Event Listeners ---
-        styleButton.addEventListener('click', updateStyledName);
-        nameInput.addEventListener('keydown',(e)=>{if(e.key==='Enter'||e.keyCode===13){e.preventDefault();updateStyledName();}});
-
-        // --- Bottom Navigation Logic ---
-        bottomNavItems.forEach(item => { item.addEventListener('click', () => { bottomNavItems.forEach(i => { i.classList.remove('active'); i.setAttribute('aria-pressed', 'false'); }); item.classList.add('active'); item.setAttribute('aria-pressed', 'true'); console.log(`Nav item clicked: ${item.id}`); /* Add content change logic here */ }); });
-
-    </script>
+    });
+</script>
 
 </body>
 </html>
