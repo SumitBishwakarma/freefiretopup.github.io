@@ -3,1070 +3,2525 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mobile-Friendly Tracker (Puzzle Theme)</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <title>TubeSaver Pro - Premium YouTube Video & Music Downloader</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
     <style>
-        /* --- গুগল ফন্টস ইম্পোর্ট --- */
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
-
-        /* --- কালার ভ্যারিয়েবল (Puzzle Theme) --- */
+        /* Base Styles & Variables */
         :root {
-            --primary-color: #36F0AE; /* Bright Green (Main Action) */
-            --primary-bg: #1F1A31; /* Dark Purple Background */
-            --container-bg: #2A2545; /* Slightly Lighter Container */
-            --text-light: #FFFFFF; /* White Text */
-            --text-medium: #A09CB8; /* Lighter Purple/Grey Text */
-            --text-dark: #EAE8FF; /* Very Light Text (for contrast on dark) */
-            --border-color: #4A4668; /* Purple/Grey Border */
-            --border-stronger: #5C587A; /* Stronger Border */
-            --hover-bg: #3E3960; /* Dark Hover Background */
-            --header-bg-month: #353055; /* Header Background */
-            --header-bg-name: #353055; /* Name Header Background */
-            --icon-color: #A09CB8; /* Icon Color */
-            --icon-hover-color: var(--primary-color); /* Icon Hover (Green) */
-            --btn-action-bg: var(--primary-color); /* Green Button */
-            --btn-action-hover-bg: #2BCFA0; /* Darker Green Hover */
-            --btn-action-text: #1F1A31; /* Dark text on green button */
-            --btn-secondary-bg: transparent; /* Secondary Button BG */
-            --btn-secondary-border: var(--border-stronger);
-            --btn-secondary-text: var(--text-medium);
-            --btn-secondary-hover-bg: rgba(54, 240, 174, 0.1); /* Light green tint on hover */
-            --btn-secondary-hover-text: var(--primary-color);
-            --btn-secondary-hover-border: var(--primary-color);
-            --btn-delete-bg: #EF4444; /* Red Delete */
-            --btn-delete-hover-bg: #DC2626;
-            --btn-delete-text: #FFFFFF;
-            --btn-disabled-bg: #4A4668; /* Disabled BG */
-            --btn-disabled-text: #7E7AA1; /* Disabled Text */
-            --checkbox-border: #7E7AA1;
-            --checkbox-checked-bg: var(--primary-color);
-            --checkbox-checked-border: var(--primary-color);
+            --primary-color: #4361ee;
+            --primary-light: #4895ef;
+            --primary-dark: #3a0ca3;
+            --secondary-color: #f72585;
+            --secondary-light: #ff6b95;
+            --accent-color: #7209b7;
+            --light-color: #ffffff;
+            --dark-color: #0c0f25;
+            --dark-medium: #232946;
+            --gray-color: #f8f9fa;
+            --gray-medium: #e9ecef;
+            --text-color: #2b2d42;
+            --text-light: #6c757d;
+            --border-radius-sm: 6px;
+            --border-radius: 12px;
+            --border-radius-lg: 20px;
+            --box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --box-shadow-hover: 0 15px 35px rgba(0, 0, 0, 0.15);
+            --transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            --font-primary: 'Poppins', sans-serif;
+            --font-heading: 'Montserrat', sans-serif;
         }
 
-        /* --- বেস এবং লেআউট স্টাইল --- */
-        *, *::before, *::after {
+        [data-theme="dark"] {
+            --primary-color: #4d6aff;
+            --primary-light: #56aeff;
+            --secondary-color: #ff408c;
+            --light-color: #232946;
+            --dark-color: #fffffe;
+            --dark-medium: #b8c1ec;
+            --gray-color: #1b1f3b;
+            --gray-medium: #2d325a;
+            --text-color: #fffffe;
+            --text-light: #b8c1ec;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
         }
-        html {
-             font-size: 16px; /* Base font size for rem calculation */
-        }
+
         body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 15px; /* Slightly reduced padding for body */
-            background-color: var(--primary-bg);
-            color: var(--text-light);
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+            font-family: var(--font-primary);
+            color: var(--text-color);
+            background-color: var(--gray-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: var(--transition);
         }
-        .tracker-container {
+
+        .container {
             width: 100%;
-            max-width: 100%; /* Use full width on mobile, max-width applies naturally */
-            background-color: var(--container-bg);
-            padding: 20px 15px; /* Reduced padding for mobile */
-            border-radius: 16px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1);
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
-        .header-area {
+
+        a {
+            text-decoration: none;
+            color: var(--primary-color);
+            transition: var(--transition);
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: var(--border-radius);
+        }
+
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: 2.75rem;
+            text-align: center;
+            margin-bottom: 3.5rem;
+            color: var(--dark-color);
+            position: relative;
+            font-weight: 800;
+        }
+
+        .section-title span {
+            background-image: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -15px;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            border-radius: 5px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.6rem;
+            background: linear-gradient(to right, var(--primary-color), var(--primary-light));
+            color: var(--light-color);
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, var(--primary-light), var(--secondary-color));
+            transition: var(--transition);
+            z-index: -1;
+        }
+
+        .btn:hover::before {
+            left: 0;
+        }
+
+        .btn:hover {
+            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-lg {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+        }
+
+        .btn-accent {
+            background: linear-gradient(to right, var(--secondary-color), var(--accent-color));
+            box-shadow: 0 4px 15px rgba(247, 37, 133, 0.3);
+        }
+
+        .btn-accent::before {
+            background: linear-gradient(to right, var(--accent-color), var(--secondary-color));
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-color);
+            color: var(--light-color);
+        }
+
+        /* Custom Theme Toggle */
+        .theme-switch-wrapper {
+            display: flex;
+            align-items: center;
+            margin-left: 20px;
+        }
+
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 25px;
+        }
+
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--gray-medium);
+            transition: var(--transition);
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 19px;
+            width: 19px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: var(--transition);
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--accent-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(25px);
+        }
+
+        .fa-moon, .fa-sun {
+            position: absolute;
+            top: 5px;
+            font-size: 14px;
+            z-index: 1;
+            color: var(--dark-color);
+        }
+
+        .fa-moon {
+            left: 6px;
+        }
+
+        .fa-sun {
+            right: 6px;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background-color: var(--light-color);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+        }
+
+        .navbar .container {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            padding: 1rem 2rem;
+        }
+
+        .logo a {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            font-weight: 800;
+            background-image: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-menu li {
+            margin-left: 2rem;
+        }
+
+        .nav-menu a {
+            color: var(--text-color);
+            font-weight: 500;
+            padding: 0.5rem 0;
             position: relative;
-            padding: 0 5px; /* Add slight horizontal padding */
-        }
-        h1.tracker-title {
-            text-align: center;
-            color: var(--text-light);
-            margin: 0 auto;
-            padding: 0 35px; /* Reduced padding for icon space */
-            font-size: 1.5rem; /* Responsive font size */
-            font-weight: 700;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            flex-grow: 1; /* Allow title to take available space */
-            min-width: 0; /* Prevent overflow issues */
-        }
-        .settings-icon {
-            position: relative; /* Change from absolute */
-            right: auto;
-            top: auto;
-            transform: none; /* Remove transform */
-            font-size: 1.6rem; /* Slightly larger icon */
-            color: var(--icon-color);
-            cursor: pointer;
-            transition: color 0.3s ease, transform 0.3s ease;
-            padding: 4px;
-            flex-shrink: 0; /* Prevent shrinking */
-            line-height: 1;
-             /* Add margin if needed */
-             /* margin-left: 10px; */
-        }
-         /* Keep hover/active styles, adjust transform origin if needed */
-        .settings-icon:hover {
-            color: var(--icon-hover-color);
-            transform: rotate(45deg);
-        }
-        .settings-icon.active {
-            transform: rotate(90deg);
-            color: var(--icon-hover-color);
         }
 
-
-        /* --- সেটিংস মেনু স্টাইল --- */
-        .settings-menu {
-            margin-bottom: 20px;
-            padding: 15px; /* Reduced padding */
-            border: 1px solid var(--border-color);
-            background-color: var(--container-bg);
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            max-height: 0;
-            overflow: hidden;
-            opacity: 0;
-            transition: max-height 0.4s ease-out, opacity 0.3s ease-in-out, padding 0.4s ease-out, margin-bottom 0.4s ease-out;
-        }
-        .settings-menu.open {
-            max-height: 500px;
-            opacity: 1;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-        .tracker-select-group {
-            display: flex;
-            flex-direction: column; /* Stack label and select on small screens */
-            align-items: stretch; /* Make items full width */
-            gap: 5px; /* Reduced gap */
-            width: 100%;
-        }
-        .tracker-select-group label {
-            font-weight: 500; /* Slightly lighter weight */
-            color: var(--text-medium);
-            white-space: nowrap;
-            font-size: 0.875rem; /* 14px */
-            text-align: left; /* Align left */
-        }
-        .tracker-select-group select {
-            padding: 10px 12px;
-            border: 1px solid var(--border-stronger);
-            border-radius: 8px;
-            font-family: inherit;
-            font-size: 0.875rem; /* 14px */
-            flex-grow: 1;
-            min-width: 0; /* Allow shrinking */
-            cursor: pointer;
-            background-color: var(--primary-bg);
-            color: var(--text-light);
-        }
-        .action-buttons {
-            display: grid; /* Use grid for better control */
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Responsive columns */
-            gap: 10px; /* Gap between buttons */
-            width: 100%;
-        }
-        /* General Button Style */
-        .settings-menu .btn {
-            padding: 10px 15px; /* Adjusted padding */
-            border: 1px solid transparent;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.875rem; /* 14px */
-            font-weight: 600;
-            transition: all 0.2s ease;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            text-align: center; /* Ensure text is centered */
-        }
-        .settings-menu .btn:disabled {
-            background-color: var(--btn-disabled-bg) !important;
-            color: var(--btn-disabled-text) !important;
-            border-color: var(--btn-disabled-bg) !important;
-            cursor: not-allowed;
-            box-shadow: none;
-            transform: none;
-        }
-        .settings-menu .btn:hover:not(:disabled) {
-            transform: translateY(-1px); /* Subtle hover effect */
-            box-shadow: 0 3px 6px rgba(0,0,0,0.12);
-        }
-        .settings-menu .btn:active:not(:disabled) {
-            transform: translateY(0px) scale(0.98);
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-        }
-
-        /* Specific Button Styles (remain the same) */
-        .btn-create, .btn-rename { background-color: var(--btn-secondary-bg); color: var(--btn-secondary-text); border: 1px solid var(--btn-secondary-border); }
-        .btn-create:hover:not(:disabled), .btn-rename:hover:not(:disabled) { background-color: var(--btn-secondary-hover-bg); color: var(--btn-secondary-hover-text); border-color: var(--btn-secondary-hover-border); }
-        .btn-delete { background-color: var(--btn-delete-bg); color: var(--btn-delete-text); border-color: var(--btn-delete-bg); }
-        .btn-delete:hover:not(:disabled) { background-color: var(--btn-delete-hover-bg); border-color: var(--btn-delete-hover-bg); }
-        .btn-download-image { background-color: var(--btn-action-bg); color: var(--btn-action-text); border-color: var(--btn-action-bg); }
-        .btn-download-image:hover:not(:disabled) { background-color: var(--btn-action-hover-bg); border-color: var(--btn-action-hover-bg); }
-
-
-        /* --- টেবিল স্টাইল --- */
-        .table-wrapper {
-            overflow-x: auto; /* Ensures horizontal scrolling */
-            margin-top: 15px;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            width: 100%; /* Takes full width of container */
-            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-        }
-        .tracker-table {
-            width: 100%;
-            border-collapse: collapse;
-            table-layout: fixed;
-            background-color: var(--container-bg);
-            min-width: 500px; /* Minimum width to encourage scrolling rather than squishing */
-        }
-        .tracker-table th, .tracker-table td {
-            border: none;
-            border-bottom: 1px solid var(--border-color);
-            padding: 12px 10px; /* Reduced padding */
-            vertical-align: middle;
-            font-size: 0.875rem; /* 14px */
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            transition: background-color 0.2s ease;
-        }
-        .tracker-table tr:last-child td { border-bottom: none; }
-
-        /* হেডার স্টাইল */
-        .tracker-table thead th {
-            font-weight: 600;
-            color: var(--text-medium);
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            background-color: var(--header-bg-month);
-            border-bottom: 2px solid var(--border-stronger);
-            text-align: center;
-            font-size: 0.75rem; /* 12px */
-            text-transform: uppercase;
-            letter-spacing: 0.6px;
-            padding-top: 10px; /* Adjust vertical padding */
-            padding-bottom: 10px;
-        }
-        /* প্রথম হেডার (Month) স্টাইল */
-        .tracker-table thead th:first-child {
-            text-align: left;
-            color: var(--text-light);
-            font-weight: 600;
-            text-transform: none;
-            letter-spacing: 0;
-            font-size: 0.875rem; /* 14px */
-            width: 100px; /* Reduced width */
-            position: sticky;
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
             left: 0;
-            z-index: 11;
-            border-right: 1px solid var(--border-color);
+            width: 0;
+            height: 2px;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            transition: var(--transition);
         }
-        /* Name হেডার স্টাইল */
-        .tracker-table th.name-header {
-            color: var(--text-light);
-            width: 100px; /* Reduced width */
+
+        .nav-menu a:hover::after,
+        .nav-menu a.active::after {
+            width: 100%;
+        }
+
+        .menu-toggle {
+            display: none;
             cursor: pointer;
-            transition: background-color 0.2s ease;
-            font-size: 0.875rem; /* 14px */
-            text-transform: none;
-            letter-spacing: 0;
+            font-size: 1.5rem;
+            color: var(--text-color);
         }
-        .tracker-table th.name-header:hover { background-color: var(--hover-bg); }
-        .tracker-table th.name-header:focus-within {
-             outline: 2px solid var(--primary-color);
-             outline-offset: -1px;
-             background-color: var(--primary-bg);
-             color: var(--text-light);
-             overflow: visible;
-             white-space: normal;
-             z-index: 11;
-             box-shadow: 0 0 0 3px rgba(54, 240, 174, 0.2);
-             border-radius: 4px;
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--gray-color) 0%, var(--light-color) 100%);
+            padding: 10rem 0 6rem;
+            position: relative;
+            overflow: hidden;
         }
-        /* কলাম যোগ করার বাটন সেল */
-        .tracker-table th.add-column-cell {
-            width: 45px; /* Reduced width */
-            padding: 0;
-            vertical-align: middle;
-            border-bottom: 2px solid var(--border-stronger);
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -10%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(77, 106, 255, 0.1) 0%, rgba(77, 106, 255, 0) 70%);
+            z-index: 0;
         }
-        button#add-column-btn {
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -10%;
+            left: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(247, 37, 133, 0.08) 0%, rgba(247, 37, 133, 0) 70%);
+            z-index: 0;
+        }
+
+        .hero .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content {
+            flex: 1;
+            max-width: 600px;
+            margin-right: 2rem;
+        }
+
+        .hero h1 {
+            font-family: var(--font-heading);
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero h1 span {
+            background-image: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero-text {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            max-width: 90%;
+        }
+
+        .hero-image {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-image img {
+            max-width: 100%;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+        }
+
+        .floating-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            border: none;
-            background: var(--header-bg-month);
-            color: var(--primary-color);
-            font-size: 1.5rem; /* 24px */
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .floating-icon {
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            background-color: var(--light-color);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 8px 0; /* Reduced padding */
+            box-shadow: var(--box-shadow);
+            animation: floating 6s infinite ease-in-out;
+            z-index: 2;
         }
-        button#add-column-btn:hover { background-color: var(--hover-bg); color: #FFF; }
 
-        /* বডি সেল স্টাইল */
-        .tracker-table tbody td {
-            text-align: left;
-            color: var(--text-medium);
+        .floating-icon i {
+            font-size: 1.8rem;
+            background-image: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
-        /* প্রথম কলাম (Month) স্টাইল */
-        .tracker-table td:first-child {
+
+        .mp3-icon {
+            top: 15%;
+            left: -10%;
+            animation-delay: 0.5s;
+        }
+
+        .mp4-icon {
+            top: 60%;
+            right: -5%;
+            animation-delay: 1s;
+        }
+
+        .download-icon {
+            bottom: 10%;
+            left: 30%;
+            animation-delay: 1.5s;
+        }
+
+        /* Downloader Box */
+        .downloader-wrapper {
+            background-color: var(--light-color);
+            padding: 3rem;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .downloader-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+        }
+
+        .downloader-heading {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .downloader-heading h2 {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            margin-bottom: 0.8rem;
+            font-weight: 700;
+        }
+
+        .downloader-heading p {
+            color: var(--text-light);
+        }
+
+        .url-input-container {
+            display: flex;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .url-input {
+            flex: 1;
+            padding: 1.2rem 1.2rem 1.2rem 3.5rem;
+            border: 2px solid var(--gray-medium);
+            border-radius: var(--border-radius) 0 0 var(--border-radius);
+            font-size: 1.1rem;
+            transition: var(--transition);
+            background-color: var(--light-color);
+            color: var(--text-color);
+        }
+
+        .url-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+
+        .url-input-container::before {
+            content: '\f0c1';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            font-size: 1.2rem;
+        }
+
+        .paste-btn {
+            background-color: var(--gray-medium);
+            border: none;
+            width: 60px;
+            border-radius: 0;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
+        }
+
+        .paste-btn:hover {
+            background-color: var(--primary-light);
+            color: var(--light-color);
+        }
+
+        .download-btn {
+            width: 180px;
+            padding: 1.2rem;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: var(--light-color);
+            border: none;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.2);
+        }
+
+        .download-btn:hover {
+            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
+        }
+
+        .video-preview {
+            display: none;
+            margin-top: 2rem;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .video-preview.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .video-info {
+            display: flex;
+            margin-bottom: 2rem;
+            background-color: var(--gray-color);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .video-thumbnail {
+            width: 250px;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .video-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 0;
+        }
+
+        .video-duration {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .video-details {
+            padding: 1.5rem;
+            flex: 1;
+        }
+
+        .video-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.7rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .video-meta {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .video-meta div {
+            display: flex;
+            align-items: center;
+            margin-right: 1.5rem;
+        }
+
+        .video-meta i {
+            margin-right: 5px;
+        }
+
+        .video-description {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .format-selector {
+            display: none;
+            background-color: var(--gray-color);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-top: 1rem;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .format-selector.active {
+            display: block;
+        }
+
+        .format-selector h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .format-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--gray-medium);
+        }
+
+        .format-tab {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
             font-weight: 500;
             color: var(--text-light);
-            background-color: var(--container-bg);
-            border-right: 1px solid var(--border-color);
-            position: sticky;
-            left: 0;
+            border-bottom: 2px solid transparent;
+            transition: var(--transition);
+        }
+
+        .format-tab.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .format-content {
+            display: none;
+        }
+
+        .format-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .format-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .format-card {
+            background-color: var(--light-color);
+            border: 2px solid var(--gray-medium);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .format-card:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .format-card.selected {
+            border-color: var(--primary-color);
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+
+        .format-card i {
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+            background-image: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .format-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .format-info {
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+
+        .format-info span {
+            display: block;
+            margin-bottom: 0.2rem;
+        }
+
+        .download-actions {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .download-all-btn {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .download-all-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 6rem 0;
+            background-color: var(--light-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .features::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background-color: rgba(67, 97, 238, 0.05);
+            z-index: 0;
+        }
+
+        .features::after {
+            content: '';
+            position: absolute;
+            bottom: -70px;
+            left: -70px;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background-color: rgba(247, 37, 133, 0.03);
+            z-index: 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+            gap: 2.5rem;
+            position: relative;
             z-index: 1;
         }
-        /* চেকবক্স সেল স্টাইল */
-        .tracker-table td.checkbox-cell {
+
+        .feature-card {
+            background-color: var(--light-color);
+            padding: 2.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
             text-align: center;
-            width: 50px; /* Reduced width */
-            padding: 8px;
-        }
-        /* শেষ কলাম (Add button এর নিচে - Empty cell) */
-         .tracker-table tr td:last-child {
-            border-bottom: 1px solid var(--border-color);
-            background-color: transparent;
-         }
-         .tracker-table tr:last-child td:last-child { border-bottom: none; }
-        /* হোভার এফেক্ট */
-        .tracker-table tbody tr:hover td { background-color: var(--hover-bg); }
-        .tracker-table tbody tr:hover td:first-child { background-color: var(--container-bg); }
-         .tracker-table tbody tr:hover td:last-child { background-color: var(--hover-bg); }
-
-        /* কাস্টম চেকবক্স স্টাইল */
-        .tracker-table input[type="checkbox"] {
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            margin: 0 auto; /* Center checkbox if needed */
-            padding: 0;
-            display: block; /* Changed to block for centering */
-            vertical-align: middle;
             position: relative;
-            cursor: pointer;
-            width: 20px;
-            height: 20px;
-            background-color: transparent;
-            border: 2px solid var(--checkbox-border);
-            border-radius: 6px;
-            transition: background-color 0.2s ease, border-color 0.2s ease;
+            z-index: 1;
+            overflow: hidden;
         }
-        .tracker-table input[type="checkbox"]:checked {
-            background-color: var(--checkbox-checked-bg);
-            border-color: var(--checkbox-checked-border);
-        }
-        .tracker-table input[type="checkbox"]::after { /* টিক চিহ্ন */
+
+        .feature-card::before {
             content: '';
-            display: block;
             position: absolute;
-            top: 3px;
-            left: 7px;
-            width: 5px;
-            height: 10px;
-            /* Force color for canvas compatibility */
-            border: solid var(--btn-action-text, #1F1A31); /* Use variable with fallback */
-            border-width: 0 2.5px 2.5px 0;
-            transform: rotate(45deg) scale(0);
-            opacity: 0;
-            transition: transform 0.2s ease-in-out, opacity 0.2s ease;
-        }
-        .tracker-table input[type="checkbox"]:checked::after {
-            transform: rotate(45deg) scale(1);
-            opacity: 1;
-        }
-        .tracker-table input[type="checkbox"]:focus-visible {
-             outline: 2px solid var(--primary-color);
-             outline-offset: 2px;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            z-index: -1;
+            transition: var(--transition);
         }
 
-        /* --- Larger Screen Adjustments --- */
-        @media (min-width: 768px) {
-            html {
-                font-size: 16px; /* Reset base font size */
-            }
-            .tracker-container {
-                padding: 30px 35px; /* Restore larger padding */
-                 max-width: 96vw; /* Limit width on larger screens */
-            }
-             .header-area {
-                 padding: 0; /* Remove padding */
-             }
-             h1.tracker-title {
-                 font-size: 1.75rem; /* 28px */
-                 padding: 0 45px; /* Restore padding */
-             }
-             .settings-icon {
-                 position: absolute; /* Back to absolute */
-                 right: 0px;
-                 top: 50%;
-                 transform: translateY(-50%);
-                 font-size: 1.75rem; /* 28px */
-             }
-             .settings-icon:hover { transform: translateY(-50%) rotate(45deg); }
-             .settings-icon.active { transform: translateY(-50%) rotate(90deg); }
-
-            .settings-menu {
-                 padding: 20px; /* Restore padding */
-                 gap: 18px;
-            }
-             .tracker-select-group {
-                 flex-direction: row; /* Side-by-side layout */
-                 align-items: center;
-                 gap: 10px;
-             }
-             .tracker-select-group label {
-                 font-size: 0.875rem; /* 14px */
-             }
-             .tracker-select-group select {
-                 font-size: 0.875rem; /* 14px */
-                 min-width: 150px;
-             }
-             .action-buttons {
-                 display: flex; /* Back to flexbox */
-                 flex-wrap: wrap;
-                 gap: 12px;
-                 justify-content: center;
-                 grid-template-columns: none; /* Remove grid setting */
-             }
-             .settings-menu .btn {
-                 padding: 10px 20px; /* Restore padding */
-                 font-size: 0.875rem; /* 14px */
-             }
-             .tracker-table {
-                 min-width: 0; /* Remove min-width on larger screens */
-             }
-             .tracker-table th, .tracker-table td {
-                 padding: 14px 18px; /* Restore padding */
-                 font-size: 0.875rem; /* 14px */
-             }
-             .tracker-table thead th {
-                 font-size: 0.75rem; /* 12px */
-                 letter-spacing: 0.8px;
-             }
-             .tracker-table thead th:first-child {
-                 font-size: 0.875rem; /* 14px */
-                 width: 130px; /* Restore width */
-             }
-             .tracker-table th.name-header {
-                 font-size: 0.875rem; /* 14px */
-                 width: 120px; /* Restore width */
-             }
-             .tracker-table th.add-column-cell {
-                 width: 60px; /* Restore width */
-             }
-             button#add-column-btn {
-                 font-size: 1.75rem; /* 28px */
-                 padding: 10px 0;
-             }
-             .tracker-table td:first-child {
-                 font-size: 0.875rem; /* 14px */
-             }
-             .tracker-table td.checkbox-cell {
-                 width: 80px; /* Restore width */
-                 padding: 10px;
-             }
-              .tracker-table input[type="checkbox"] {
-                  display: inline-block; /* Back to inline-block */
-                  margin: 0; /* Remove auto margins */
-              }
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--box-shadow-hover);
         }
 
+        .feature-card:hover::before {
+            height: 8px;
+        }
+
+        .feature-icon {
+            width: 85px;
+            height: 85px;
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.1), rgba(114, 9, 183, 0.1));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.8rem;
+            position: relative;
+        }
+
+        .feature-icon::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 2px dashed rgba(67, 97, 238, 0.3);
+            animation: rotate 20s linear infinite;
+        }
+
+        .feature-icon i {
+            font-size: 2.2rem;
+            background-image: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .feature-card p {
+            color: var(--text-light);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        /* How to Use Section */
+        .how-to-use {
+            padding: 6rem 0;
+            background-color: var(--gray-color);
+        }
+
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 3.5rem;
+        }
+
+        .step {
+            display: flex;
+            gap: 2.5rem;
+            align-items: flex-start;
+            position: relative;
+        }
+
+        .step::after {
+            content: '';
+            position: absolute;
+            top: 70px;
+            left: 30px;
+            bottom: -70px;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--primary-light), transparent);
+            z-index: 0;
+        }
+
+        .step:last-child::after {
+            display: none;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(to bottom right, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--light-color);
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-content {
+            flex: 1;
+            background-color: var(--light-color);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-content:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--box-shadow-hover);
+        }
+
+        .step-content h3 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .step-content p {
+            margin-bottom: 1.5rem;
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+
+        .step-image {
+            margin-top: 1.5rem;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+
+        .step-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, transparent 80%, rgba(0, 0, 0, 0.03));
+            z-index: 1;
+        }
+
+        .step-image img {
+            transition: var(--transition);
+            display: block;
+            width: 100%;
+        }
+
+        .step-content:hover .step-image img {
+            transform: scale(1.02);
+        }
+
+        /* FAQ Section */
+        .faq {
+            padding: 6rem 0;
+            background-color: var(--light-color);
+        }
+
+        .faq-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            margin-bottom: 1.5rem;
+            background-color: var(--gray-color);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            transition: var(--transition);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .faq-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .faq-item.active {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .faq-question {
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .faq-item.active .faq-question {
+            background-color: var(--primary-color);
+            color: var(--light-color);
+        }
+
+        .faq-question h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .faq-question i {
+            transition: var(--transition);
+            font-size: 1.1rem;
+        }
+
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+            color: var(--light-color);
+        }
+
+        .faq-answer {
+            height: 0;
+            overflow: hidden;
+            transition: height 0.3s ease-out;
+        }
+
+        .faq-answer-content {
+            padding: 0 2rem 1.5rem;
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+
+        /* Recently Downloaded Section */
+        .recent-downloads {
+            padding: 5rem 0;
+            background-color: var(--gray-color);
+        }
+
+        .recent-downloads-container {
+            background-color: var(--light-color);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--box-shadow);
+        }
+
+        .recent-downloads-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-medium);
+        }
+
+        .recent-downloads-header h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .recent-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .recent-item {
+            background-color: var(--gray-color);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+        }
+
+        .recent-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .recent-thumb {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .recent-thumb img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 0;
+            transition: var(--transition);
+        }
+
+        .recent-item:hover .recent-thumb img {
+            transform: scale(1.05);
+        }
+
+        .recent-format {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .recent-format.mp3 {
+            background-color: var(--secondary-color);
+        }
+
+        .recent-info {
+            padding: 1rem;
+        }
+
+        .recent-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            height: 2.8rem;
+        }
+
+        .recent-meta {
+            color: var(--text-light);
+            font-size: 0.8rem;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+        }
+
+        .recent-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .recent-actions button {
+            flex: 1;
+            font-size: 0.8rem;
+            padding: 0.4rem;
+            background-color: var(--gray-medium);
+            border: none;
+            border-radius: var(--border-radius-sm);
+            color: var(--text-color);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .recent-actions button:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .recent-actions button i {
+            margin-right: 3px;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--dark-medium);
+            color: var(--light-color);
+            padding: 4rem 0 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer::before, .footer::after {
+            content: "";
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            opacity: 0.05;
+            z-index: 0;
+        }
+
+        .footer::before {
+            background-color: var(--primary-color);
+            top: -150px;
+            right: -100px;
+        }
+
+        .footer::after {
+            background-color: var(--secondary-color);
+            bottom: -150px;
+            left: -100px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 2.5rem;
+            margin-bottom: 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-logo {
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-logo a {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            font-weight: 800;
+            background-image: linear-gradient(45deg, var(--primary-light), var(--secondary-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+
+        .footer-about p {
+            color: #b8c1ec;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--light-color);
+            transition: var(--transition);
+        }
+
+        .social-link:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        .footer-links h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.8rem;
+            color: white;
+        }
+
+        .footer-links h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            border-radius: 3px;
+        }
+
+        .footer-links ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links ul li a {
+            color: #b8c1ec;
+            transition: var(--transition);
+            display: inline-block;
+            font-size: 0.95rem;
+        }
+
+        .footer-links ul li a:hover {
+            color: var(--primary-light);
+            transform: translateX(5px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #b8c1ec;
+            position: relative;
+            z-index: 1;
+        }
+
+        .copyright p {
+            font-size: 0.9rem;
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            display: none;
+        }
+
+        .loader {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .loader::before, .loader::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+        }
+
+        .loader::before {
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(to right, var(--primary-color) 0%, var(--secondary-color) 100%);
+            animation: spin 1s infinite linear;
+        }
+
+        .loader::after {
+            width: 85%;
+            height: 85%;
+            background-color: rgba(0, 0, 0, 0.8);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .loading-text {
+            color: var(--light-color);
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .loading-subtext {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1rem;
+        }
+
+        .progress-container {
+            width: 300px;
+            height: 8px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            margin-top: 2rem;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 350px;
+        }
+
+        .toast {
+            padding: 15px 20px;
+            border-radius: var(--border-radius);
+            color: white;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.7s;
+            transition: var(--transition);
+            transform: translateX(0);
+            background-color: var(--primary-color);
+        }
+
+        .toast i {
+            margin-right: 12px;
+            font-size: 1.2rem;
+        }
+
+        .toast.success {
+            background-color: #28a745;
+        }
+
+        .toast.error {
+            background-color: #dc3545;
+        }
+
+        .toast.warning {
+            background-color: #ffc107;
+            color: #212529;
+        }
+
+        .toast.info {
+            background-color: #17a2b8;
+        }
+
+        /* Animations */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes rotate {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        @keyframes floating {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Media Queries */
+        @media screen and (max-width: 1200px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .hero-image {
+                max-width: 450px;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1.5fr 1fr 1fr 1fr;
+            }
+        }
+
+        @media screen and (max-width: 992px) {
+            .section-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero .container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .hero-content {
+                max-width: 100%;
+                margin-right: 0;
+                margin-bottom: 3rem;
+            }
+            
+            .hero-text {
+                max-width: 100%;
+                margin: 0 auto 2rem;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem 4rem;
+            }
+            
+            .footer-about {
+                grid-column: span 2;
+            }
+            
+            .step {
+                align-items: flex-start;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            .section-title {
+                font-size: 2.2rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .navbar .container {
+                padding: 1rem;
+            }
+            
+            .nav-menu {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                background-color: var(--light-color);
+                width: 100%;
+                flex-direction: column;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+                transition: 0.4s;
+                padding: 2rem 0;
+                z-index: 999;
+            }
+            
+            .nav-menu.active {
+                left: 0;
+            }
+            
+            .nav-menu li {
+                margin: 0;
+                text-align: center;
+            }
+            
+            .nav-menu a {
+                display: block;
+                padding: 1rem 0;
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+            
+            .url-input-container {
+                flex-direction: column;
+            }
+            
+            .url-input {
+                border-radius: var(--border-radius) var(--border-radius) 0 0;
+            }
+            
+            .paste-btn {
+                position: absolute;
+                right: 0;
+                top: 0;
+                height: 100%;
+                width: 50px;
+                border-radius: 0 var(--border-radius) 0 0;
+            }
+            
+            .download-btn {
+                width: 100%;
+                border-radius: 0 0 var(--border-radius) var(--border-radius);
+            }
+            
+            .video-info {
+                flex-direction: column;
+            }
+            
+            .video-thumbnail {
+                width: 100%;
+            }
+            
+            .format-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .step {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                gap: 1.5rem;
+            }
+            
+            .step::after {
+                display: none;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-about {
+                grid-column: span 1;
+            }
+            
+            .footer-links h3::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            
+            .footer-links {
+                text-align: center;
+            }
+            
+            .social-links {
+                justify-content: center;
+            }
+        }
+
+        @media screen and (max-width: 576px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-text {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .downloader-wrapper {
+                padding: 2rem 1.5rem;
+            }
+            
+            .format-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .recent-items {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <div class="logo">
+                    <a href="#"><i class="fas fa-cloud-download-alt"></i> Tube<span>Saver</span></a>
+                </div>
+                <div class="menu-toggle" id="mobile-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="#home" class="active">Home</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#how-to-use">How to Use</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                    <li class="theme-switch-wrapper">
+                        <label class="theme-switch" for="checkbox">
+                            <input type="checkbox" id="checkbox" />
+                            <div class="slider">
+                                <i class="fas fa-moon"></i>
+                                <i class="fas fa-sun"></i>
+                            </div>
+                        </label>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
 
-<!-- HTML Structure remains the same -->
-<div class="tracker-container" id="tracker-capture-area">
-    <div class="header-area">
-        <h1 class="tracker-title">Monthly Tracker</h1>
-        <div class="settings-icon" id="settings-btn" title="Settings">⚙️</div>
-    </div>
-
-    <div class="settings-menu" id="settings-options">
-        <div class="tracker-select-group">
-            <label for="tracker-select">Current:</label>
-            <select id="tracker-select"></select>
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Download YouTube Videos & Music <span>Effortlessly</span></h1>
+                <p class="hero-text">The most powerful free online YouTube downloader - Extract high-quality videos and audio with just a few clicks. No registration, no software installation!</p>
+                
+                <div class="downloader-wrapper">
+                    <div class="downloader-heading">
+                        <h2>YouTube Video Downloader</h2>
+                        <p>Paste your YouTube URL to start downloading videos or music</p>
+                    </div>
+                    <div class="url-input-container">
+                        <input type="text" id="video-url" class="url-input" placeholder="Paste YouTube URL here...">
+                        <button id="paste-button" class="paste-btn" title="Paste from clipboard"><i class="fas fa-paste"></i></button>
+                        <button id="download-button" class="download-btn">Analyze</button>
+                    </div>
+                    
+                    <div id="video-preview" class="video-preview">
+                        <div class="video-info">
+                            <div class="video-thumbnail">
+                                <img src="https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg" alt="Video thumbnail">
+                                <div class="video-duration">3:32</div>
+                            </div>
+                            <div class="video-details">
+                                <h3 class="video-title">Rick Astley - Never Gonna Give You Up (Official Music Video)</h3>
+                                <div class="video-meta">
+                                    <div><i class="fas fa-user"></i> Rick Astley</div>
+                                    <div><i class="fas fa-eye"></i> 1.2B views</div>
+                                    <div><i class="fas fa-calendar-alt"></i> Oct 25, 2009</div>
+                                </div>
+                                <p class="video-description">The official music video for "Never Gonna Give You Up" by Rick Astley. The song was released on July 27, 1987, and became a number one hit in 25 countries. The music video has over 1 billion views on YouTube.</p>
+                            </div>
+                        </div>
+                        
+                        <div id="format-selector" class="format-selector">
+                            <h3>Select Download Format</h3>
+                            <div class="format-tabs">
+                                <div class="format-tab active" data-tab="video">Video Formats</div>
+                                <div class="format-tab" data-tab="audio">Audio Formats</div>
+                            </div>
+                            
+                            <div class="format-content active" data-content="video">
+                                <div class="format-grid">
+                                    <div class="format-card" data-format="mp4-1080">
+                                        <i class="fas fa-film"></i>
+                                        <div class="format-name">MP4 HD</div>
+                                        <div class="format-info">
+                                            <span>1080p Quality</span>
+                                            <span>~128 MB</span>
+                                        </div>
+                                    </div>
+                                    <div class="format-card" data-format="mp4-720">
+                                        <i class="fas fa-film"></i>
+                                        <div class="format-name">MP4 HD</div>
+                                        <div class="format-info">
+                                            <span>720p Quality</span>
+                                            <span>~58 MB</span>
+                                        </div>
+                                    </div>
+                                    <div class="format-card" data-format="mp4-480">
+                                        <i class="fas fa-film"></i>
+                                        <div class="format-name">MP4 SD</div>
+                                        <div class="format-info">
+                                            <span>480p Quality</span>
+                                            <span>~32 MB</span>
+                                        </div>
+                                    </div>
+                                    <div class="format-card" data-format="mp4-360">
+                                        <i class="fas fa-film"></i>
+                                        <div class="format-name">MP4 SD</div>
+                                        <div class="format-info">
+                                            <span>360p Quality</span>
+                                            <span>~18 MB</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="format-content" data-content="audio">
+                                <div class="format-grid">
+                                    <div class="format-card" data-format="mp3-320">
+                                        <i class="fas fa-music"></i>
+                                        <div class="format-name">MP3 HD</div>
+                                        <div class="format-info">
+                                            <span>320 kbps</span>
+                                            <span>~8.2 MB</span>
+                                        </div>
+                                    </div>
+                                    <div class="format-card" data-format="mp3-256">
+                                        <i class="fas fa-music"></i>
+                                        <div class="format-name">MP3 HQ</div>
+                                        <div class="format-info">
+                                            <span>256 kbps</span>
+                                            <span>~6.5 MB</span>
+                                        </div>
+                                    </div>
+                                    <div class="format-card" data-format="mp3-192">
+                                        <i class="fas fa-music"></i>
+                                        <div class="format-name">MP3 HQ</div>
+                                        <div class="format-info">
+                                            <span>192 kbps</span>
+                                            <span>~4.9 MB</span>
+                                        </div>
+                                    </div>
+                                    <div class="format-card" data-format="mp3-128">
+                                        <i class="fas fa-music"></i>
+                                        <div class="format-name">MP3</div>
+                                        <div class="format-info">
+                                            <span>128 kbps</span>
+                                            <span>~3.3 MB</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="download-actions">
+                                <button id="start-download" class="btn btn-lg">Start Download</button>
+                                <button id="download-all" class="download-all-btn">Download All Formats (ZIP)</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="https://cdn.pixabay.com/photo/2023/05/22/16/23/technology-8010697_1280.png" alt="YouTube Downloader Illustration">
+                <div class="floating-elements">
+                    <div class="floating-icon mp3-icon"><i class="fas fa-music"></i></div>
+                    <div class="floating-icon mp4-icon"><i class="fas fa-video"></i></div>
+                    <div class="floating-icon download-icon"><i class="fas fa-download"></i></div>
+                </div>
+            </div>
         </div>
-        <div class="action-buttons">
-            <button id="create-tracker-btn" class="btn btn-create" title="Create a new blank tracker page">Create New</button>
-            <button id="rename-tracker-btn" class="btn btn-rename" title="Rename the current tracker page">Rename</button>
-            <button id="delete-tracker-btn" class="btn btn-delete" title="Delete the current tracker page">Delete</button>
-            <button id="download-image-btn" class="btn btn-download-image" title="Download the current view as an image">Download Image</button>
+    </section>
+
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">Why Choose <span>TubeSaver</span></h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Lightning Fast</h3>
+                    <p>Download your favorite videos and music in seconds with our optimized technology. Our servers handle the processing so your device doesn't have to.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>100% Secure</h3>
+                    <p>No registration required. We don't store your videos or personal data on our servers. Your privacy is our top priority.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-hand-holding-heart"></i>
+                    </div>
+                    <h3>Easy to Use</h3>
+                    <p>Simple 3-step process: Paste URL, select format, download. Designed to be intuitive so anyone can use it without technical knowledge.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-photo-video"></i>
+                    </div>
+                    <h3>Multiple Formats</h3>
+                    <p>Download videos in MP4, WebM or extract audio in MP3 format. Choose from various quality options to suit your needs.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-desktop"></i>
+                    </div>
+                    <h3>All Devices</h3>
+                    <p>Works perfectly on all devices - desktop, tablet, and mobile without installing software. Access anywhere with an internet connection.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h3>High Quality</h3>
+                    <p>Download videos in HD quality up to 4K and audio up to 320kbps. Never compromise on quality when you download your content.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="recent-downloads" class="recent-downloads">
+        <div class="container">
+            <h2 class="section-title">Recently <span>Downloaded</span></h2>
+            <div class="recent-downloads-container">
+                <div class="recent-downloads-header">
+                    <h3>Trending Downloads</h3>
+                    <div class="btn-outline">View All</div>
+                </div>
+                <div class="recent-items">
+                    <div class="recent-item">
+                        <div class="recent-thumb">
+                            <img src="https://i.ytimg.com/vi/9bZkp7q19f0/maxresdefault.jpg" alt="PSY - Gangnam Style">
+                            <div class="recent-format">MP4</div>
+                        </div>
+                        <div class="recent-info">
+                            <div class="recent-title">PSY - Gangnam Style (강남스타일) M/V</div>
+                            <div class="recent-meta">
+                                <span>5:13</span>
+                                <span>1080p</span>
+                            </div>
+                            <div class="recent-actions">
+                                <button><i class="fas fa-download"></i> Download</button>
+                                <button><i class="fas fa-music"></i> MP3</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="recent-item">
+                        <div class="recent-thumb">
+                            <img src="https://i.ytimg.com/vi/JGwWNGJdvx8/maxresdefault.jpg" alt="Ed Sheeran - Shape of You">
+                            <div class="recent-format mp3">MP3</div>
+                        </div>
+                        <div class="recent-info">
+                            <div class="recent-title">Ed Sheeran - Shape of You (Official Music Video)</div>
+                            <div class="recent-meta">
+                                <span>4:24</span>
+                                <span>320 kbps</span>
+                            </div>
+                            <div class="recent-actions">
+                                <button><i class="fas fa-download"></i> Download</button>
+                                <button><i class="fas fa-video"></i> MP4</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="recent-item">
+                        <div class="recent-thumb">
+                            <img src="https://i.ytimg.com/vi/kJQP7kiw5Fk/maxresdefault.jpg" alt="Luis Fonsi - Despacito">
+                            <div class="recent-format">MP4</div>
+                        </div>
+                        <div class="recent-info">
+                            <div class="recent-title">Luis Fonsi - Despacito ft. Daddy Yankee</div>
+                            <div class="recent-meta">
+                                <span>4:42</span>
+                                <span>720p</span>
+                            </div>
+                            <div class="recent-actions">
+                                <button><i class="fas fa-download"></i> Download</button>
+                                <button><i class="fas fa-music"></i> MP3</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="recent-item">
+                        <div class="recent-thumb">
+                            <img src="https://i.ytimg.com/vi/RgKAFK5djSk/maxresdefault.jpg" alt="See You Again">
+                            <div class="recent-format mp3">MP3</div>
+                        </div>
+                        <div class="recent-info">
+                            <div class="recent-title">Wiz Khalifa - See You Again ft. Charlie Puth</div>
+                            <div class="recent-meta">
+                                <span>3:58</span>
+                                <span>256 kbps</span>
+                            </div>
+                            <div class="recent-actions">
+                                <button><i class="fas fa-download"></i> Download</button>
+                                <button><i class="fas fa-video"></i> MP4</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="how-to-use" class="how-to-use">
+        <div class="container">
+            <h2 class="section-title">How to <span>Download</span></h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Copy YouTube URL</h3>
+                        <p>Find the video you want to download on YouTube. Copy the URL from your browser's address bar or use the "Share" button below the video.</p>
+                        <div class="step-image">
+                            <img src="https://cdn.pixabay.com/photo/2018/11/29/21/51/social-media-3846597_1280.png" alt="Copy YouTube URL step">
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Paste URL & Analyze</h3>
+                        <p>Return to TubeSaver and paste the URL into the input field at the top of this page. Click the "Analyze" button to process the video details.</p>
+                        <div class="step-image">
+                            <img src="https://cdn.pixabay.com/photo/2017/11/10/05/24/add-2935430_1280.png" alt="Paste URL Step">
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Select Format & Quality</h3>
+                        <p>Choose your preferred format (MP4, WebM, MP3) and quality for the download. Higher quality videos will have larger file sizes.</p>
+                        <div class="step-image">
+                            <img src="https://cdn.pixabay.com/photo/2018/04/06/13/46/poly-3295856_1280.png" alt="Select Format Step">
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Start Download</h3>
+                        <p>Click the "Start Download" button and your file will begin downloading automatically. Save it to your desired location and enjoy offline!</p>
+                        <div class="step-image">
+                            <img src="https://cdn.pixabay.com/photo/2018/09/04/10/27/imac-3653506_1280.png" alt="Download Step">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="faq" class="faq">
+        <div class="container">
+            <h2 class="section-title">Frequently Asked <span>Questions</span></h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Is this service completely free?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>Yes, TubeSaver is 100% free to use. There are no hidden fees, subscriptions, or payments required. We maintain the service through minimal advertisements.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Is it legal to download YouTube videos?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>Downloading videos from YouTube for personal use is generally acceptable, but it may be against YouTube's Terms of Service. We recommend only downloading videos that you have permission to download or that are published under Creative Commons licenses. Never use downloaded content for commercial purposes without proper authorization.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>What is the maximum video quality available?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>TubeSaver supports video downloads up to 4K quality, depending on the original video quality. For audio, we offer up to 320kbps MP3 format. You'll always see all available quality options for each video when you analyze the URL.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Can I download private or age-restricted videos?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>No, our service cannot download private or age-restricted videos from YouTube. We can only process videos that are publicly available without restrictions.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>How fast are the downloads?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>Download speeds depend on several factors including your internet connection, server load, and file size. Most downloads start within seconds and complete as quickly as your connection allows. For large files, such as 4K videos, it may take longer to process and download.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Can I download entire playlists?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>Yes, TubeSaver supports playlist downloads. Simply paste the playlist URL and our system will analyze all available videos. You can then choose to download individual videos or the entire playlist as a batch.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <a href="#">Tube<span>Saver</span></a>
+                    </div>
+                    <p>TubeSaver is the leading free YouTube video and audio downloader. Our service allows you to download high-quality content from YouTube quickly, easily, and securely.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#how-to-use">How to Use</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                        <li><a href="#">Supported Sites</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">DMCA</a></li>
+                        <li><a href="#">Disclaimer</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Report Issues</a></li>
+                        <li><a href="#">Feedback</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 TubeSaver. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loader"></div>
+        <p class="loading-text">Processing your download...</p>
+        <p class="loading-subtext">This may take a few moments</p>
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
         </div>
     </div>
+    
+    <div class="toast-container" id="toast-container"></div>
 
-    <div class="table-wrapper" id="table-scroll-wrapper">
-        <table class="tracker-table">
-            <thead>
-                 <tr id="header-row">
-                    <th>Month</th>
-                    <th id="name-header-1" class="name-header" contenteditable="true" spellcheck="false">Name 1</th>
-                    <th class="add-column-cell">
-                        <button id="add-column-btn" title="Add Name Column">+</button>
-                    </th>
-                </tr>
-            </thead>
-            <tbody id="tracker-body">
-                 <!-- Rows generated by JS or initial state -->
-                 <tr> <td>January</td> <td class="checkbox-cell"><input type="checkbox" id="chk-0-1"></td> <td></td> </tr>
-                  <tr><td>February</td><td class="checkbox-cell"><input type="checkbox" id="chk-1-1"></td> <td></td></tr>
-                  <tr><td>March</td><td class="checkbox-cell"><input type="checkbox" id="chk-2-1"></td> <td></td></tr>
-                  <tr><td>April</td><td class="checkbox-cell"><input type="checkbox" id="chk-3-1"></td> <td></td></tr>
-                  <tr><td>May</td><td class="checkbox-cell"><input type="checkbox" id="chk-4-1"></td> <td></td></tr>
-                  <tr><td>June</td><td class="checkbox-cell"><input type="checkbox" id="chk-5-1"></td> <td></td></tr>
-                  <tr><td>July</td><td class="checkbox-cell"><input type="checkbox" id="chk-6-1"></td> <td></td></tr>
-                  <tr><td>August</td><td class="checkbox-cell"><input type="checkbox" id="chk-7-1"></td> <td></td></tr>
-                  <tr><td>September</td><td class="checkbox-cell"><input type="checkbox" id="chk-8-1"></td> <td></td></tr>
-                  <tr><td>October</td><td class="checkbox-cell"><input type="checkbox" id="chk-9-1"></td> <td></td></tr>
-                  <tr><td>November</td><td class="checkbox-cell"><input type="checkbox" id="chk-10-1"></td> <td></td></tr>
-                  <tr><td>December</td><td class="checkbox-cell"><input type="checkbox" id="chk-11-1"></td> <td></td></tr>
-             </tbody>
-        </table>
-    </div>
-</div>
+    <script>
+        // Wait for the DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elements
+            const themeToggle = document.getElementById('checkbox');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const navMenu = document.querySelector('.nav-menu');
+            const videoUrlInput = document.getElementById('video-url');
+            const pasteButton = document.getElementById('paste-button');
+            const downloadButton = document.getElementById('download-button');
+            const videoPreview = document.getElementById('video-preview');
+            const formatTabs = document.querySelectorAll('.format-tab');
+            const formatContents = document.querySelectorAll('.format-content');
+            const formatCards = document.querySelectorAll('.format-card');
+            const startDownloadButton = document.getElementById('start-download');
+            const downloadAllButton = document.getElementById('download-all');
+            const loadingOverlay = document.getElementById('loading-overlay');
+            const progressBar = document.getElementById('progress-bar');
+            const faqItems = document.querySelectorAll('.faq-item');
+            const toastContainer = document.getElementById('toast-container');
 
-<script>
-    // Javascript remains exactly the same as the previous version
-    document.addEventListener('DOMContentLoaded', function() {
-        // --- DOM এলিমেন্টের রেফারেন্স ---
-        const settingsBtn = document.getElementById('settings-btn');
-        const settingsOptionsDiv = document.getElementById('settings-options');
-        const trackerSelect = document.getElementById('tracker-select');
-        const createTrackerBtn = document.getElementById('create-tracker-btn');
-        const renameTrackerBtn = document.getElementById('rename-tracker-btn');
-        const deleteTrackerBtn = document.getElementById('delete-tracker-btn');
-        const downloadImageBtn = document.getElementById('download-image-btn');
-        const addColumnBtn = document.getElementById('add-column-btn');
-        const captureArea = document.getElementById('tracker-capture-area');
-        const tableWrapper = document.getElementById('table-scroll-wrapper');
-        const pageTitleElement = document.querySelector('h1.tracker-title');
-        const theadRow = document.getElementById('header-row');
-        const tbody = document.getElementById('tracker-body');
-
-        // --- লোকাল স্টোরেজ কী এবং গ্লোবাল স্টেট ---
-        const masterListKey = 'myTrackers_list_v2'; // Updated key for new structure
-        const activeTrackerKeyPreference = 'myTrackers_activeKey_v2'; // Updated key
-        let currentTrackerKey = null;
-        const defaultColumnCount = 1; // Start with 1 Name column
-
-        // --- ট্র্যাকার তালিকা ম্যানেজমেন্ট ফাংশন ---
-        function getTrackers() {
-            const listJSON = localStorage.getItem(masterListKey);
-            try {
-                const list = JSON.parse(listJSON);
-                return Array.isArray(list) && list.length > 0 ? list : createDefaultTrackerList();
-            } catch (e) {
-                return createDefaultTrackerList();
+            // Theme toggle
+            if (localStorage.getItem('theme') === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeToggle.checked = true;
             }
-        }
-        function saveTrackers(trackerList) {
-            localStorage.setItem(masterListKey, JSON.stringify(trackerList));
-            populateTrackerSelect(trackerList);
-        }
-        function createDefaultTrackerList() {
-            const defaultKey = generateUniqueKey('default_');
-            // Default tracker now starts with defaultColumnCount
-            const defaultList = [{ key: defaultKey, name: 'My First Tracker', colCount: defaultColumnCount }];
-            localStorage.setItem(masterListKey, JSON.stringify(defaultList));
-            let setAsActive = false;
-            if(!getActiveTrackerKey()) {
-                setActiveTrackerKey(defaultKey);
-                setAsActive = true;
-            }
-             // Save empty data for the new default tracker
-            if (!localStorage.getItem(defaultKey)) {
-                 saveCurrentStateData({ headers: {}, checks: {}, columnCount: defaultColumnCount }, defaultKey);
-             }
-             if(setAsActive){
-                currentTrackerKey = defaultKey;
-             }
-            return defaultList;
-        }
-        function generateUniqueKey(prefix = 'tracker_') {
-            return prefix + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
-        }
-        function getActiveTrackerKey() {
-            return localStorage.getItem(activeTrackerKeyPreference);
-        }
-        function setActiveTrackerKey(key) {
-            currentTrackerKey = key;
-            localStorage.setItem(activeTrackerKeyPreference, key);
-            if (trackerSelect && trackerSelect.value !== key) { // Avoid resetting selection if already correct
-                trackerSelect.value = key;
-            }
-        }
 
-        // --- স্টেট (ডেটা) ম্যানেজমেন্ট ফাংশন ---
-        function getStateDataForKey(trackerKey) {
-            const dataJSON = localStorage.getItem(trackerKey);
-            try {
-                const data = JSON.parse(dataJSON);
-                // Default data now reflects defaultColumnCount
-                const defaultData = { headers: {}, checks: {}, columnCount: defaultColumnCount };
-                // Ensure loaded data has columnCount, if not use default
-                 const validatedData = data && typeof data === 'object' ? { ...defaultData, ...data } : defaultData;
-                 if (typeof validatedData.columnCount !== 'number' || validatedData.columnCount < 1) {
-                     validatedData.columnCount = defaultColumnCount;
-                 }
-                 return validatedData;
-
-            } catch (e) {
-                return { headers: {}, checks: {}, columnCount: defaultColumnCount };
-            }
-        }
-        function saveCurrentStateData(data, trackerKey = currentTrackerKey) {
-            if (!trackerKey) {
-                console.warn("Cannot save state, no tracker key active.");
-                return;
-            }
-            try {
-                // Get actual current column count from UI
-                data.columnCount = document.querySelectorAll('.tracker-table thead th.name-header').length;
-                localStorage.setItem(trackerKey, JSON.stringify(data));
-            } catch (error) {
-                console.error("Error saving state for key:", trackerKey, error);
-            }
-        }
-        function saveCurrentUIToState() {
-            if (!currentTrackerKey) return;
-
-            const currentHeaders = document.querySelectorAll('th.name-header[contenteditable="true"]');
-            const currentCheckboxes = document.querySelectorAll('tbody input[type="checkbox"]');
-            const currentState = { headers: {}, checks: {}, columnCount: currentHeaders.length };
-
-            currentHeaders.forEach(header => {
-                currentState.headers[header.id] = header.textContent.trim();
-            });
-            currentCheckboxes.forEach(checkbox => {
-                currentState.checks[checkbox.id] = checkbox.checked;
+            themeToggle.addEventListener('change', function() {
+                if (this.checked) {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                    showToast('Dark mode enabled', 'info');
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    localStorage.setItem('theme', 'light');
+                    showToast('Light mode enabled', 'info');
+                }
             });
 
-            saveCurrentStateData(currentState);
-            // Update tracker list in local storage with the current column count
-            const trackers = getTrackers();
-            const trackerIndex = trackers.findIndex(t => t.key === currentTrackerKey);
-            if (trackerIndex !== -1) {
-                trackers[trackerIndex].colCount = currentState.columnCount;
-                localStorage.setItem(masterListKey, JSON.stringify(trackers)); // Save updated list silently
-            }
-            // console.log(`UI State saved for ${currentTrackerKey} with ${currentState.columnCount} columns.`); // Optional: reduce console noise
-        }
-
-        // --- UI হ্যান্ডলার ফাংশন ---
-        function handleHeaderInput(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                event.target.blur();
-            }
-        }
-        function handleHeaderFocus(event) {
-             // Simple focus style is handled by CSS :focus-within
-        }
-        function handleHeaderBlur(event) {
-            // Sanitize header text (optional: remove extra spaces)
-            const currentText = event.target.textContent;
-            const trimmedText = currentText.trim().replace(/\s+/g, ' ');
-            if (currentText !== trimmedText) {
-                event.target.textContent = trimmedText; // Update only if changed
-            }
-            saveCurrentUIToState();
-        }
-        function handleCheckboxChange(event) {
-            saveCurrentUIToState();
-        }
-
-        // --- কলাম যোগ/বিয়োগ করার ফাংশন ---
-        function addColumnToUI(columnIndex) {
-            const addColumnCell = document.querySelector('.add-column-cell');
-            if (!addColumnCell) return;
-
-            const newHeaderId = `name-header-${columnIndex}`;
-            const newTh = document.createElement('th');
-            newTh.id = newHeaderId;
-            newTh.className = 'name-header';
-            newTh.contentEditable = 'true';
-            newTh.spellcheck = 'false';
-            newTh.textContent = `Name ${columnIndex}`;
-            theadRow.insertBefore(newTh, addColumnCell);
-            newTh.addEventListener('keydown', handleHeaderInput);
-            newTh.addEventListener('focus', handleHeaderFocus);
-            newTh.addEventListener('blur', handleHeaderBlur);
-
-            const rows = tbody.querySelectorAll('tr');
-            rows.forEach((row, rowIndex) => {
-                const newTd = document.createElement('td');
-                newTd.className = 'checkbox-cell';
-                const newCheckbox = document.createElement('input');
-                newCheckbox.type = 'checkbox';
-                newCheckbox.id = `chk-${rowIndex}-${columnIndex}`;
-                newCheckbox.addEventListener('change', handleCheckboxChange);
-                newTd.appendChild(newCheckbox);
-                row.insertBefore(newTd, row.lastElementChild);
+            // Mobile menu toggle
+            mobileMenu.addEventListener('click', function() {
+                navMenu.classList.toggle('active');
+                this.querySelector('i').classList.toggle('fa-bars');
+                this.querySelector('i').classList.toggle('fa-times');
             });
-            // console.log(`Added UI for column ${columnIndex}`);
-        }
 
-        function removeExtraColumns(currentColCount, targetColCount) {
-            if (currentColCount <= targetColCount) return;
-            const addColumnCell = document.querySelector('.add-column-cell');
-            if (!addColumnCell) return;
-
-            for (let i = currentColCount; i > targetColCount; i--) {
-                const headerToRemove = addColumnCell.previousElementSibling;
-                if (headerToRemove && headerToRemove.classList.contains('name-header')) {
-                     headerToRemove.remove();
-                } else { break; }
-
-                const rows = tbody.querySelectorAll('tr');
-                rows.forEach(row => {
-                    const cellToRemove = row.lastElementChild.previousElementSibling;
-                    if (cellToRemove && cellToRemove.classList.contains('checkbox-cell')) {
-                        cellToRemove.remove();
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Close mobile menu if open
+                    if(navMenu.classList.contains('active')) {
+                        navMenu.classList.remove('active');
+                        mobileMenu.querySelector('i').classList.add('fa-bars');
+                        mobileMenu.querySelector('i').classList.remove('fa-times');
+                    }
+                    
+                    // Scroll to target
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if(targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                        
+                        // Update active link
+                        document.querySelectorAll('.nav-menu a').forEach(link => {
+                            link.classList.remove('active');
+                        });
+                        this.classList.add('active');
                     }
                 });
-            }
-             // console.log(`Removed ${currentColCount - targetColCount} extra columns.`);
-        }
+            });
 
-        function setupInitialColumns(savedColumnCount) {
-            const currentColumnCount = document.querySelectorAll('.tracker-table thead th.name-header').length;
-            const targetColCount = Math.max(1, savedColumnCount); // Ensure at least 1
+            // Paste URL functionality
+            pasteButton.addEventListener('click', function() {
+                navigator.clipboard.readText()
+                    .then(text => {
+                        videoUrlInput.value = text;
+                        validateUrl(text);
+                    })
+                    .catch(err => {
+                        console.error('Failed to read clipboard: ', err);
+                        showToast('Please paste the URL manually', 'error');
+                    });
+            });
 
-            if (targetColCount > currentColumnCount) {
-                for (let i = currentColumnCount + 1; i <= targetColCount; i++) {
-                    addColumnToUI(i);
+            // URL validation and format selection
+            videoUrlInput.addEventListener('input', function() {
+                validateUrl(this.value);
+            });
+
+            // URL validation function
+            function validateUrl(url) {
+                const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/;
+                
+                if(youtubeRegex.test(url)) {
+                    downloadButton.removeAttribute('disabled');
+                    downloadButton.style.opacity = '1';
+                } else {
+                    downloadButton.setAttribute('disabled', 'true');
+                    downloadButton.style.opacity = '0.7';
+                    videoPreview.classList.remove('active');
                 }
             }
-            else if (targetColCount < currentColumnCount) {
-                removeExtraColumns(currentColumnCount, targetColCount);
-            }
-            attachAllListeners(); // Ensure listeners are present
-        }
 
-        function attachAllListeners() {
-             document.querySelectorAll('th.name-header').forEach(th => {
-                th.removeEventListener('keydown', handleHeaderInput);
-                th.removeEventListener('focus', handleHeaderFocus);
-                th.removeEventListener('blur', handleHeaderBlur);
-                th.addEventListener('keydown', handleHeaderInput);
-                th.addEventListener('focus', handleHeaderFocus);
-                th.addEventListener('blur', handleHeaderBlur);
-            });
-            document.querySelectorAll('tbody input[type="checkbox"]').forEach(cb => {
-                cb.removeEventListener('change', handleCheckboxChange);
-                cb.addEventListener('change', handleCheckboxChange);
-            });
-        }
-
-
-        // --- স্টেট লোড করার ফাংশন ---
-        function loadStateFromKey(trackerKey) {
-            setActiveTrackerKey(trackerKey);
-            const data = getStateDataForKey(trackerKey);
-            const trackers = getTrackers();
-            const currentTrackerInfo = trackers.find(t => t.key === trackerKey);
-
-            if (pageTitleElement) {
-                pageTitleElement.textContent = currentTrackerInfo ? currentTrackerInfo.name : "Monthly Tracker";
-            }
-
-            const targetColumnCount = Math.max(1, data.columnCount || defaultColumnCount);
-            setupInitialColumns(targetColumnCount);
-
-            const currentHeaders = document.querySelectorAll('th.name-header[contenteditable="true"]');
-            currentHeaders.forEach((header, index) => {
-                 const colIndex = index + 1;
-                 const headerId = `name-header-${colIndex}`;
-                 header.id = headerId; // Ensure ID is correct
-                 header.textContent = data.headers?.[headerId] || `Name ${colIndex}`;
-            });
-
-            const currentCheckboxes = document.querySelectorAll('tbody input[type="checkbox"]');
-            currentCheckboxes.forEach(checkbox => {
-                 checkbox.checked = data.checks?.[checkbox.id] || false;
-            });
-
-            console.log(`State loaded for ${currentTrackerInfo ? currentTrackerInfo.name : trackerKey} (${targetColumnCount} cols).`);
-
-            const canDelete = trackers.length > 1;
-            if(deleteTrackerBtn) {
-                 deleteTrackerBtn.disabled = !canDelete;
-                 deleteTrackerBtn.title = canDelete ? "Delete current tracker" : "Cannot delete the only tracker";
-            }
-            if(renameTrackerBtn) {
-                 renameTrackerBtn.disabled = false;
-                 renameTrackerBtn.title = "Rename current tracker";
-            }
-            attachAllListeners(); // Re-attach just in case
-        }
-
-        function resetUIToDefault(newTrackerName = "New Tracker") {
-            const currentColCount = document.querySelectorAll('.tracker-table thead th.name-header').length;
-            removeExtraColumns(currentColCount, defaultColumnCount); // Reset to 1 column
-
-            const firstHeader = document.getElementById('name-header-1');
-            if (firstHeader) {
-                firstHeader.textContent = `Name 1`;
-            }
-
-            const currentCheckboxes = document.querySelectorAll('tbody input[type="checkbox"]');
-            currentCheckboxes.forEach(checkbox => {
-                checkbox.checked = false;
-            });
-            if(pageTitleElement) {
-                pageTitleElement.textContent = newTrackerName;
-            }
-             attachAllListeners();
-        }
-
-        function populateTrackerSelect(trackerList) {
-            trackerSelect.innerHTML = '';
-            let activeKeyExistsInList = false;
-
-            if (!Array.isArray(trackerList)) {
-                trackerList = createDefaultTrackerList();
-            }
-            if (trackerList.length === 0) { // Handle case where list becomes empty
-                 trackerList = createDefaultTrackerList();
-             }
-
-            const currentActiveKey = getActiveTrackerKey(); // Get potentially updated key
-
-            trackerList.forEach(tracker => {
-                 if(typeof tracker !== 'object' || !tracker.key || !tracker.name) return;
-                const option = document.createElement('option');
-                option.value = tracker.key;
-                option.textContent = tracker.name;
-                trackerSelect.appendChild(option);
-                if(tracker.key === currentActiveKey) activeKeyExistsInList = true;
-            });
-
-            if(activeKeyExistsInList) {
-                trackerSelect.value = currentActiveKey;
-            }
-            else if (trackerList.length > 0) {
-                 // Active key was deleted or invalid, select the first one
-                 setActiveTrackerKey(trackerList[0].key);
-                 trackerSelect.value = trackerList[0].key;
-             }
-             // We ensured trackerList is not empty above
-        }
-
-        function downloadTrackerAsImage() {
-            if (typeof html2canvas === 'undefined') {
-                alert("Error: html2canvas library not loaded."); return;
-            }
-            console.log("Starting image capture...");
-
-             const originalTableWrapperOverflowX = tableWrapper.style.overflowX;
-             const originalBodyBg = document.body.style.backgroundColor;
-             const settingsWasOpen = settingsOptionsDiv.classList.contains('open');
-             const settingsOriginalDisplay = settingsOptionsDiv.style.display;
-
-             if (settingsWasOpen) { settingsOptionsDiv.classList.remove('open'); }
-             settingsOptionsDiv.style.display = 'none';
-             tableWrapper.style.overflowX = 'visible';
-             document.body.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--primary-bg').trim();
-
-
-             new Promise(resolve => setTimeout(resolve, 150)).then(() => {
-                html2canvas(captureArea, {
-                    allowTaint: true,
-                    useCORS: true,
-                    backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--primary-bg').trim() || '#1F1A31',
-                    scale: window.devicePixelRatio * 1.5 // Increase scale based on device pixel ratio
-                }).then(canvas => {
-                    const imageDataUrl = canvas.toDataURL('image/png');
-                    const a = document.createElement('a');
-                    a.href = imageDataUrl;
-
-                    const date = new Date();
-                     const timestamp = `${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}`;
-                     const currentTrackerName = getTrackers().find(t => t.key === currentTrackerKey)?.name || 'tracker';
-                     const safeName = currentTrackerName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
-                    a.download = `${safeName}_tracker_${timestamp}.png`;
-
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    console.log("Image download initiated.");
-
-                }).catch(error => {
-                    console.error("Error capturing image:", error);
-                    alert("Sorry, there was an error generating the image.");
-                }).finally(() => {
-                    // Restore original styles
-                     tableWrapper.style.overflowX = originalTableWrapperOverflowX;
-                     document.body.style.backgroundColor = originalBodyBg;
-                     settingsOptionsDiv.style.display = settingsOriginalDisplay;
-                     if(settingsWasOpen && settingsOriginalDisplay !== 'none') {
-                         void settingsOptionsDiv.offsetWidth;
-                         settingsOptionsDiv.classList.add('open');
-                     }
+            // Format tab switching
+            formatTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs and contents
+                    formatTabs.forEach(t => t.classList.remove('active'));
+                    formatContents.forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked tab and corresponding content
+                    this.classList.add('active');
+                    document.querySelector(`.format-content[data-content="${this.dataset.tab}"]`).classList.add('active');
                 });
-             });
-        }
+            });
 
+            // Main download button click
+            downloadButton.addEventListener('click', function() {
+                const url = videoUrlInput.value.trim();
+                
+                if(!url) {
+                    showToast('Please enter a YouTube URL', 'error');
+                    return;
+                }
+                
+                // Show loading overlay for analysis
+                loadingOverlay.style.display = 'flex';
+                progressBar.style.width = '0%';
+                
+                // Simulate analysis process
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += Math.random() * 10;
+                    if (progress > 100) progress = 100;
+                    progressBar.style.width = `${progress}%`;
+                    
+                    if (progress === 100) {
+                        clearInterval(interval);
+                        
+                        // Hide loading overlay and show video info after 1 second
+                        setTimeout(() => {
+                            loadingOverlay.style.display = 'none';
+                            videoPreview.classList.add('active');
+                            
+                            // Scroll to video preview
+                            videoPreview.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                            
+                            showToast('Video analyzed successfully!', 'success');
+                        }, 1000);
+                    }
+                }, 200);
+            });
 
-        // --- ইভেন্ট লিসেনার সেটআপ ---
-        settingsBtn.addEventListener('click', function() {
-             const isOpen = settingsOptionsDiv.classList.contains('open');
-             if (!isOpen) {
-                 settingsOptionsDiv.style.display = 'flex';
-                 void settingsOptionsDiv.offsetWidth;
-                 settingsOptionsDiv.classList.add('open');
-             } else {
-                 settingsOptionsDiv.classList.remove('open');
-                 settingsOptionsDiv.addEventListener('transitionend', () => {
-                     if (!settingsOptionsDiv.classList.contains('open')) {
-                         settingsOptionsDiv.style.display = 'none';
-                     }
-                 }, { once: true });
-             }
-             settingsBtn.classList.toggle('active');
-        });
+            // Format card selection
+            formatCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // Find all cards in the same tab
+                    const parentContent = this.closest('.format-content');
+                    const siblingCards = parentContent.querySelectorAll('.format-card');
+                    
+                    // Remove selected class from siblings only
+                    siblingCards.forEach(c => c.classList.remove('selected'));
+                    
+                    // Add selected class to clicked card
+                    this.classList.add('selected');
+                });
+            });
 
-        trackerSelect.addEventListener('change', function() {
-            const selectedKey = trackerSelect.value;
-            if(selectedKey && selectedKey !== currentTrackerKey) {
-                saveCurrentUIToState(); // Save state before switching
-                loadStateFromKey(selectedKey);
+            // Start download button click
+            startDownloadButton.addEventListener('click', function() {
+                const url = videoUrlInput.value.trim();
+                
+                // Check if any format is selected
+                const activeContent = document.querySelector('.format-content.active');
+                const selectedFormat = activeContent.querySelector('.format-card.selected');
+                
+                if(!selectedFormat) {
+                    showToast('Please select a format', 'warning');
+                    return;
+                }
+                
+                const format = selectedFormat.dataset.format;
+                
+                // Show loading overlay for download
+                loadingOverlay.style.display = 'flex';
+                progressBar.style.width = '0%';
+                
+                // Simulate download process
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += Math.random() * 5;
+                    if (progress > 100) progress = 100;
+                    progressBar.style.width = `${progress}%`;
+                    
+                    if (progress === 100) {
+                        clearInterval(interval);
+                        
+                        // Hide loading overlay after completion
+                        setTimeout(() => {
+                            loadingOverlay.style.display = 'none';
+                            
+                            // Reset UI for next download
+                            videoPreview.classList.remove('active');
+                            videoUrlInput.value = '';
+                            formatCards.forEach(c => c.classList.remove('selected'));
+                            
+                            showToast('Download completed successfully!', 'success');
+                        }, 1000);
+                    }
+                }, 150);
+            });
+
+            // Download all button click
+            downloadAllButton.addEventListener('click', function() {
+                showToast('Preparing ZIP archive of all formats...', 'info');
+                
+                // Show loading overlay
+                loadingOverlay.style.display = 'flex';
+                progressBar.style.width = '0%';
+                
+                // Simulate download process - slower for "all formats"
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += Math.random() * 3;
+                    if (progress > 100) progress = 100;
+                    progressBar.style.width = `${progress}%`;
+                    
+                    if (progress === 100) {
+                        clearInterval(interval);
+                        
+                        // Hide loading overlay after completion
+                        setTimeout(() => {
+                            loadingOverlay.style.display = 'none';
+                            
+                            // Reset UI for next download
+                            videoPreview.classList.remove('active');
+                            videoUrlInput.value = '';
+                            
+                            showToast('ZIP archive download completed!', 'success');
+                        }, 1500);
+                    }
+                }, 200);
+            });
+
+            // FAQ toggles
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                const answer = item.querySelector('.faq-answer');
+                const answerContent = item.querySelector('.faq-answer-content');
+                
+                // Set initial height to 0
+                answer.style.height = '0px';
+                
+                question.addEventListener('click', function() {
+                    // Close all other items
+                    faqItems.forEach(faq => {
+                        if(faq !== item) {
+                            const faqAnswer = faq.querySelector('.faq-answer');
+                            faq.classList.remove('active');
+                            faqAnswer.style.height = '0px';
+                        }
+                    });
+                    
+                    // Toggle current item
+                    item.classList.toggle('active');
+                    
+                    if(item.classList.contains('active')) {
+                        answer.style.height = answerContent.offsetHeight + 'px';
+                    } else {
+                        answer.style.height = '0px';
+                    }
+                });
+            });
+
+            // Toast notification function
+            function showToast(message, type = 'info') {
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                
+                let icon;
+                switch(type) {
+                    case 'success':
+                        icon = 'fa-check-circle';
+                        break;
+                    case 'error':
+                        icon = 'fa-exclamation-circle';
+                        break;
+                    case 'warning':
+                        icon = 'fa-exclamation-triangle';
+                        break;
+                    default:
+                        icon = 'fa-info-circle';
+                }
+                
+                toast.innerHTML = `<i class="fas ${icon}"></i> ${message}`;
+                toastContainer.appendChild(toast);
+                
+                // Remove toast after 3 seconds
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateX(100%)';
+                    
+                    // Remove from DOM after animation
+                    setTimeout(() => {
+                        toast.remove();
+                    }, 300);
+                }, 3000);
             }
+
+            // Scroll animations with IntersectionObserver
+            const animateOnScroll = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if(entry.isIntersecting) {
+                        entry.target.classList.add('animate-in');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            // Elements to animate
+            const animatedElements = document.querySelectorAll('.feature-card, .step, .recent-item, .hero-content, .hero-image');
+            
+            animatedElements.forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                animateOnScroll.observe(el);
+            });
+
+            // Add animation class when element enters viewport
+            document.addEventListener('scroll', function() {
+                document.querySelectorAll('.animate-in').forEach(el => {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                });
+            });
+
+            // Active nav link based on scroll position
+            window.addEventListener('scroll', function() {
+                const scrollPosition = window.scrollY;
+                
+                document.querySelectorAll('section').forEach(section => {
+                    const sectionTop = section.offsetTop - 100;
+                    const sectionHeight = section.offsetHeight;
+                    const sectionId = section.getAttribute('id');
+                    
+                    if(scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                        document.querySelectorAll('.nav-menu a').forEach(link => {
+                            link.classList.remove('active');
+                            if(link.getAttribute('href') === `#${sectionId}`) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            });
+
+            // Show success message on load
+            setTimeout(() => {
+                showToast('Welcome to TubeSaver! Paste a YouTube URL to start.', 'info');
+            }, 1000);
         });
-
-        createTrackerBtn.addEventListener('click', function() {
-             saveCurrentUIToState();
-            const currentTrackers = getTrackers();
-            const newName = prompt("Enter name for the new tracker:", "Tracker " + (currentTrackers.length + 1));
-
-            if (newName && newName.trim() !== '') {
-                const newKey = generateUniqueKey();
-                const trimmedName = newName.trim();
-                currentTrackers.push({ key: newKey, name: trimmedName, colCount: defaultColumnCount });
-                saveTrackers(currentTrackers);
-
-                resetUIToDefault(trimmedName);
-                setActiveTrackerKey(newKey);
-                saveCurrentStateData({ headers: { 'name-header-1': 'Name 1' }, checks: {}, columnCount: defaultColumnCount }, newKey);
-                trackerSelect.value = newKey; // Update dropdown selection explicitly
-
-                alert(`Tracker "${trimmedName}" created!`);
-            } else if (newName !== null) {
-                alert("Tracker name cannot be empty.");
-            }
-        });
-
-        renameTrackerBtn.addEventListener('click', function() {
-            if (!currentTrackerKey || renameTrackerBtn.disabled) return;
-            const currentTrackers = getTrackers();
-            const currentTracker = currentTrackers.find(t => t.key === currentTrackerKey);
-            if (!currentTracker) return;
-            const newName = prompt("Enter the new name:", currentTracker.name);
-
-            if (newName && newName.trim() !== '') {
-                const trimmedName = newName.trim();
-                currentTracker.name = trimmedName;
-                saveTrackers(currentTrackers);
-                if (pageTitleElement) { pageTitleElement.textContent = trimmedName; }
-                // Update dropdown text for the current selection
-                const currentOption = trackerSelect.querySelector(`option[value="${currentTrackerKey}"]`);
-                if (currentOption) { currentOption.textContent = trimmedName; }
-                alert(`Tracker renamed to "${trimmedName}"!`);
-            } else if (newName !== null) { alert("Name cannot be empty."); }
-        });
-
-        deleteTrackerBtn.addEventListener('click', function() {
-            if (!currentTrackerKey || deleteTrackerBtn.disabled) return;
-            const currentTrackers = getTrackers();
-            const currentTracker = currentTrackers.find(t => t.key === currentTrackerKey);
-            if (!currentTracker) return;
-
-            if (confirm(`Are you sure you want to delete the tracker "${currentTracker.name}"? This action cannot be undone.`)) {
-                 const keyToDelete = currentTrackerKey; // Store key before it potentially changes
-                localStorage.removeItem(keyToDelete);
-                const updatedTrackers = currentTrackers.filter(t => t.key !== keyToDelete);
-                saveTrackers(updatedTrackers); // This will repopulate and potentially set a new active key
-
-                 // Determine which key is now active after saveTrackers repopulated the select
-                 const newActiveKey = trackerSelect.value; // The new active key is now selected in the dropdown
-
-                 if (newActiveKey && newActiveKey !== keyToDelete) {
-                     loadStateFromKey(newActiveKey); // Load the state of the new active tracker
-                 } else if (!newActiveKey && getTrackers().length === 0) {
-                     // If the list became empty and createDefaultTrackerList was called
-                     initializeApp(); // Re-initialize completely
-                 } else {
-                    console.warn("Could not determine new active tracker after deletion.");
-                     // Fallback: Try initializing again?
-                     initializeApp();
-                 }
-             }
-        });
-
-        downloadImageBtn.addEventListener('click', downloadTrackerAsImage);
-
-        addColumnBtn.addEventListener('click', function() {
-            const currentHeaders = document.querySelectorAll('.tracker-table thead th.name-header');
-            const newColumnIndex = currentHeaders.length + 1;
-            addColumnToUI(newColumnIndex);
-            saveCurrentUIToState();
-        });
-
-        // --- অ্যাপ ইনিশিয়ালাইজেশন ফাংশন ---
-        function initializeApp() {
-             console.log("Initializing App (v_mobile_final)...");
-
-             let trackers = getTrackers(); // Ensures default exists if needed
-             let keyToLoad = getActiveTrackerKey();
-
-             if (!keyToLoad || !trackers.some(t => t.key === keyToLoad)) {
-                  keyToLoad = trackers[0]?.key;
-                  if (keyToLoad) {
-                      setActiveTrackerKey(keyToLoad); // Set first as active if previous was invalid/missing
-                  }
-             }
-
-              if (!keyToLoad) {
-                 // Absolute fallback - should not happen if getTrackers is robust
-                 console.error("CRITICAL: No tracker key found after initialization!");
-                 trackers = createDefaultTrackerList(); // Try creating again
-                 keyToLoad = trackers[0]?.key;
-                 if(keyToLoad) setActiveTrackerKey(keyToLoad);
-             }
-
-             populateTrackerSelect(trackers); // Populate dropdown, reflects active key
-
-             if (currentTrackerKey) { // currentTrackerKey should be set now
-                  loadStateFromKey(currentTrackerKey);
-             } else {
-                  if(pageTitleElement) pageTitleElement.textContent = "Error: No Tracker Loaded";
-                  console.error("Initialization failed to load any tracker state.");
-              }
-
-             // Initial setup for settings menu visibility
-             settingsOptionsDiv.style.display = 'none';
-              settingsOptionsDiv.classList.remove('open');
-              settingsBtn.classList.remove('active');
-         }
-
-        // অ্যাপ চালু করে
-        initializeApp();
-
-    });
-</script>
-
+    </script>
 </body>
 </html>
