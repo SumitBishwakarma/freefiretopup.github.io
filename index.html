@@ -12,7 +12,7 @@
             --text-secondary: #4A5568;
             --header-content-color: #FFFFFF;
             --bg-body: #F7FAFC;
-            --bg-header-initial: #2563EB; 
+            --bg-header-initial: #2563EB;
             --bg-header-scrolled: #000000;
             --bg-card-modal: #FFFFFF;
             --accent-main: #2563EB;
@@ -50,7 +50,7 @@
             line-height: 1.6;
             -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
             user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;
-            overflow: hidden; 
+            overflow: hidden;
         }
         .modal-content input[type="text"],
         .modal-content input[type="number"] {
@@ -64,55 +64,60 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: var(--bg-header-initial); 
+            background-color: var(--bg-header-initial); /* This will be overridden by JS if admin settings exist */
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 2000; 
+            z-index: 2000;
             opacity: 1;
             visibility: visible;
             transition: opacity 0.7s ease-in-out, visibility 0s 0.7s;
+            /* For background image/video from admin panel */
+            background-size: cover;
+            background-position: center;
+            overflow: hidden; /* Ensure video doesn't overflow */
         }
         .splash-screen.hidden {
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
         }
-        .splash-content { /* Modified for centering logo-title and loading */
+        .splash-content {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            color: var(--header-content-color); 
+            color: var(--header-content-color);
+            /* Will be positioned on top of video by JS */
         }
-        .splash-logo-title-wrapper { /* New wrapper for logo and title */
+        .splash-logo-title-wrapper {
             display: flex;
-            align-items: center; /* Vertically aligns logo and title */
-            justify-content: center; /* Horizontally centers the pair */
-            margin-bottom: 30px; /* Space before loading animation */
-            opacity: 0; /* Initial state for animation */
-            transform: translateY(30px); /* Initial state for animation */
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(30px);
             transition: opacity 0.8s cubic-bezier(0.25, 0.1, 0.25, 1), transform 0.8s cubic-bezier(0.25, 0.1, 0.25, 1);
         }
-        .splash-logo-title-wrapper.animate-in { /* Animated state */
+        .splash-logo-title-wrapper.animate-in {
             opacity: 1;
             transform: translateY(0);
         }
-        .splash-logo { 
-            width: 55px; 
+        .splash-logo {
+            width: 55px;
             height: 55px;
             fill: currentColor;
-            margin-right: 15px; 
+            margin-right: 15px;
         }
-        .splash-title { 
-            font-size: 2.4em; 
+        .splash-title {
+            font-size: 2.4em;
             font-weight: 600;
             line-height: 1.2;
-            white-space: nowrap; 
+            white-space: nowrap;
         }
-      
-        .loading-animation { 
-            margin-top: 40px; /* Further down from logo-title wrapper */
+
+        .loading-animation {
+            margin-top: 40px;
             display: flex;
             justify-content: center;
         }
@@ -132,11 +137,11 @@
         }
 
 
-        .app-container { 
+        .app-container {
             display: block;
-            padding-top: var(--header-height); 
-            opacity: 0; 
-            visibility: hidden; 
+            padding-top: var(--header-height);
+            opacity: 0;
+            visibility: hidden;
             transition: opacity 0.5s ease-in;
         }
         .app-container.visible {
@@ -153,17 +158,17 @@
             height: var(--header-height); box-shadow: var(--shadow-subtle);
         }
         .site-header.scrolled { background-color: var(--bg-header-scrolled); box-shadow: var(--shadow-standard); }
-        .site-header .logo-title { 
+        .site-header .logo-title {
             display: flex;
             align-items: center;
-            font-size: 1.5em; 
+            font-size: 1.5em;
             font-weight: 600;
         }
-        .header-app-icon { 
-            width: 1.1em; 
+        .header-app-icon {
+            width: 1.1em;
             height: 1.1em;
             fill: currentColor;
-            margin-right: 0.4em; 
+            margin-right: 0.4em;
             flex-shrink: 0;
         }
         .site-header .header-details-title {
@@ -274,7 +279,7 @@
         .month-item.paid { background-color: var(--paid-month-bg); color: var(--paid-month-text); border-color: var(--paid-month-border); font-weight: 600; }
         .month-item.paid .tick-icon { display: inline-block; margin-top: 6px; }
         .tick-icon { display: none; width: 22px; height: 22px; fill: var(--paid-month-text); }
-        
+
         .sidebar {
             position: fixed; top: 0; right: -280px; width: 280px; height: 100vh;
             background-color: var(--sidebar-bg); box-shadow: -3px 0 15px rgba(0,0,0,0.1);
@@ -285,39 +290,39 @@
         .sidebar.active { transform: translateX(-280px); }
         .sidebar-content { padding: 20px; flex-grow: 1; }
         .sidebar-content ul { list-style: none; padding: 0; margin: 0; }
-        
-        .sidebar-content ul li a { 
-            display: flex; 
+
+        .sidebar-content ul li a {
+            display: flex;
             align-items: center;
-            padding: 12px 15px; 
+            padding: 12px 15px;
             color: var(--sidebar-text-color);
-            text-decoration: none; 
-            font-size: 1.05em; 
+            text-decoration: none;
+            font-size: 1.05em;
             font-weight: 500;
             border-radius: var(--border-radius-button);
-            transition: background-color 0.2s ease, color 0.2s ease; 
+            transition: background-color 0.2s ease, color 0.2s ease;
             margin-bottom: 8px;
             -webkit-tap-highlight-color: transparent;
         }
         .sidebar-content ul li a:hover,
-        .sidebar-content ul li a:focus-visible { 
-            background-color: var(--sidebar-link-hover-bg); 
-            color: var(--sidebar-link-hover-text); 
-            outline: none; 
+        .sidebar-content ul li a:focus-visible {
+            background-color: var(--sidebar-link-hover-bg);
+            color: var(--sidebar-link-hover-text);
+            outline: none;
         }
 
-        .sidebar-link-icon { 
-            width: 22px; 
-            height: 22px; 
-            fill: currentColor; 
-            margin-right: 12px; 
-            flex-shrink: 0; 
-            transition: fill 0.2s ease; 
+        .sidebar-link-icon {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+            margin-right: 12px;
+            flex-shrink: 0;
+            transition: fill 0.2s ease;
         }
-        .sidebar-link-text {  
+        .sidebar-link-text {
             flex-grow: 1;
         }
-        
+
         .sidebar-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: rgba(0,0,0,0.4); z-index: 1001;
@@ -327,12 +332,16 @@
         .sidebar-overlay.active { opacity: 1; visibility: visible; transition: opacity 0.3s ease, visibility 0s 0s; }
         .about-us-content { text-align: center; }
         .about-us-logo-placeholder {
-            width: 150px; height: 150px; border-radius: 50%; object-fit: cover;
+            width: 150px; height: 150px; border-radius: 50%; /* object-fit will be handled by img inside */
             margin: 0 auto 20px auto; display: block;
             background-color: var(--border-color-soft); border: 3px solid var(--bg-card-modal);
             box-shadow: var(--shadow-standard);
+            overflow: hidden; /* To ensure img corners are rounded if logo is not perfectly round */
         }
-        .about-us-logo-placeholder img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+        .about-us-logo-placeholder img {
+            width: 100%; height: 100%; border-radius: 50%; /* Make the image itself round */
+            object-fit: cover;
+        }
         .developer-info { font-size: 1.1em; font-weight: 600; color: var(--text-primary); margin: 20px auto 10px auto; }
         .about-us-title { font-size: 1.5em; color: var(--text-primary); margin-bottom: 10px; margin-top: 15px; }
         .about-us-description { font-size: 1em; color: var(--text-secondary); line-height: 1.7; max-width: 600px; margin: 0 auto 15px auto; }
@@ -378,14 +387,14 @@
             .about-us-title { font-size: 1.3em; }
             .developer-info { font-size: 1em; }
             .social-icon-link svg { width: 30px; height: 30px; }
-            
+
             .splash-logo { width: 50px; height: 50px; margin-right: 12px; }
             .splash-title { font-size: 2.0em; }
             .loading-animation { margin-top: 30px; }
             .loading-dot { width: 10px; height: 10px; }
         }
         @media (max-width: 480px) {
-            :root { --header-height: 60px; } 
+            :root { --header-height: 60px; }
             .site-header { padding: 0 15px; }
             .site-header .logo-title { font-size: 1.2em; }
             .site-header .header-details-title { font-size: 1em; }
@@ -405,7 +414,7 @@
             .about-us-description { font-size: 0.9em; }
             .social-icon-link svg { width: 28px; height: 28px; }
 
-            .splash-logo { width: 45px; height: 45px; margin-right: 10px; } 
+            .splash-logo { width: 45px; height: 45px; margin-right: 10px; }
             .splash-title { font-size: 1.9em; }
             .loading-animation { margin-top: 25px; }
             .loading-dot { width: 8px; height: 8px; }
@@ -436,7 +445,7 @@
             <button id="headerBackBtn" class="header-control-btn" style="display: none;" aria-label="Back to List">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
             </button>
-            
+
             <div class="logo-title" id="headerSiteTitle">
                 <svg class="header-app-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
                     <path d="M0 0h24v24H0V0z" fill="none"/>
@@ -463,12 +472,20 @@
 
         <div id="aboutUsViewContainer" class="view-container hidden">
             <div class="about-us-content">
-                <div id="aboutUsLogoContainer" class="about-us-logo-placeholder"></div>
+                <div id="aboutUsLogoContainer" class="about-us-logo-placeholder">
+                    <!-- Logo will be inserted here by JavaScript -->
+                </div>
                 <p class="developer-info">Developed by: Sumit Bishwakarma</p>
                 <h3 class="about-us-title">About This Application</h3>
                 <p class="about-us-description">This application helps you track your monthly fee records efficiently. Manage your payments and stay organized with ease.</p>
                 <p class="app-version">Version: 1.0.0</p>
-                <a href="https://www.instagram.com/death_force_2006?igsh=MXMzejhyYzJjbjFhdw==" target="_blank" rel="noopener noreferrer" class="social-icon-link" aria-label="Sumit Bishwakarma on Instagram">
+                <!-- Instagram link with id="instagramLink" -->
+                <a href="https://www.instagram.com/death_force_2006?igsh=MXMzejhyYzJjbjFhdw=="
+                   id="instagramLink"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="social-icon-link"
+                   aria-label="Sumit Bishwakarma on Instagram">
                     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919C5.856 2.235 6.235 2.223 8.887 2.163H12zm0-2.163C8.741 0 8.333.014 7.053.072c-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.668.072 4.948c.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.668-.014 4.948-.072c4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4c2.21 0 4 1.791 4 4s-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
                     </svg>
@@ -521,18 +538,18 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // --- HTML এলিমেন্টগুলোর নির্বাচক (Selectors for HTML Elements) ---
             const splashScreen = document.getElementById('splashScreen');
-            const splashLogoTitleWrapper = document.getElementById('splashLogoTitleWrapper'); // Get the wrapper
             const appContainer = document.getElementById('appContainer');
-            
+            const splashLogoTitleWrapper = document.getElementById('splashLogoTitleWrapper');
+
             const siteHeader = document.querySelector('.site-header');
-            const menuIcon = document.getElementById('menuIcon'); 
+            const menuIcon = document.getElementById('menuIcon');
             const fabAddButton = document.getElementById('fabAddButton');
             const addItemModal = document.getElementById('addItemModal');
-            
-            const headerSiteTitle = document.getElementById('headerSiteTitle'); 
-            const headerSiteTitleTextSpan = document.getElementById('headerSiteTitleTextSpan'); 
-            
+
+            const headerSiteTitle = document.getElementById('headerSiteTitle');
+            const headerSiteTitleTextSpan = document.getElementById('headerSiteTitleTextSpan');
             const headerBackBtn = document.getElementById('headerBackBtn');
             const headerDetailsTitleEl = document.getElementById('headerDetailsTitle');
 
@@ -540,6 +557,7 @@
             const detailsViewContainer = document.getElementById('detailsViewContainer');
             const aboutUsViewContainer = document.getElementById('aboutUsViewContainer');
             const aboutUsLogoContainer = document.getElementById('aboutUsLogoContainer');
+            const instagramLinkElement = document.getElementById('instagramLink');
 
             const detailsItemSummaryEl = document.getElementById('detailsItemSummary');
             const monthGridEl = document.getElementById('monthGrid');
@@ -558,57 +576,180 @@
             let feeRecords = [];
             let currentItemViewingId = null;
             const MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-            
-            // Splash Screen Logic
+            const DEFAULT_INSTAGRAM_URL = "https://www.instagram.com/death_force_2006?igsh=MXMzejhyYzJjbjFhdw==";
+
+
+            // --- Functions to Apply Admin Settings ---
+
+            // MODIFIED/IMPROVED applySplashScreenSettings function
+            function applySplashScreenSettings() {
+                if (!splashScreen) {
+                    console.error("Splash screen element (splashScreen) not found in HTML!");
+                    return;
+                }
+
+                const adminSplashBgType = localStorage.getItem('admin_splash_background_type');
+                const adminSplashBgValue = localStorage.getItem('admin_splash_background_value');
+                const splashContentDiv = splashScreen.querySelector('.splash-content');
+
+                // Cleanup: Remove any existing video element from previous runs
+                const existingVideo = splashScreen.querySelector('video.splash-video-background');
+                if (existingVideo) {
+                    existingVideo.remove();
+                }
+                // Reset splashContent z-index styling
+                if (splashContentDiv) {
+                    splashContentDiv.style.position = ''; // Reset to default (static)
+                    splashContentDiv.style.zIndex = '';   // Reset z-index
+                }
+
+                // Set default styles first
+                splashScreen.style.backgroundImage = 'none'; // Clear image by default
+                splashScreen.style.backgroundColor = 'var(--bg-header-initial)'; // Apply default/fallback color
+
+                if (adminSplashBgType && adminSplashBgValue) {
+                    console.log("Splash Settings Found: Type -", adminSplashBgType, ", Value (start) -", adminSplashBgValue.substring(0, 60) + "...");
+                    if (adminSplashBgType === 'color') {
+                        splashScreen.style.backgroundColor = adminSplashBgValue;
+                        // Ensure no BG image is visible if color is set
+                        splashScreen.style.backgroundImage = 'none';
+                    } else if (adminSplashBgType === 'image_url' || adminSplashBgType === 'image_file') {
+                        splashScreen.style.backgroundImage = `url('${adminSplashBgValue}')`;
+                        // Background color might be transparent or a specific color if the image has transparency
+                        // For simplicity, let's ensure it's not showing the default blue if an image is there
+                        // splashScreen.style.backgroundColor = 'transparent'; // Optional: or let CSS variable decide
+                    } else if (adminSplashBgType === 'video_file') {
+                        // For video, make background transparent and remove image
+                        splashScreen.style.backgroundColor = 'transparent';
+                        splashScreen.style.backgroundImage = 'none';
+
+                        const videoElement = document.createElement('video');
+                        videoElement.classList.add('splash-video-background'); // For easy selection if needed later
+                        videoElement.src = adminSplashBgValue;
+                        videoElement.autoplay = true;
+                        videoElement.loop = true;
+                        videoElement.muted = true; // Essential for autoplay in most browsers
+                        videoElement.playsInline = true; // Good practice for mobile (iOS)
+
+                        // Style the video to cover the entire splash screen
+                        videoElement.style.position = 'absolute';
+                        videoElement.style.top = '0';
+                        videoElement.style.left = '0';
+                        videoElement.style.width = '100%';
+                        videoElement.style.height = '100%';
+                        videoElement.style.objectFit = 'cover';
+                        videoElement.style.zIndex = '0'; // Video at the base layer within splashScreen
+
+                        // Prepend video so it's behind other content by DOM order initially
+                        splashScreen.insertBefore(videoElement, splashScreen.firstChild);
+
+                        // Ensure splash-content (logo, title, loading) is on top of the video
+                        if (splashContentDiv) {
+                            splashContentDiv.style.position = 'relative'; // Needed for z-index to work reliably
+                            splashContentDiv.style.zIndex = '1';          // Place above the video (z-index: 0)
+                        }
+                        
+                        videoElement.play().catch(error => {
+                             console.warn("Splash video autoplay was prevented or failed:", error);
+                             // You could implement a fallback here if video fails to play
+                        });
+
+                    }
+                } else {
+                    console.log("No admin splash settings found or value is empty. Using default styles from CSS (color and no image/video).");
+                    // Default background color `var(--bg-header-initial)` is already set.
+                    // Ensure no background image if only default color is intended
+                    splashScreen.style.backgroundImage = 'none';
+                }
+            }
+
+
+            function loadAboutUsLogoFromAdminSettings() {
+                if (!aboutUsLogoContainer) {
+                    console.warn("About Us logo container (aboutUsLogoContainer) not found in HTML.");
+                    return;
+                }
+                const logoData = localStorage.getItem('aboutUsAppLogo');
+                aboutUsLogoContainer.innerHTML = '';
+
+                if (logoData) {
+                    console.log("About Us Logo found in localStorage. Applying it.");
+                    const logoImg = document.createElement('img');
+                    logoImg.src = logoData;
+                    logoImg.alt = "Application Logo";
+                    aboutUsLogoContainer.appendChild(logoImg);
+                    aboutUsLogoContainer.style.backgroundColor = 'transparent';
+                } else {
+                    console.log("No About Us logo found in localStorage. Default placeholder style will be used.");
+                    aboutUsLogoContainer.style.backgroundColor = 'var(--border-color-soft)';
+                }
+            }
+
+            function applyInstagramLinkFromAdminSettings() {
+                if (!instagramLinkElement) {
+                    console.warn("Instagram link element (id='instagramLink') not found in HTML.");
+                    return;
+                }
+                const adminInstagramUrl = localStorage.getItem('admin_instagram_url');
+                if (adminInstagramUrl && adminInstagramUrl.trim() !== "") {
+                    console.log("Instagram URL found in localStorage. Applying:", adminInstagramUrl);
+                    instagramLinkElement.href = adminInstagramUrl;
+                } else {
+                    console.log("No Instagram URL found in localStorage or it is empty. Using default:", DEFAULT_INSTAGRAM_URL);
+                    instagramLinkElement.href = DEFAULT_INSTAGRAM_URL;
+                }
+            }
+
+            applySplashScreenSettings();
+
+
             if (splashScreen && appContainer && splashLogoTitleWrapper) {
-                setTimeout(() => { // Delay to start animation after page layout
+                setTimeout(() => {
                     splashLogoTitleWrapper.classList.add('animate-in');
                 }, 200);
 
-                const splashTotalDuration = 3500; 
+                const splashTotalDuration = 3000;
 
                 setTimeout(() => {
                     splashScreen.classList.add('hidden');
-                    document.body.style.overflow = ''; 
-                    
-                    appContainer.classList.add('visible');
-
+                    if(document.body) document.body.style.overflow = '';
+                    if(appContainer) appContainer.classList.add('visible');
                     loadRecordsFromLocalStorage();
                     showListView();
-                }, splashTotalDuration); 
+                }, splashTotalDuration);
             } else {
+                console.warn("Essential splash screen or app container elements are missing. App might not load correctly.");
                 if (appContainer) appContainer.classList.add('visible');
-                document.body.style.overflow = '';
+                if(document.body) document.body.style.overflow = '';
                 loadRecordsFromLocalStorage();
                 showListView();
             }
 
+
             function hideAllViews() {
-                listViewContainer.classList.add('hidden');
-                detailsViewContainer.classList.add('hidden');
-                aboutUsViewContainer.classList.add('hidden');
+                if(listViewContainer) listViewContainer.classList.add('hidden');
+                if(detailsViewContainer) detailsViewContainer.classList.add('hidden');
+                if(aboutUsViewContainer) aboutUsViewContainer.classList.add('hidden');
             }
 
-            function configureHeader(mode, title) { 
+            function configureHeader(mode, title = "") {
                 if (menuIcon) {
-                    menuIcon.style.display = 'flex'; 
+                    menuIcon.style.display = 'flex';
                     menuIcon.style.visibility = 'visible';
                     menuIcon.style.pointerEvents = 'auto';
                 }
 
                 switch(mode) {
                     case "list":
-                        if(headerSiteTitle) headerSiteTitle.style.display = 'flex'; 
-                        if(headerSiteTitleTextSpan) headerSiteTitleTextSpan.textContent = "𝕸𝖔𝖓𝖙𝖍𝖑𝖞 𝕱𝖊𝖊"; 
-                        
-                        if(headerDetailsTitleEl) headerDetailsTitleEl.style.display = 'none'; 
+                        if(headerSiteTitle) headerSiteTitle.style.display = 'flex';
+                        if(headerSiteTitleTextSpan) headerSiteTitleTextSpan.textContent = "𝕸𝖔𝖓𝖙𝖍𝖑𝖞 𝕱𝖊𝖊";
+                        if(headerDetailsTitleEl) headerDetailsTitleEl.style.display = 'none';
                         if(headerBackBtn) headerBackBtn.style.display = 'none';
                         if(fabAddButton) fabAddButton.style.display = 'flex';
                         break;
                     case "details":
-                        if(headerSiteTitle) headerSiteTitle.style.display = 'none'; 
-
-                        if(headerDetailsTitleEl) { 
+                        if(headerSiteTitle) headerSiteTitle.style.display = 'none';
+                        if(headerDetailsTitleEl) {
                             headerDetailsTitleEl.textContent = title;
                             headerDetailsTitleEl.style.display = 'block';
                         }
@@ -616,16 +757,14 @@
                         if(fabAddButton) fabAddButton.style.display = 'none';
                         break;
                     case "about":
-                        if(headerSiteTitle) headerSiteTitle.style.display = 'none'; 
-
-                        if(headerDetailsTitleEl) { 
+                        if(headerSiteTitle) headerSiteTitle.style.display = 'none';
+                        if(headerDetailsTitleEl) {
                             headerDetailsTitleEl.textContent = "About Us";
                             headerDetailsTitleEl.style.display = 'block';
                         }
                         if(headerBackBtn) headerBackBtn.style.display = 'flex';
                         if(menuIcon) {
-                            menuIcon.style.display = 'flex';    
-                            menuIcon.style.visibility = 'hidden'; 
+                            menuIcon.style.visibility = 'hidden';
                             menuIcon.style.pointerEvents = 'none';
                         }
                         if(fabAddButton) fabAddButton.style.display = 'none';
@@ -633,36 +772,14 @@
                 }
             }
 
-            function saveRecordsToLocalStorage() { localStorage.setItem('feeRecords', JSON.stringify(feeRecords)); }
-            function loadRecordsFromLocalStorage() {
-                const storedRecords = localStorage.getItem('feeRecords');
-                if (storedRecords) { feeRecords = JSON.parse(storedRecords); }
-            }
-
-            function loadAboutUsLogo() {
-                const logoData = localStorage.getItem('aboutUsAppLogo');
-                if(aboutUsLogoContainer) { 
-                    aboutUsLogoContainer.innerHTML = '';
-                    if (logoData) {
-                        const logoImg = document.createElement('img');
-                        logoImg.src = logoData;
-                        logoImg.alt = "Application Logo";
-                        aboutUsLogoContainer.appendChild(logoImg);
-                        aboutUsLogoContainer.style.backgroundColor = 'transparent';
-                    } else {
-                        aboutUsLogoContainer.style.backgroundColor = 'var(--border-color-soft)';
-                    }
-                }
-            }
-
             function showListView() {
                 hideAllViews();
-                listViewContainer.classList.remove('hidden');
-                configureHeader("list"); 
+                if(listViewContainer) listViewContainer.classList.remove('hidden');
+                configureHeader("list");
                 currentItemViewingId = null;
                 renderItemList();
                 window.scrollTo(0,0);
-                if (sidebar && sidebar.classList.contains('active')) { 
+                if (sidebar && sidebar.classList.contains('active')) {
                     closeSidebar();
                 }
             }
@@ -670,9 +787,12 @@
             function showDetailsView(itemId) {
                 currentItemViewingId = itemId;
                 const item = feeRecords.find(record => record.id === itemId);
-                if (!item) { showListView(); return; }
+                if (!item) {
+                    showListView();
+                    return;
+                }
                 hideAllViews();
-                detailsViewContainer.classList.remove('hidden');
+                if(detailsViewContainer) detailsViewContainer.classList.remove('hidden');
                 configureHeader("details", `${item.name} - ${parseFloat(item.amount).toFixed(2)}`);
                 renderMonthGrid(item);
                 updateItemTotalPaidDisplay(item);
@@ -681,102 +801,213 @@
 
             function showAboutUsView() {
                 hideAllViews();
-                aboutUsViewContainer.classList.remove('hidden');
-                configureHeader("about"); 
-                loadAboutUsLogo();
+                if(aboutUsViewContainer) aboutUsViewContainer.classList.remove('hidden');
+                configureHeader("about");
+                loadAboutUsLogoFromAdminSettings();
+                applyInstagramLinkFromAdminSettings();
                 window.scrollTo(0,0);
-                if (sidebar && sidebar.classList.contains('active')) { 
+                if (sidebar && sidebar.classList.contains('active')) {
                     closeSidebar();
                 }
             }
 
+            function saveRecordsToLocalStorage() {
+                try {
+                    localStorage.setItem('feeRecords', JSON.stringify(feeRecords));
+                } catch (e) {
+                    console.error("Error saving fee records to localStorage:", e);
+                }
+            }
+            function loadRecordsFromLocalStorage() {
+                try {
+                    const storedRecords = localStorage.getItem('feeRecords');
+                    if (storedRecords) {
+                        feeRecords = JSON.parse(storedRecords);
+                    }
+                } catch (e) {
+                    console.error("Error loading fee records from localStorage:", e);
+                    feeRecords = [];
+                }
+            }
+
             function renderItemList() {
-                if (!itemListEl) return; 
+                if (!itemListEl) {
+                    console.error("Item list element (itemList) not found.");
+                    return;
+                }
                 itemListEl.innerHTML = '';
                 if (feeRecords.length === 0) {
                     const p = document.createElement('p');
-                    p.textContent = 'No fee records. Add one using "+".';
-                    p.style.textAlign = 'center'; p.style.color = 'var(--text-secondary)'; p.style.padding = '20px 0';
-                    itemListEl.appendChild(p); return;
+                    p.textContent = 'No fee records yet. Add one using the "+" button.';
+                    p.style.textAlign = 'center';
+                    p.style.color = 'var(--text-secondary)';
+                    p.style.padding = '20px 0';
+                    itemListEl.appendChild(p);
+                    return;
                 }
-                feeRecords.forEach(item => {
+                const fragment = document.createDocumentFragment();
+                feeRecords.slice().reverse().forEach(item => {
                     const li = document.createElement('li');
-                    li.setAttribute('data-id', item.id); li.setAttribute('role', 'button'); li.tabIndex = 0;
-                    li.setAttribute('aria-label', `Details for ${item.name}`);
-                    const infoDiv = document.createElement('div'); infoDiv.classList.add('item-info');
+                    li.setAttribute('data-id', item.id);
+                    li.setAttribute('role', 'button');
+                    li.tabIndex = 0;
+                    li.setAttribute('aria-label', `View details for ${item.name}`);
+
+                    const infoDiv = document.createElement('div');
+                    infoDiv.classList.add('item-info');
                     infoDiv.textContent = `${item.name} - ${parseFloat(item.amount).toFixed(2)}`;
-                    const removeBtn = document.createElement('button'); removeBtn.textContent = 'Remove';
-                    removeBtn.classList.add('remove-item'); removeBtn.setAttribute('aria-label', `Remove ${item.name}`);
-                    removeBtn.addEventListener('click', e => { e.stopPropagation(); if (confirm(`Remove "${item.name}"?`)) removeFeeRecord(item.id); });
-                    li.appendChild(infoDiv); li.appendChild(removeBtn);
+
+                    const removeBtn = document.createElement('button');
+                    removeBtn.textContent = 'Remove';
+                    removeBtn.classList.add('remove-item');
+                    removeBtn.setAttribute('aria-label', `Remove record: ${item.name}`);
+                    removeBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        if (confirm(`Are you sure you want to remove "${item.name}"?`)) {
+                            removeFeeRecord(item.id);
+                        }
+                    });
+
+                    li.appendChild(infoDiv);
+                    li.appendChild(removeBtn);
                     li.addEventListener('click', () => showDetailsView(item.id));
-                    li.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); showDetailsView(item.id); }});
-                    itemListEl.prepend(li);
+                    li.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            showDetailsView(item.id);
+                        }
+                    });
+                    fragment.appendChild(li);
                 });
+                itemListEl.appendChild(fragment);
             }
 
             function renderMonthGrid(item) {
-                if(!monthGridEl) return; 
+                if (!monthGridEl) {
+                     console.error("Month grid element (monthGrid) not found.");
+                     return;
+                }
                 monthGridEl.innerHTML = '';
                 MONTH_NAMES.forEach((monthName, index) => {
-                    const monthDiv = document.createElement('div'); monthDiv.classList.add('month-item');
-                    monthDiv.setAttribute('data-month-index', index); monthDiv.setAttribute('role', 'button'); monthDiv.tabIndex = 0;
-                    const monthText = document.createElement('span'); monthText.textContent = monthName; monthDiv.appendChild(monthText);
+                    const monthDiv = document.createElement('div');
+                    monthDiv.classList.add('month-item');
+                    monthDiv.setAttribute('data-month-index', index);
+                    monthDiv.setAttribute('role', 'button');
+                    monthDiv.tabIndex = 0;
+
+                    const monthText = document.createElement('span');
+                    monthText.textContent = monthName;
+                    monthDiv.appendChild(monthText);
+
                     const tickSVG = `<svg class="tick-icon" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>`;
                     if (item.paidMonths && item.paidMonths[index]) {
-                        monthDiv.classList.add('paid'); monthText.insertAdjacentHTML('afterend', tickSVG);
-                        monthDiv.setAttribute('aria-pressed', 'true'); monthDiv.setAttribute('aria-label', `${monthName} - Paid. Toggle unpaid.`);
+                        monthDiv.classList.add('paid');
+                        monthText.insertAdjacentHTML('afterend', tickSVG);
+                        monthDiv.setAttribute('aria-pressed', 'true');
+                        monthDiv.setAttribute('aria-label', `${monthName} - Marked as Paid. Click to mark as unpaid.`);
                     } else {
-                        monthDiv.setAttribute('aria-pressed', 'false'); monthDiv.setAttribute('aria-label', `${monthName} - Unpaid. Toggle paid.`);
+                        monthDiv.setAttribute('aria-pressed', 'false');
+                        monthDiv.setAttribute('aria-label', `${monthName} - Marked as Unpaid. Click to mark as paid.`);
                     }
+
                     monthDiv.addEventListener('click', () => toggleMonthPayment(item.id, index));
-                    monthDiv.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleMonthPayment(item.id, index); }});
+                    monthDiv.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            toggleMonthPayment(item.id, index);
+                        }
+                    });
                     monthGridEl.appendChild(monthDiv);
                 });
             }
 
             function addNewFeeRecord(name, amount) {
-                feeRecords.push({ id: Date.now().toString(), name, amount, paidMonths: Array(12).fill(false) });
-                saveRecordsToLocalStorage(); renderItemList();
+                if (!name.trim() || isNaN(parseFloat(amount)) || parseFloat(amount) < 0) {
+                    alert("Please provide a valid name and a non-negative amount.");
+                    return;
+                }
+                const newRecord = {
+                    id: Date.now().toString(),
+                    name: name.trim(),
+                    amount: parseFloat(amount),
+                    paidMonths: Array(12).fill(false)
+                };
+                feeRecords.push(newRecord);
+                saveRecordsToLocalStorage();
+                renderItemList();
             }
+
             function removeFeeRecord(itemId) {
                 feeRecords = feeRecords.filter(item => item.id !== itemId);
-                saveRecordsToLocalStorage(); renderItemList();
-                if (currentItemViewingId === itemId) showListView();
+                saveRecordsToLocalStorage();
+                renderItemList();
+                if (currentItemViewingId === itemId) {
+                    showListView();
+                }
             }
 
             function calculateTotalPaidForItem(item) {
-                let total = 0;
-                if (item && item.paidMonths) item.paidMonths.forEach(paid => { if (paid) total += parseFloat(item.amount); });
-                return total;
+                if (!item || !item.paidMonths) return 0;
+                return item.paidMonths.reduce((total, isPaid) => {
+                    return isPaid ? total + parseFloat(item.amount) : total;
+                }, 0);
             }
+
             function updateItemTotalPaidDisplay(item) {
-                if (!detailsItemSummaryEl) return;
-                detailsItemSummaryEl.textContent = `Total Paid: ${item ? calculateTotalPaidForItem(item).toFixed(2) : '0.00'}`;
+                if (!detailsItemSummaryEl) {
+                    console.warn("Details item summary element (detailsItemSummary) not found.");
+                    return;
+                }
+                const totalPaid = item ? calculateTotalPaidForItem(item) : 0;
+                detailsItemSummaryEl.textContent = `Total Paid: ${totalPaid.toFixed(2)}`;
             }
+
             function toggleMonthPayment(itemId, monthIndex) {
-                const item = feeRecords.find(record => record.id === itemId);
-                if (item) {
-                    item.paidMonths[monthIndex] = !item.paidMonths[monthIndex];
-                    saveRecordsToLocalStorage(); renderMonthGrid(item); updateItemTotalPaidDisplay(item);
+                const itemIndex = feeRecords.findIndex(record => record.id === itemId);
+                if (itemIndex > -1) {
+                    feeRecords[itemIndex].paidMonths[monthIndex] = !feeRecords[itemIndex].paidMonths[monthIndex];
+                    saveRecordsToLocalStorage();
+                    renderMonthGrid(feeRecords[itemIndex]);
+                    updateItemTotalPaidDisplay(feeRecords[itemIndex]);
                 }
             }
 
             function setupModalFocusTrap() {
-                if(!addItemModal) return;
+                if (!addItemModal) return;
                 const modalContent = addItemModal.querySelector('.modal-content');
-                if(!modalContent) return;
-                const focusableModalElements = modalContent.querySelectorAll('button, [href], input:not([type="hidden"]), select, textarea, [tabindex]:not([tabindex="-1"])');
-                 if (focusableModalElements.length > 0) {
+                if (!modalContent) return;
+                const focusableElementsString = 'button, [href], input:not([type="hidden"]), select, textarea, [tabindex]:not([tabindex="-1"])';
+                const focusableModalElements = modalContent.querySelectorAll(focusableElementsString);
+                if (focusableModalElements.length > 0) {
                     firstFocusableElementModal = focusableModalElements[0];
                     lastFocusableElementModal = focusableModalElements[focusableModalElements.length - 1];
                 } else {
-                     firstFocusableElementModal = modalContent;
-                     lastFocusableElementModal = modalContent;
-                 }
-             }
+                    firstFocusableElementModal = modalContent;
+                    lastFocusableElementModal = modalContent;
+                }
+            }
 
-            if(siteHeader) window.addEventListener('scroll', () => siteHeader.classList.toggle('scrolled', window.scrollY > 20));
+            function openModal() {
+                if (!addItemModal) return;
+                addItemModal.classList.add('active');
+                setupModalFocusTrap();
+                if(itemNameInput) itemNameInput.focus();
+                if(document.body) document.body.style.overflow = 'hidden';
+            }
+
+            function closeModal() {
+                if (!addItemModal) return;
+                addItemModal.classList.remove('active');
+                if(addItemForm) addItemForm.reset();
+                if(itemNameInput) itemNameInput.classList.remove('invalid');
+                if(itemAmountInput) itemAmountInput.classList.remove('invalid');
+                if (fabAddButton) fabAddButton.focus();
+                const isSplashHidden = splashScreen ? splashScreen.classList.contains('hidden') : true;
+                const isSidebarClosed = sidebar ? !sidebar.classList.contains('active') : true;
+                if (isSplashHidden && isSidebarClosed && document.body) {
+                    document.body.style.overflow = '';
+                }
+            }
 
             function openSidebar() {
                 if(!sidebar || !sidebarOverlay || !menuIcon) return;
@@ -784,7 +1015,7 @@
                 sidebarOverlay.classList.add('active');
                 menuIcon.classList.add('active');
                 menuIcon.setAttribute('aria-expanded', 'true');
-                document.body.style.overflow = 'hidden'; 
+                if(document.body) document.body.style.overflow = 'hidden';
             }
             function closeSidebar() {
                 if(!sidebar || !sidebarOverlay || !menuIcon) return;
@@ -792,98 +1023,134 @@
                 sidebarOverlay.classList.remove('active');
                 menuIcon.classList.remove('active');
                 menuIcon.setAttribute('aria-expanded', 'false');
-                if (splashScreen.classList.contains('hidden')) { 
-                    document.body.style.overflow = ''; 
-                }
-            }
-
-            if(menuIcon) { 
-                menuIcon.addEventListener('click', () => {
-                    if (sidebar && sidebar.classList.contains('active')) closeSidebar(); else openSidebar();
-                });
-                menuIcon.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if(menuIcon) menuIcon.click(); }});
-            }
-
-            if(sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebar);
-
-            sidebarLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const linkId = e.currentTarget.id;
-
-                    if (linkId === 'homeLink') {
-                         showListView();
-                    } else if (linkId === 'aboutUsLink') {
-                        showAboutUsView();
-                    } else if (linkId === 'adRemovePlanLink') {
-                        alert('Ad Remove Plan (This is a placeholder)');
-                        closeSidebar(); 
-                    }
-                });
-            });
-
-            if(fabAddButton) {
-                fabAddButton.addEventListener('click', () => {
-                    if(addItemModal) addItemModal.classList.add('active');
-                    setupModalFocusTrap();
-                    if(itemNameInput) itemNameInput.focus();
-                    document.body.style.overflow = 'hidden'; 
-                });
-            }
-
-            function closeModal() {
-                if(addItemModal) addItemModal.classList.remove('active');
-                if(addItemForm) addItemForm.reset();
-                if(itemNameInput) itemNameInput.classList.remove('invalid');
-                if(itemAmountInput) itemAmountInput.classList.remove('invalid');
-                if (fabAddButton) fabAddButton.focus();
-                if (!sidebar.classList.contains('active') && splashScreen.classList.contains('hidden')) {
+                const isSplashHidden = splashScreen ? splashScreen.classList.contains('hidden') : true;
+                const isModalClosed = addItemModal ? !addItemModal.classList.contains('active') : true;
+                if (isSplashHidden && isModalClosed && document.body) {
                     document.body.style.overflow = '';
                 }
             }
-            if(cancelModalButton) cancelModalButton.addEventListener('click', closeModal);
 
-            if(addItemModal) {
-                addItemModal.addEventListener('click', e => { if (e.target === addItemModal) closeModal(); });
-            }
-
-
-            if(addItemForm) {
-                addItemForm.addEventListener('submit', e => {
-                    e.preventDefault();
-                    const name = itemNameInput.value.trim();
-                    const amount = itemAmountInput.value.trim();
-                    let valid = true;
-                    itemNameInput.classList.remove('invalid');
-                    itemAmountInput.classList.remove('invalid');
-                    if (!name) { itemNameInput.classList.add('invalid'); valid = false; }
-                    if (!amount || parseFloat(amount) < 0 || isNaN(parseFloat(amount))) { itemAmountInput.classList.add('invalid'); valid = false; }
-                    if (valid) { addNewFeeRecord(name, parseFloat(amount)); closeModal(); }
-                    else if (itemNameInput && itemAmountInput && !itemNameInput.classList.contains('invalid') && itemAmountInput.classList.contains('invalid')) itemAmountInput.focus();
-                    else if (itemNameInput) itemNameInput.focus();
+            if(siteHeader) {
+                window.addEventListener('scroll', () => {
+                    siteHeader.classList.toggle('scrolled', window.scrollY > 20);
                 });
             }
 
-            document.addEventListener('keydown', e => {
+            if(menuIcon) {
+                menuIcon.addEventListener('click', () => {
+                    if (sidebar && sidebar.classList.contains('active')) {
+                        closeSidebar();
+                    } else {
+                        openSidebar();
+                    }
+                });
+                menuIcon.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        menuIcon.click();
+                    }
+                });
+            }
+
+            if(sidebarOverlay) {
+                sidebarOverlay.addEventListener('click', closeSidebar);
+            }
+
+            if(sidebarLinks && sidebarLinks.length > 0) {
+                sidebarLinks.forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const linkId = e.currentTarget.id;
+                        if (linkId === 'homeLink') {
+                            showListView();
+                        } else if (linkId === 'aboutUsLink') {
+                            showAboutUsView();
+                        } else if (linkId === 'adRemovePlanLink') {
+                            alert('Ad Remove Plan feature is not yet implemented.');
+                            closeSidebar();
+                        }
+                    });
+                });
+            }
+
+            if(fabAddButton) {
+                fabAddButton.addEventListener('click', openModal);
+            }
+
+            if(cancelModalButton) {
+                cancelModalButton.addEventListener('click', closeModal);
+            }
+
+            if(addItemModal) {
+                addItemModal.addEventListener('click', (e) => {
+                    if (e.target === addItemModal) {
+                        closeModal();
+                    }
+                });
+            }
+
+            if(addItemForm) {
+                addItemForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const name = itemNameInput.value.trim();
+                    const amountStr = itemAmountInput.value.trim();
+                    let valid = true;
+                    itemNameInput.classList.remove('invalid');
+                    itemAmountInput.classList.remove('invalid');
+                    if (!name) {
+                        itemNameInput.classList.add('invalid');
+                        valid = false;
+                    }
+                    if (!amountStr || isNaN(parseFloat(amountStr)) || parseFloat(amountStr) < 0) {
+                        itemAmountInput.classList.add('invalid');
+                        valid = false;
+                    }
+                    if (valid) {
+                        addNewFeeRecord(name, parseFloat(amountStr));
+                        closeModal();
+                    } else {
+                        if (itemNameInput.classList.contains('invalid')) {
+                            itemNameInput.focus();
+                        } else if (itemAmountInput.classList.contains('invalid')) {
+                            itemAmountInput.focus();
+                        }
+                    }
+                });
+            }
+
+            document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
                     if (sidebar && sidebar.classList.contains('active')) {
                         closeSidebar();
                     } else if (addItemModal && addItemModal.classList.contains('active')) {
                         closeModal();
-                    } else if (detailsViewContainer && aboutUsViewContainer &&
-                               (!detailsViewContainer.classList.contains('hidden') || !aboutUsViewContainer.classList.contains('hidden'))) {
-                         showListView(); 
+                    } else if ( (detailsViewContainer && !detailsViewContainer.classList.contains('hidden')) ||
+                               (aboutUsViewContainer && !aboutUsViewContainer.classList.contains('hidden')) ) {
+                        showListView();
                     }
                 }
                 if (addItemModal && addItemModal.classList.contains('active') && e.key === 'Tab') {
-                    if (!firstFocusableElementModal) setupModalFocusTrap();
-                    if (!firstFocusableElementModal) return; 
-                    if (e.shiftKey) { if (document.activeElement === firstFocusableElementModal) { lastFocusableElementModal.focus(); e.preventDefault(); }}
-                    else { if (document.activeElement === lastFocusableElementModal) { firstFocusableElementModal.focus(); e.preventDefault(); }}
+                    if (!firstFocusableElementModal || !lastFocusableElementModal) {
+                        setupModalFocusTrap();
+                    }
+                    if (!firstFocusableElementModal) return;
+                    if (e.shiftKey) {
+                        if (document.activeElement === firstFocusableElementModal) {
+                            lastFocusableElementModal.focus();
+                            e.preventDefault();
+                        }
+                    } else {
+                        if (document.activeElement === lastFocusableElementModal) {
+                            firstFocusableElementModal.focus();
+                            e.preventDefault();
+                        }
+                    }
                 }
             });
 
-            if(headerBackBtn) headerBackBtn.addEventListener('click', showListView);
+            if(headerBackBtn) {
+                headerBackBtn.addEventListener('click', showListView);
+            }
         });
     </script>
 </body>
