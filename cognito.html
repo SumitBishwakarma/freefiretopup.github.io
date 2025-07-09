@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cognito – Real-Time Question Solving</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro:wght@600;700&family=Inter:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --midnight: #0D1B2A;
+      --charcoal: #1C1C1E;
+      --secondary-bg: #1B263B;
+      --aurum: #D4AF37;
+      --offwhite: #F0F0F0;
+      --lightgrey: #A9A9A9;
+      --teal: #48A9A6;
+      --terracotta: #E27D60;
+      --shadow: 0 4px 24px 0 rgba(13,27,42,0.12);
+      --radius: 16px;
+      --transition: 0.25s cubic-bezier(.4,0,.2,1);
+    }
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background: var(--midnight);
+      color: var(--offwhite);
+      font-family: 'Inter', Arial, sans-serif;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    /* Logo */
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Source Serif Pro', serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: var(--aurum);
+      margin-top: 32px;
+      margin-bottom: 32px;
+      justify-content: center;
+      user-select: none;
+    }
+    .logo-icon {
+      width: 38px;
+      height: 38px;
+      display: inline-block;
+    }
+    /* Top right icon */
+    .top-right {
+      position: absolute;
+      top: 32px;
+      right: 32px;
+      z-index: 10;
+    }
+    .icon-btn {
+      background: none;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      color: var(--offwhite);
+      font-size: 1.7rem;
+      transition: color var(--transition), transform var(--transition);
+      padding: 8px;
+      border-radius: 50%;
+    }
+    .icon-btn:hover, .icon-btn:focus {
+      color: var(--aurum);
+      background: rgba(212,175,55,0.08);
+      transform: scale(1.08);
+    }
+    /* Query Canvas */
+    .canvas {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 70vh;
+      position: relative;
+    }
+    .query-input-wrap {
+      background: var(--secondary-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 32px 32px 24px 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 340px;
+      max-width: 98vw;
+      transition: box-shadow var(--transition);
+    }
+    .query-input {
+      width: 340px;
+      max-width: 90vw;
+      font-size: 1.2rem;
+      padding: 18px 20px;
+      border-radius: 12px;
+      border: none;
+      outline: none;
+      background: var(--charcoal);
+      color: var(--offwhite);
+      font-family: 'Inter', sans-serif;
+      box-shadow: 0 2px 8px 0 rgba(13,27,42,0.10);
+      margin-bottom: 18px;
+      transition: box-shadow var(--transition), background var(--transition);
+    }
+    .query-input:focus {
+      box-shadow: 0 0 0 3px var(--aurum), 0 2px 8px 0 rgba(13,27,42,0.10);
+      background: #23232a;
+    }
+    .input-icons {
+      display: flex;
+      gap: 18px;
+      margin-bottom: 8px;
+    }
+    .input-icon-btn {
+      background: none;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      color: var(--lightgrey);
+      font-size: 1.5rem;
+      padding: 10px;
+      border-radius: 50%;
+      transition: color var(--transition), background var(--transition), transform var(--transition);
+    }
+    .input-icon-btn:hover, .input-icon-btn:focus {
+      color: var(--aurum);
+      background: rgba(212,175,55,0.10);
+      transform: scale(1.12);
+    }
+    .canvas .submit-btn {
+      margin-top: 10px;
+      background: var(--aurum);
+      color: var(--midnight);
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 32px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px 0 rgba(212,175,55,0.10);
+      transition: background var(--transition), color var(--transition), transform var(--transition);
+    }
+    .canvas .submit-btn:hover, .canvas .submit-btn:focus {
+      background: #bfa13a;
+      color: var(--offwhite);
+      transform: scale(1.04);
+    }
+    /* Real-Time Solution Screen */
+    .solution-screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      background: var(--midnight);
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 20;
+      animation: fadeIn 0.5s;
+    }
+    .solution-header {
+      width: 100%;
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 32px 0 0 0;
+      font-family: 'Source Serif Pro', serif;
+      font-size: 1.5rem;
+      color: var(--aurum);
+      text-align: left;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+    .solution-thread {
+      width: 100%;
+      max-width: 700px;
+      margin: 24px auto 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .ai-card, .user-card {
+      background: var(--secondary-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px 28px;
+      font-size: 1.1rem;
+      color: var(--offwhite);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      animation: fadeInUp 0.5s;
+    }
+    .ai-card {
+      border-left: 5px solid var(--aurum);
+    }
+    .user-card {
+      border-left: 5px solid var(--teal);
+      background: #16213a;
+    }
+    .ai-summary {
+      font-family: 'Source Serif Pro', serif;
+      font-size: 1.15rem;
+      color: var(--aurum);
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .collapsible {
+      background: none;
+      border: none;
+      color: var(--offwhite);
+      text-align: left;
+      padding: 0;
+      font-size: 1.05rem;
+      cursor: pointer;
+      outline: none;
+      margin-bottom: 6px;
+      transition: color var(--transition);
+    }
+    .collapsible:hover {
+      color: var(--aurum);
+    }
+    .collapsible-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      margin-bottom: 8px;
+    }
+    .collapsible.open + .collapsible-content {
+      max-height: 500px;
+      margin-bottom: 8px;
+    }
+    .code-block {
+      background: #23232a;
+      border-radius: 8px;
+      font-family: 'Fira Code', monospace;
+      font-size: 1rem;
+      color: #e0e0e0;
+      padding: 14px 18px;
+      margin: 8px 0;
+      position: relative;
+      overflow-x: auto;
+    }
+    .copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: var(--aurum);
+      color: var(--midnight);
+      border: none;
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: background var(--transition), color var(--transition);
+    }
+    .copy-btn:hover {
+      background: #bfa13a;
+      color: var(--offwhite);
+    }
+    .latex-block {
+      background: #23232a;
+      border-radius: 8px;
+      font-family: 'Fira Code', monospace;
+      font-size: 1.1rem;
+      color: #e0e0e0;
+      padding: 12px 16px;
+      margin: 8px 0;
+      overflow-x: auto;
+    }
+    .ai-typing {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--aurum);
+      opacity: 0.7;
+      animation: blink 1.2s infinite both;
+    }
+    .dot:nth-child(2) { animation-delay: 0.2s; }
+    .dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes blink {
+      0%, 80%, 100% { opacity: 0.7; }
+      40% { opacity: 0.2; }
+    }
+    /* Follow-up input */
+    .followup-bar {
+      width: 100%;
+      max-width: 700px;
+      margin: 32px auto 0 auto;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      background: var(--secondary-bg);
+      border-radius: 10px;
+      padding: 10px 16px;
+      box-shadow: 0 2px 8px 0 rgba(13,27,42,0.10);
+      position: sticky;
+      bottom: 0;
+    }
+    .followup-input {
+      flex: 1;
+      background: var(--charcoal);
+      border: none;
+      border-radius: 8px;
+      color: var(--offwhite);
+      font-size: 1.05rem;
+      padding: 10px 14px;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: box-shadow var(--transition), background var(--transition);
+    }
+    .followup-input:focus {
+      box-shadow: 0 0 0 2px var(--aurum);
+      background: #23232a;
+    }
+    .followup-btn {
+      background: var(--aurum);
+      color: var(--midnight);
+      border: none;
+      border-radius: 8px;
+      font-size: 1.05rem;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      padding: 10px 22px;
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition), transform var(--transition);
+    }
+    .followup-btn:hover, .followup-btn:focus {
+      background: #bfa13a;
+      color: var(--offwhite);
+      transform: scale(1.04);
+    }
+    /* History & Collections */
+    .history-screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      background: var(--midnight);
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 30;
+      animation: slideInRight 0.5s;
+    }
+    .history-header {
+      width: 100%;
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 32px 0 0 0;
+      font-family: 'Source Serif Pro', serif;
+      font-size: 1.5rem;
+      color: var(--aurum);
+      text-align: left;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+    .history-list {
+      width: 100%;
+      max-width: 700px;
+      margin: 24px auto 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .history-item {
+      background: var(--secondary-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px 24px;
+      font-size: 1.05rem;
+      color: var(--offwhite);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      cursor: pointer;
+      transition: background var(--transition), box-shadow var(--transition), transform var(--transition);
+    }
+    .history-item:hover {
+      background: #23232a;
+      box-shadow: 0 6px 24px 0 rgba(212,175,55,0.10);
+      transform: scale(1.01);
+    }
+    .history-summary {
+      color: var(--lightgrey);
+      font-size: 0.98rem;
+      margin-top: 2px;
+    }
+    .history-meta {
+      color: var(--teal);
+      font-size: 0.92rem;
+      margin-top: 2px;
+    }
+    .history-search {
+      width: 100%;
+      max-width: 700px;
+      margin: 24px auto 0 auto;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .history-search input {
+      flex: 1;
+      background: var(--charcoal);
+      border: none;
+      border-radius: 8px;
+      color: var(--offwhite);
+      font-size: 1.05rem;
+      padding: 10px 14px;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: box-shadow var(--transition), background var(--transition);
+    }
+    .history-search input:focus {
+      box-shadow: 0 0 0 2px var(--aurum);
+      background: #23232a;
+    }
+    .history-search select {
+      background: var(--charcoal);
+      color: var(--offwhite);
+      border: none;
+      border-radius: 8px;
+      font-size: 1.05rem;
+      padding: 10px 14px;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: box-shadow var(--transition), background var(--transition);
+    }
+    .history-search select:focus {
+      box-shadow: 0 0 0 2px var(--aurum);
+      background: #23232a;
+    }
+    /* Collections */
+    .collections {
+      width: 100%;
+      max-width: 700px;
+      margin: 32px auto 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .collection {
+      background: #23232a;
+      border-radius: 12px;
+      padding: 16px 22px;
+      color: var(--offwhite);
+      font-size: 1.08rem;
+      font-family: 'Inter', sans-serif;
+      box-shadow: 0 2px 8px 0 rgba(13,27,42,0.10);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .collection-title {
+      font-family: 'Source Serif Pro', serif;
+      color: var(--aurum);
+      font-size: 1.13rem;
+      font-weight: 600;
+    }
+    .collection-notes {
+      color: var(--lightgrey);
+      font-size: 0.98rem;
+    }
+    /* Skeleton Loading */
+    .skeleton {
+      background: linear-gradient(90deg, #1B263B 25%, #23232a 50%, #1B263B 75%);
+      background-size: 200% 100%;
+      animation: skeleton 1.2s infinite linear;
+      border-radius: 8px;
+      min-height: 24px;
+      width: 100%;
+    }
+    @keyframes skeleton {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(60px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    /* Responsive */
+    @media (max-width: 600px) {
+      .query-input, .query-input-wrap, .solution-header, .solution-thread, .followup-bar, .history-header, .history-list, .history-search, .collections {
+        max-width: 98vw;
+        min-width: unset;
+        padding-left: 8px;
+        padding-right: 8px;
+      }
+      .logo {
+        font-size: 1.3rem;
+      }
+      .logo-icon {
+        width: 28px; height: 28px;
+      }
+      .top-right {
+        top: 12px; right: 12px;
+      }
+    }
+  </style>
+  <!-- KaTeX for LaTeX rendering -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+</head>
+<body>
+  <!-- Top right: History & Collections -->
+  <div class="top-right">
+    <button class="icon-btn" id="historyBtn" title="History & Collections">
+      <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M16 3v4M8 3v4M3 9h18"/></svg>
+    </button>
+  </div>
+  <!-- Logo -->
+  <div class="logo">
+    <span class="logo-icon">
+      <!-- Stylized C / neuron / question-exclamation -->
+      <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="19" cy="19" r="18" stroke="#D4AF37" stroke-width="2.5"/>
+        <path d="M26 14C26 10.6863 23.3137 8 20 8C16.6863 8 14 10.6863 14 14V24C14 27.3137 16.6863 30 20 30C23.3137 30 26 27.3137 26 24" stroke="#D4AF37" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="19" cy="14" r="2" fill="#D4AF37"/>
+        <rect x="17.5" y="27" width="3" height="3" rx="1.5" fill="#D4AF37"/>
+      </svg>
+    </span>
+    Cognito
+  </div>
+  <!-- Query Canvas (Home) -->
+  <div class="canvas" id="canvasScreen">
+    <form class="query-input-wrap" id="queryForm" autocomplete="off">
+      <input class="query-input" id="queryInput" type="text" placeholder="Pose your question, paste a problem, or upload a file…" required autofocus />
+      <div class="input-icons">
+        <button class="input-icon-btn" type="button" title="Image input" id="imgInputBtn">
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        </button>
+        <button class="input-icon-btn" type="button" title="Voice input" id="micInputBtn">
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg>
+        </button>
+        <button class="input-icon-btn" type="button" title="File upload" id="fileInputBtn">
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </button>
+        <input type="file" id="fileInput" style="display:none" />
+      </div>
+      <button class="submit-btn" type="submit">Ask</button>
+    </form>
+  </div>
+  <!-- Real-Time Solution Screen -->
+  <div class="solution-screen" id="solutionScreen">
+    <div class="solution-header" id="solutionHeader"></div>
+    <div class="solution-thread" id="solutionThread"></div>
+    <form class="followup-bar" id="followupForm">
+      <input class="followup-input" id="followupInput" type="text" placeholder="Ask a follow-up…" autocomplete="off" />
+      <button class="followup-btn" type="submit">Send</button>
+    </form>
+  </div>
+  <!-- History & Collections Screen -->
+  <div class="history-screen" id="historyScreen">
+    <div class="history-header">History & Collections</div>
+    <div class="history-search">
+      <input type="text" id="historySearchInput" placeholder="Search questions or answers…" />
+      <select id="historyTypeFilter">
+        <option value="all">All Types</option>
+        <option value="text">Text</option>
+        <option value="image">Image</option>
+        <option value="file">File</option>
+      </select>
+      <input type="date" id="historyDateFilter" />
+    </div>
+    <div class="history-list" id="historyList"></div>
+    <div class="collections" id="collections"></div>
+  </div>
+  <script>
+    // --- State ---
+    let history = JSON.parse(localStorage.getItem('cognito_history') || '[]');
+    let collections = JSON.parse(localStorage.getItem('cognito_collections') || '[]');
+    let currentQuestion = null;
+    let currentThread = [];
+    let aiThinkingTimeout = null;
+    // --- Utility ---
+    function saveHistory() {
+      localStorage.setItem('cognito_history', JSON.stringify(history));
+    }
+    function saveCollections() {
+      localStorage.setItem('cognito_collections', JSON.stringify(collections));
+    }
+    function formatDate(ts) {
+      const d = new Date(ts);
+      return d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    }
+    // --- Navigation ---
+    const canvasScreen = document.getElementById('canvasScreen');
+    const solutionScreen = document.getElementById('solutionScreen');
+    const historyScreen = document.getElementById('historyScreen');
+    function showScreen(screen) {
+      canvasScreen.style.display = (screen === 'canvas') ? 'flex' : 'none';
+      solutionScreen.style.display = (screen === 'solution') ? 'flex' : 'none';
+      historyScreen.style.display = (screen === 'history') ? 'flex' : 'none';
+    }
+    // --- Query Canvas ---
+    document.getElementById('queryForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const input = document.getElementById('queryInput');
+      const question = input.value.trim();
+      if (!question) return;
+      currentQuestion = question;
+      currentThread = [{role: 'user', content: question, ts: Date.now()}];
+      showSolutionScreen(question);
+      input.value = '';
+    });
+    // --- Solution Screen ---
+    function showSolutionScreen(question) {
+      document.getElementById('solutionHeader').textContent = question;
+      document.getElementById('solutionThread').innerHTML = '';
+      showScreen('solution');
+      addUserCard(question);
+      aiThinkingTimeout = setTimeout(() => {
+        addAIThinking();
+        setTimeout(() => {
+          removeAIThinking();
+          addAICard(generateAISolution(question));
+        }, 1800);
+      }, 600);
+    }
+    function addUserCard(text) {
+      const thread = document.getElementById('solutionThread');
+      const card = document.createElement('div');
+      card.className = 'user-card';
+      card.textContent = text;
+      thread.appendChild(card);
+      thread.scrollTop = thread.scrollHeight;
+    }
+    function addAIThinking() {
+      const thread = document.getElementById('solutionThread');
+      const aiDiv = document.createElement('div');
+      aiDiv.className = 'ai-card ai-typing';
+      aiDiv.id = 'aiThinking';
+      aiDiv.innerHTML = '<span class="dot"></span><span class="dot"></span><span class="dot"></span>';
+      thread.appendChild(aiDiv);
+      thread.scrollTop = thread.scrollHeight;
+    }
+    function removeAIThinking() {
+      const aiDiv = document.getElementById('aiThinking');
+      if (aiDiv) aiDiv.remove();
+    }
+    function addAICard(aiObj) {
+      const thread = document.getElementById('solutionThread');
+      const card = document.createElement('div');
+      card.className = 'ai-card';
+      // Summary
+      const summary = document.createElement('div');
+      summary.className = 'ai-summary';
+      summary.textContent = aiObj.summary;
+      card.appendChild(summary);
+      // Steps
+      aiObj.steps.forEach((step, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'collapsible';
+        btn.textContent = `Step ${i+1}: ${step.title}`;
+        btn.addEventListener('click', function() {
+          this.classList.toggle('open');
+          content.style.maxHeight = this.classList.contains('open') ? content.scrollHeight + 'px' : null;
+        });
+        card.appendChild(btn);
+        const content = document.createElement('div');
+        content.className = 'collapsible-content';
+        content.innerHTML = renderStepContent(step.content);
+        card.appendChild(content);
+      });
+      thread.appendChild(card);
+      thread.scrollTop = thread.scrollHeight;
+      // Save to history
+      history.unshift({
+        question: currentQuestion,
+        answer: aiObj.summary,
+        steps: aiObj.steps,
+        ts: Date.now(),
+        type: 'text',
+        tags: [],
+      });
+      saveHistory();
+    }
+    function renderStepContent(content) {
+      // Render code, LaTeX, and text
+      let html = '';
+      content.forEach(block => {
+        if (block.type === 'text') {
+          html += `<div>${block.text}</div>`;
+        } else if (block.type === 'code') {
+          html += `<div class="code-block"><button class="copy-btn" onclick="navigator.clipboard.writeText(\`${block.code.replace(/`/g,'\\`')}\`)">Copy</button><pre>${escapeHtml(block.code)}</pre></div>`;
+        } else if (block.type === 'latex') {
+          html += `<div class="latex-block" data-latex="${encodeURIComponent(block.latex)}"></div>`;
+        }
+      });
+      return html;
+    }
+    function escapeHtml(str) {
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+    // --- Simulated AI Solution ---
+    function generateAISolution(question) {
+      // For demo, return a canned response with all features
+      return {
+        summary: 'Here is a concise summary of the solution to your question.',
+        steps: [
+          {
+            title: 'Understand the Problem',
+            content: [
+              {type: 'text', text: 'First, we analyze the question to identify the key requirements.'},
+              {type: 'latex', latex: 'E = mc^2'},
+            ]
+          },
+          {
+            title: 'Apply the Method',
+            content: [
+              {type: 'text', text: 'Next, we apply the relevant method or formula.'},
+              {type: 'code', code: 'def solve():\n    return "solution"'},
+            ]
+          },
+          {
+            title: 'Interpret the Result',
+            content: [
+              {type: 'text', text: 'Finally, we interpret the result and check for correctness.'},
+            ]
+          }
+        ]
+      };
+    }
+    // --- Follow-up ---
+    document.getElementById('followupForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const input = document.getElementById('followupInput');
+      const followup = input.value.trim();
+      if (!followup) return;
+      addUserCard(followup);
+      input.value = '';
+      aiThinkingTimeout = setTimeout(() => {
+        addAIThinking();
+        setTimeout(() => {
+          removeAIThinking();
+          addAICard(generateAISolution(followup));
+        }, 1800);
+      }, 600);
+    });
+    // --- History & Collections ---
+    document.getElementById('historyBtn').addEventListener('click', () => {
+      showScreen('history');
+      renderHistory();
+      renderCollections();
+    });
+    function renderHistory() {
+      const list = document.getElementById('historyList');
+      list.innerHTML = '';
+      const search = document.getElementById('historySearchInput').value.toLowerCase();
+      const type = document.getElementById('historyTypeFilter').value;
+      const date = document.getElementById('historyDateFilter').value;
+      let filtered = history.filter(item => {
+        let match = true;
+        if (search) {
+          match = (item.question.toLowerCase().includes(search) || (item.answer && item.answer.toLowerCase().includes(search)));
+        }
+        if (type !== 'all') {
+          match = match && (item.type === type);
+        }
+        if (date) {
+          const d = new Date(item.ts);
+          const dstr = d.toISOString().slice(0,10);
+          match = match && (dstr === date);
+        }
+        return match;
+      });
+      if (filtered.length === 0) {
+        list.innerHTML = '<div class="skeleton" style="height:32px"></div>';
+        return;
+      }
+      filtered.forEach((item, idx) => {
+        const div = document.createElement('div');
+        div.className = 'history-item';
+        div.innerHTML = `<div>${item.question}</div><div class="history-summary">${item.answer}</div><div class="history-meta">${formatDate(item.ts)}</div>`;
+        div.addEventListener('click', () => {
+          // Re-show this Q/A in solution screen
+          currentQuestion = item.question;
+          showScreen('solution');
+          document.getElementById('solutionHeader').textContent = item.question;
+          document.getElementById('solutionThread').innerHTML = '';
+          addUserCard(item.question);
+          addAICard({summary: item.answer, steps: item.steps || []});
+        });
+        list.appendChild(div);
+      });
+    }
+    document.getElementById('historySearchInput').addEventListener('input', renderHistory);
+    document.getElementById('historyTypeFilter').addEventListener('change', renderHistory);
+    document.getElementById('historyDateFilter').addEventListener('change', renderHistory);
+    // --- Collections ---
+    function renderCollections() {
+      const colDiv = document.getElementById('collections');
+      colDiv.innerHTML = '';
+      if (collections.length === 0) return;
+      collections.forEach(col => {
+        const div = document.createElement('div');
+        div.className = 'collection';
+        div.innerHTML = `<div class="collection-title">${col.title}</div><div class="collection-notes">${col.notes || ''}</div>`;
+        colDiv.appendChild(div);
+      });
+    }
+    // --- Back to Home ---
+    historyScreen.addEventListener('click', (e) => {
+      if (e.target === historyScreen) {
+        showScreen('canvas');
+      }
+    });
+    solutionScreen.addEventListener('click', (e) => {
+      if (e.target === solutionScreen) {
+        showScreen('canvas');
+      }
+    });
+    // --- File Upload ---
+    document.getElementById('fileInputBtn').addEventListener('click', () => {
+      document.getElementById('fileInput').click();
+    });
+    document.getElementById('fileInput').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      currentQuestion = `File uploaded: ${file.name}`;
+      currentThread = [{role: 'user', content: currentQuestion, ts: Date.now()}];
+      showSolutionScreen(currentQuestion);
+    });
+    // --- Image Input (stub) ---
+    document.getElementById('imgInputBtn').addEventListener('click', () => {
+      alert('Image input coming soon!');
+    });
+    // --- Voice Input (stub) ---
+    document.getElementById('micInputBtn').addEventListener('click', () => {
+      alert('Voice input coming soon!');
+    });
+    // --- LaTeX Rendering ---
+    function renderLatexBlocks() {
+      document.querySelectorAll('.latex-block').forEach(div => {
+        if (div.dataset.latex && window.katex) {
+          try {
+            katex.render(decodeURIComponent(div.dataset.latex), div, {throwOnError: false});
+          } catch {}
+        }
+      });
+    }
+    // Observe DOM changes for LaTeX
+    const observer = new MutationObserver(renderLatexBlocks);
+    observer.observe(document.body, {childList: true, subtree: true});
+    // --- Haptic Feedback (mobile) ---
+    function hapticFeedback() {
+      if (window.navigator.vibrate) {
+        window.navigator.vibrate(18);
+      }
+    }
+    document.querySelectorAll('.submit-btn, .followup-btn').forEach(btn => {
+      btn.addEventListener('click', hapticFeedback);
+    });
+    // --- Initial Screen ---
+    showScreen('canvas');
+  </script>
+</body>
+</html>
