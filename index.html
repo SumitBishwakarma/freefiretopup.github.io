@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi Tool Pro - Premium Toolkit</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Theme Toggle -->
+    <div class="theme-toggle">
+        <button id="themeToggle" class="theme-btn">
+            <i class="fas fa-moon"></i>
+        </button>
+    </div>
+
+    <!-- Login/Registration Screen -->
+    <div id="authScreen" class="screen active">
+        <div class="auth-container">
+            <div class="auth-header">
+                <div class="logo-container">
+                    <div class="logo">
+                        <i class="fas fa-cube"></i>
+                    </div>
+                    <h1 class="app-title">Multi Tool Pro</h1>
+                    <p class="app-subtitle">Premium Professional Toolkit</p>
+                </div>
+            </div>
+            
+            <div class="auth-form-container">
+                <div class="auth-tabs">
+                    <button class="auth-tab active" data-tab="login">Sign In</button>
+                    <button class="auth-tab" data-tab="register">Sign Up</button>
+                </div>
+                
+                <!-- Login Form -->
+                <form id="loginForm" class="auth-form active">
+                    <div class="input-group">
+                        <div class="input-container">
+                            <i class="fas fa-envelope input-icon"></i>
+                            <input type="email" placeholder="Email address" required>
+                            <div class="input-line"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <div class="input-container">
+                            <i class="fas fa-lock input-icon"></i>
+                            <input type="password" placeholder="Password" required>
+                            <div class="input-line"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="auth-options">
+                        <label class="checkbox-container">
+                            <input type="checkbox">
+                            <span class="checkmark"></span>
+                            Remember me
+                        </label>
+                        <a href="#" class="forgot-password">Forgot password?</a>
+                    </div>
+                    
+                    <button type="submit" class="primary-btn glow-btn">
+                        <span>Sign In</span>
+                        <div class="btn-glow"></div>
+                    </button>
+                    
+                    <div class="divider">
+                        <span>or continue with</span>
+                    </div>
+                    
+                    <div class="social-auth">
+                        <button type="button" class="social-btn">
+                            <i class="fab fa-google"></i>
+                        </button>
+                        <button type="button" class="social-btn">
+                            <i class="fab fa-apple"></i>
+                        </button>
+                        <button type="button" class="social-btn">
+                            <i class="fab fa-microsoft"></i>
+                        </button>
+                    </div>
+                </form>
+                
+                <!-- Registration Form -->
+                <form id="registerForm" class="auth-form">
+                    <div class="input-group">
+                        <div class="input-container">
+                            <i class="fas fa-user input-icon"></i>
+                            <input type="text" placeholder="Full name" required>
+                            <div class="input-line"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <div class="input-container">
+                            <i class="fas fa-envelope input-icon"></i>
+                            <input type="email" placeholder="Email address" required>
+                            <div class="input-line"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <div class="input-container">
+                            <i class="fas fa-lock input-icon"></i>
+                            <input type="password" placeholder="Password" required>
+                            <div class="input-line"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <div class="input-container">
+                            <i class="fas fa-lock input-icon"></i>
+                            <input type="password" placeholder="Confirm password" required>
+                            <div class="input-line"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="auth-options">
+                        <label class="checkbox-container">
+                            <input type="checkbox" required>
+                            <span class="checkmark"></span>
+                            I agree to the <a href="#">Terms & Privacy</a>
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="primary-btn glow-btn">
+                        <span>Create Account</span>
+                        <div class="btn-glow"></div>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Screen -->
+    <div id="dashboardScreen" class="screen">
+        <div class="dashboard-container">
+            <!-- Header -->
+            <header class="dashboard-header">
+                <div class="header-left">
+                    <div class="logo-mini">
+                        <i class="fas fa-cube"></i>
+                    </div>
+                    <div class="user-greeting">
+                        <h2>Good morning, Alex</h2>
+                        <p class="status-indicator">
+                            <span class="status-dot online"></span>
+                            All systems operational
+                        </p>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+                    <div class="user-avatar">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9InVybCgjZ3JhZGllbnQwXzEyXzMpIi8+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMTYiIHI9IjYiIGZpbGw9IndoaXRlIiBmaWxsLW9wYWNpdHk9IjAuOSIvPgo8cGF0aCBkPSJNMTAgMzJjMC02IDQtMTAgMTAtMTBzMTAgNCAxMCAxMCIgZmlsbD0id2hpdGUiIGZpbGwtb3BhY2l0eT0iMC45Ii8+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9ImdyYWRpZW50MF8xMl8zIiB4MT0iMCIgeTE9IjAiIHgyPSI0MCIgeTI9IjQwIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CjxzdG9wIHN0b3AtY29sb3I9IiM2MzY2RjEiLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjOEI1Q0Y2Ii8+CjwvbGluZWFyR3JhZGllbnQ+CjwvZGVmcz4KPHN2Zz4K" alt="User Avatar">
+                    </div>
+                </div>
+            </header>
+
+            <!-- Quick Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>24</h3>
+                        <p>Tools Used Today</p>
+                        <div class="stat-trend positive">
+                            <i class="fas fa-arrow-up"></i>
+                            +12%
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>2.4h</h3>
+                        <p>Time Saved</p>
+                        <div class="stat-trend positive">
+                            <i class="fas fa-arrow-up"></i>
+                            +8%
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>98%</h3>
+                        <p>Success Rate</p>
+                        <div class="stat-trend positive">
+                            <i class="fas fa-arrow-up"></i>
+                            +2%
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <h3 class="section-title">Quick Actions</h3>
+                <div class="action-grid">
+                    <button class="action-btn" data-tool="converter">
+                        <div class="action-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <span>Converter</span>
+                    </button>
+                    <button class="action-btn" data-tool="calculator">
+                        <div class="action-icon">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <span>Calculator</span>
+                    </button>
+                    <button class="action-btn" data-tool="generator">
+                        <div class="action-icon">
+                            <i class="fas fa-magic"></i>
+                        </div>
+                        <span>Generator</span>
+                    </button>
+                    <button class="action-btn" data-tool="analyzer">
+                        <div class="action-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <span>Analyzer</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="recent-activity">
+                <h3 class="section-title">Recent Activity</h3>
+                <div class="activity-list">
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-file-code"></i>
+                        </div>
+                        <div class="activity-content">
+                            <h4>JSON Formatter</h4>
+                            <p>Formatted 3 JSON files</p>
+                            <span class="activity-time">2 minutes ago</span>
+                        </div>
+                        <div class="activity-status success">
+                            <i class="fas fa-check"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-palette"></i>
+                        </div>
+                        <div class="activity-content">
+                            <h4>Color Picker</h4>
+                            <p>Generated color palette</p>
+                            <span class="activity-time">15 minutes ago</span>
+                        </div>
+                        <div class="activity-status success">
+                            <i class="fas fa-check"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-qrcode"></i>
+                        </div>
+                        <div class="activity-content">
+                            <h4>QR Generator</h4>
+                            <p>Created 2 QR codes</p>
+                            <span class="activity-time">1 hour ago</span>
+                        </div>
+                        <div class="activity-status success">
+                            <i class="fas fa-check"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tools Screen -->
+    <div id="toolsScreen" class="screen">
+        <div class="tools-container">
+            <header class="tools-header">
+                <button class="back-btn">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2>All Tools</h2>
+                <button class="search-btn">
+                    <i class="fas fa-search"></i>
+                </button>
+            </header>
+            
+            <div class="search-bar">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" placeholder="Search tools...">
+                <div class="search-filters">
+                    <button class="filter-btn active">All</button>
+                    <button class="filter-btn">Recent</button>
+                    <button class="filter-btn">Favorites</button>
+                </div>
+            </div>
+            
+            <div class="tool-categories">
+                <div class="category">
+                    <div class="category-header">
+                        <h3>Development Tools</h3>
+                        <span class="category-count">12</span>
+                    </div>
+                    <div class="tool-grid">
+                        <div class="tool-card">
+                            <div class="tool-icon">
+                                <i class="fas fa-code"></i>
+                            </div>
+                            <h4>JSON Formatter</h4>
+                            <p>Format and validate JSON</p>
+                            <div class="tool-badge popular">Popular</div>
+                        </div>
+                        
+                        <div class="tool-card">
+                            <div class="tool-icon">
+                                <i class="fas fa-terminal"></i>
+                            </div>
+                            <h4>Base64 Encoder</h4>
+                            <p>Encode/decode Base64</p>
+                        </div>
+                        
+                        <div class="tool-card">
+                            <div class="tool-icon">
+                                <i class="fas fa-hashtag"></i>
+                            </div>
+                            <h4>Hash Generator</h4>
+                            <p>MD5, SHA1, SHA256</p>
+                        </div>
+                        
+                        <div class="tool-card">
+                            <div class="tool-icon">
+                                <i class="fas fa-regular-expression"></i>
+                            </div>
+                            <h4>RegEx Tester</h4>
+                            <p>Test regular expressions</p>
+                            <div class="tool-badge new">New</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="category">
+                    <div class="category-header">
+                        <h3>Design Tools</h3>
+                        <span class="category-count">8</span>
+                    </div>
+                    <div class="tool-grid">
+                        <div class="tool-card">
+                            <div class="tool-icon">
+                                <i class="fas fa-palette"></i>
+                            </div>
+                            <h4>Color Picker</h4>
+                            <p>Pick and generate colors</p>
+                        </div>
+                        
+                        <div class="tool-card">
+                            <div class="tool-icon">
+                                <i class="fas fa-font"></i>
+                            </div>
+                            <h4>Font Pairing</h4>
+                            <p>Find perfect font pairs</p>
+                        </div>
+                        
+                        <div class="tool-card">
+                            <div class="tool-icon">
+                                <i class="fas fa-images"></i>
+                            </div>
+                            <h4>Image Optimizer</h4>
+                            <p>Compress and resize</p>
+                        </div>
+                        
+                        <div class="tool-card">
+                            <div class="tool-icon">
+                                <i class="fas fa-crop"></i>
+                            </div>
+                            <h4>CSS Generator</h4>
+                            <p>Generate CSS snippets</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="category">
+                    <div class="category-header">
+                        <h3>Utilities</h3>
+                        <span class="category-count">15</span>
+                    </div>
+                    <div class="tool-grid">
+                        <div class="tool-card">
+                            <div class="tool-icon">
+                                <i class="fas fa-qrcode"></i>
+                            </div>
+                            <h4>QR Generator</h4>
+                            <p>Create QR codes</p>
+                            <div class="tool-badge popular">Popular</div>
+                        </div>
+                        
+                        <div class="tool-card">
+                            <div class="tool-icon">
+                                <i class="fas fa-random"></i>
+                            </div>
+                            <h4>Password Gen</h4>
+                            <p>Secure passwords</p>
+                        </div>
+                        
+                        <div class="tool-card">
+                            <div class="tool-icon">
+                                <i class="fas fa-calculator"></i>
+                            </div>
+                            <h4>Calculator</h4>
+                            <p>Advanced calculations</p>
+                        </div>
+                        
+                        <div class="tool-card">
+                            <div class="tool-icon">
+                                <i class="fas fa-exchange-alt"></i>
+                            </div>
+                            <h4>Unit Converter</h4>
+                            <p>Convert units</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Screen -->
+    <div id="settingsScreen" class="screen">
+        <div class="settings-container">
+            <header class="settings-header">
+                <button class="back-btn">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2>Settings</h2>
+            </header>
+            
+            <div class="settings-content">
+                <!-- Profile Section -->
+                <div class="settings-section">
+                    <div class="section-header">
+                        <h3>Profile</h3>
+                    </div>
+                    <div class="profile-card">
+                        <div class="profile-avatar">
+                            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9InVybCgjZ3JhZGllbnQwXzEyXzMpIi8+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMTYiIHI9IjYiIGZpbGw9IndoaXRlIiBmaWxsLW9wYWNpdHk9IjAuOSIvPgo8cGF0aCBkPSJNMTAgMzJjMC02IDQtMTAgMTAtMTBzMTAgNCAxMCAxMCIgZmlsbD0id2hpdGUiIGZpbGwtb3BhY2l0eT0iMC45Ii8+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9ImdyYWRpZW50MF8xMl8zIiB4MT0iMCIgeTE9IjAiIHgyPSI0MCIgeTI9IjQwIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CjxzdG9wIHN0b3AtY29sb3I9IiM2MzY2RjEiLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjOEI1Q0Y2Ii8+CjwvbGluZWFyR3JhZGllbnQ+CjwvZGVmcz4KPHN2Zz4K" alt="Profile">
+                            <button class="edit-avatar">
+                                <i class="fas fa-camera"></i>
+                            </button>
+                        </div>
+                        <div class="profile-info">
+                            <h4>Alex Johnson</h4>
+                            <p>alex.johnson@email.com</p>
+                            <span class="profile-badge">Pro Member</span>
+                        </div>
+                        <button class="edit-profile-btn">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Preferences -->
+                <div class="settings-section">
+                    <div class="section-header">
+                        <h3>Preferences</h3>
+                    </div>
+                    <div class="settings-list">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <i class="fas fa-palette"></i>
+                                <div>
+                                    <h4>Theme</h4>
+                                    <p>Dark mode</p>
+                                </div>
+                            </div>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="themeSwitch" checked>
+                                <label for="themeSwitch"></label>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <i class="fas fa-bell"></i>
+                                <div>
+                                    <h4>Notifications</h4>
+                                    <p>Push notifications</p>
+                                </div>
+                            </div>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="notificationSwitch" checked>
+                                <label for="notificationSwitch"></label>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <i class="fas fa-shield-alt"></i>
+                                <div>
+                                    <h4>Privacy Mode</h4>
+                                    <p>Enhanced security</p>
+                                </div>
+                            </div>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="privacySwitch">
+                                <label for="privacySwitch"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- History -->
+                <div class="settings-section">
+                    <div class="section-header">
+                        <h3>Activity History</h3>
+                        <button class="clear-history-btn">Clear All</button>
+                    </div>
+                    <div class="history-list">
+                        <div class="history-item">
+                            <div class="history-icon">
+                                <i class="fas fa-file-code"></i>
+                            </div>
+                            <div class="history-content">
+                                <h4>JSON Formatter</h4>
+                                <p>Today at 2:30 PM</p>
+                            </div>
+                            <button class="history-action">
+                                <i class="fas fa-redo"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="history-item">
+                            <div class="history-icon">
+                                <i class="fas fa-palette"></i>
+                            </div>
+                            <div class="history-content">
+                                <h4>Color Picker</h4>
+                                <p>Today at 1:15 PM</p>
+                            </div>
+                            <button class="history-action">
+                                <i class="fas fa-redo"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="history-item">
+                            <div class="history-icon">
+                                <i class="fas fa-qrcode"></i>
+                            </div>
+                            <div class="history-content">
+                                <h4>QR Generator</h4>
+                                <p>Yesterday at 4:45 PM</p>
+                            </div>
+                            <button class="history-action">
+                                <i class="fas fa-redo"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Account Actions -->
+                <div class="settings-section">
+                    <div class="section-header">
+                        <h3>Account</h3>
+                    </div>
+                    <div class="account-actions">
+                        <button class="account-btn">
+                            <i class="fas fa-crown"></i>
+                            <span>Upgrade to Pro</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                        
+                        <button class="account-btn">
+                            <i class="fas fa-life-ring"></i>
+                            <span>Help & Support</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                        
+                        <button class="account-btn">
+                            <i class="fas fa-file-alt"></i>
+                            <span>Terms & Privacy</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                        
+                        <button class="account-btn logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Sign Out</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <button class="nav-btn active" data-screen="dashboard">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </button>
+        <button class="nav-btn" data-screen="tools">
+            <i class="fas fa-tools"></i>
+            <span>Tools</span>
+        </button>
+        <button class="nav-btn" data-screen="favorites">
+            <i class="fas fa-star"></i>
+            <span>Favorites</span>
+        </button>
+        <button class="nav-btn" data-screen="settings">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+        </button>
+    </nav>
+
+    <script src="script.js"></script>
+</body>
+</html>
