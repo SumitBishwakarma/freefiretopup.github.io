@@ -3,630 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multi Tool Pro - Premium Toolkit</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>ToolBox Pro - Final Working Version</title>
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- External Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+
+    <style>
+        /* CSS RESET & CORE SETUP */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --font-family: 'Poppins', sans-serif;
+            --transition-fast: 0.2s ease;
+            --transition-medium: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            /* Light & Dark Theme Variables */
+            --bg-primary-light: #F4F7FE; --bg-secondary-light: #FFFFFF; --bg-glass-light: rgba(255, 255, 255, 0.5); --border-glass-light: rgba(255, 255, 255, 0.8); --text-primary-light: #1A202C; --text-secondary-light: #4A5568; --shadow-light: 0 8px 32px 0 rgba(100, 108, 144, 0.2); --accent-gradient-light: linear-gradient(135deg, #667eea 0%, #764ba2 100%); --accent-solid-light: #6D63F6;
+            --bg-primary-dark: #0F172A; --bg-secondary-dark: #1E293B; --bg-glass-dark: rgba(30, 41, 59, 0.5); --border-glass-dark: rgba(255, 255, 255, 0.1); --text-primary-dark: #E2E8F0; --text-secondary-dark: #94A3B8; --shadow-dark: 0 8px 32px 0 rgba(0, 0, 0, 0.3); --accent-gradient-dark: linear-gradient(135deg, #818cf8 0%, #c084fc 100%); --accent-solid-dark: #8b80f9;
+        }
+        html[data-theme='light'] { --bg-primary: var(--bg-primary-light); --bg-secondary: var(--bg-secondary-light); --bg-glass: var(--bg-glass-light); --border-glass: var(--border-glass-light); --text-primary: var(--text-primary-light); --text-secondary: var(--text-secondary-light); --shadow: var(--shadow-light); --accent-gradient: var(--accent-gradient-light); --accent-solid: var(--accent-solid-light); }
+        html[data-theme='dark'] { --bg-primary: var(--bg-primary-dark); --bg-secondary: var(--bg-secondary-dark); --bg-glass: var(--bg-glass-dark); --border-glass: var(--border-glass-dark); --text-primary: var(--text-primary-dark); --text-secondary: var(--text-secondary-dark); --shadow: var(--shadow-dark); --accent-gradient: var(--accent-gradient-dark); --accent-solid: var(--accent-solid-dark); }
+        body { font-family: var(--font-family); background-color: var(--bg-primary); color: var(--text-primary); line-height: 1.6; transition: background-color var(--transition-fast), color var(--transition-fast); overflow-x: hidden; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .background-shapes { position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1; }
+        .shape { position: absolute; border-radius: 50%; background: var(--accent-gradient); opacity: 0.15; filter: blur(80px); }
+        .shape1 { width: 400px; height: 400px; top: -100px; left: -100px; animation: move 20s infinite alternate; }
+        .shape2 { width: 500px; height: 500px; bottom: -150px; right: -150px; animation: move 25s infinite alternate-reverse; }
+        @keyframes move { from { transform: translate(0, 0) rotate(0deg); } to { transform: translate(100px, 150px) rotate(180deg); } }
+        #app-container { width: 100%; max-width: 1400px; min-height: 100vh; display: flex; }
+        #main-app.hidden, #auth-content.hidden { display: none !important; }
+        #auth-content { width: 100%; display: flex; justify-content: center; align-items: center; flex-grow: 1; }
+        .auth-container { width: 100%; padding: 2rem; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; animation: fadeIn 0.5s ease-out; }
+        .logo { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+        .logo i { color: var(--accent-solid); }
+        .logo h1 { font-size: 1.75rem; font-weight: 700; color: var(--text-primary); }
+        .auth-card { background: var(--bg-glass); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border-radius: 20px; border: 1px solid var(--border-glass); box-shadow: var(--shadow); padding: 2.5rem; width: 100%; max-width: 400px; transform: translateY(20px); opacity: 0; animation: slideUp 0.6s 0.2s cubic-bezier(0.165, 0.84, 0.44, 1) forwards; text-align: left;}
+        .input-group { margin-bottom: 1.25rem; }
+        .input-group label { display: block; font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem; }
+        .input-group input { width: 100%; padding: 0.8rem 1rem; border-radius: 10px; border: 1px solid var(--border-glass); background: var(--bg-secondary); color: var(--text-primary); font-size: 1rem; transition: all var(--transition-fast); }
+        .input-group input:focus, .tool-textarea:focus, .tool-select:focus { outline: none; box-shadow: 0 0 0 3px var(--accent-solid); border-color: var(--accent-solid) !important; }
+        .btn { width: 100%; padding: 0.9rem 1rem; border-radius: 10px; border: none; font-family: var(--font-family); font-size: 1rem; font-weight: 600; cursor: pointer; transition: all var(--transition-medium); position: relative; }
+        .btn-secondary { background: var(--bg-secondary); color: var(--text-primary); border: 1px solid var(--border-glass); }
+        .btn-secondary:hover { background: var(--bg-primary); }
+        .btn-group { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .btn-group .btn { width: auto; flex-grow: 1; }
+        .btn-primary { background: var(--accent-gradient); color: white; box-shadow: 0 4px 15px 0 rgba(109, 99, 246, 0.4); }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 6px 20px 0 rgba(109, 99, 246, 0.5); }
+        .btn:disabled { cursor: not-allowed; opacity: 0.7; }
+        .btn .btn-text { transition: opacity 0.2s; }
+        .btn.loading .btn-text { opacity: 0; }
+        .btn .spinner { visibility: hidden; opacity: 0; position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 1s linear infinite; }
+        .btn.loading .spinner { visibility: visible; opacity: 1; }
+        @keyframes spin { to { transform: translate(-50%,-50%) rotate(360deg); } }
+        .auth-switch { text-align: center; margin-top: 1.5rem; font-size: 0.9rem; color: var(--text-secondary); }
+        .auth-switch a { color: var(--accent-solid); font-weight: 500; cursor: pointer; text-decoration: none; }
+        .auth-switch a:hover { text-decoration: underline; }
+        .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); padding: 12px 24px; border-radius: 10px; color: #fff; font-weight: 500; z-index: 1001; box-shadow: var(--shadow); opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s, bottom 0.3s; font-size: 0.9rem; }
+        .toast.show { opacity: 1; visibility: visible; bottom: 40px; }
+        .toast.success { background: linear-gradient(135deg, #2dd4bf, #14b8a6); }
+        .toast.error { background: linear-gradient(135deg, #f87171, #ef4444); }
+        #main-app { width: 100%; display: grid; grid-template-columns: 80px 1fr; transition: all 0.5s ease; }
+        .sidebar { background: var(--bg-glass); backdrop-filter: blur(20px); border-right: 1px solid var(--border-glass); padding: 2rem 0; display: flex; flex-direction: column; align-items: center; gap: 2rem; height: 100vh; position: fixed; left: 0; top: 0; width: 80px; z-index: 10; }
+        .nav-links { list-style: none; width: 100%; }
+        .nav-link { display: flex; justify-content: center; align-items: center; height: 50px; margin-bottom: 0.5rem; cursor: pointer; position: relative; }
+        .nav-link i { color: var(--text-secondary); transition: color var(--transition-fast); }
+        .nav-link.active i, .nav-link:hover i { color: var(--accent-solid); }
+        .nav-link.active::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 4px; height: 60%; background: var(--accent-solid); border-radius: 0 4px 4px 0; }
+        .main-content { grid-column: 2 / 3; padding: 2rem; animation: fadeIn 0.5s ease; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+        .header h1 { font-size: 1.8rem; font-weight: 600; }
+        .user-profile { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; cursor: pointer; border: 2px solid var(--accent-solid); }
+        .card { background: var(--bg-secondary); border-radius: 16px; padding: 1.5rem; box-shadow: var(--shadow); border: 1px solid var(--border-glass); transition: all var(--transition-medium); }
+        .card:hover { transform: translateY(-5px); }
+        .dashboard-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem}.data-card{text-align:center}.data-card .value{font-size:2.5rem;font-weight:700;color:var(--accent-solid);line-height:1.2}.data-card p{font-size:.9rem;color:var(--text-secondary)}.real-time-chart-card{grid-column:1/-1}.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.5rem}.tool-card{display:flex;flex-direction:column;align-items:center;text-align:center;cursor:pointer; padding: 1.25rem;}.tool-card .icon-wrapper{width:50px;height:50px;border-radius:12px;display:flex;justify-content:center;align-items:center;background:var(--accent-gradient);color:#fff;margin-bottom:1rem}.tool-card h4{font-size:.9rem;font-weight:600;margin-bottom:.25rem;color:var(--text-primary)}.tool-card p{font-size:.75rem;color:var(--text-secondary); line-height: 1.4;}.profile-container{max-width:800px;margin:0 auto}.profile-header{display:flex;flex-direction:column;align-items:center;gap:1rem;text-align:center;padding:2rem;margin-bottom:1.5rem}.profile-avatar{width:100px;height:100px;border-radius:50%;border:4px solid var(--accent-solid)}.profile-info h2{font-size:1.75rem;font-weight:600}.profile-info p{color:var(--text-secondary)}.settings-list .card{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;padding:1.25rem 1.5rem;cursor:pointer}.theme-toggle{cursor:pointer;width:50px;height:26px;border-radius:13px;background:var(--bg-primary);position:relative;border:1px solid var(--border-glass)}.theme-toggle .toggle-circle{width:20px;height:20px;border-radius:50%;background:var(--accent-solid);position:absolute;top:3px;left:3px;transition:transform var(--transition-fast)}html[data-theme=dark] .theme-toggle .toggle-circle{transform:translateX(24px)}.logout-btn{background:#ef4444;color:#fff;margin-top:1rem;text-align:center}.logout-btn:hover{background:#dc2626}
+        .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);z-index:1000;display:none;justify-content:center;align-items:center;animation:fadeIn .3s ease}.modal-overlay.active{display:flex}.modal-content{background:var(--bg-glass);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border:1px solid var(--border-glass);border-radius:20px;padding:2rem;width:90%;max-width:800px;max-height:90vh;overflow-y:auto;position:relative;box-shadow:var(--shadow);transform:scale(.95);animation:slideUp .4s cubic-bezier(.165,.84,.44,1) forwards}.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem}.modal-header h2{font-size:1.5rem;color:var(--text-primary)}.modal-close{background:0 0;border:none;cursor:pointer;color:var(--text-secondary)}.modal-close:hover i{color:var(--text-primary)}.tool-container{display:flex;flex-direction:column;gap:1.5rem}.tool-row{display:flex;gap:1rem;align-items:flex-start;flex-wrap:wrap}.tool-col{display:flex;flex-direction:column;flex:1;min-width:200px}.tool-label{font-size:.9rem;font-weight:500;color:var(--text-secondary);margin-bottom:.5rem}.tool-textarea{width:100%;height:150px;background:var(--bg-primary);border:1px solid var(--border-glass);border-radius:10px;padding:1rem;color:var(--text-primary);font-family:monospace;resize:vertical;transition:all var(--transition-fast)}.tool-input,.tool-select{width:100%;padding:.8rem 1rem;background:var(--bg-secondary);border:1px solid var(--border-glass);border-radius:10px;color:var(--text-primary);transition:all var(--transition-fast)}.tool-range{width:100%;accent-color:var(--accent-solid)}.range-value{font-weight:600;color:var(--accent-solid)}.password-options{display:flex;flex-wrap:wrap;gap:1rem}#qr-code-container{width:180px;height:180px;background:#fff;padding:10px;border-radius:10px;margin:1rem auto}#color-preview{width:80px;height:80px;border-radius:50%;border:2px solid var(--border-glass);margin:auto}.output-box{background:var(--bg-primary);padding:1rem;border-radius:10px;min-height:50px;font-weight:500;color:var(--text-primary);word-break:break-all}.copy-btn{background:var(--bg-secondary);color:var(--text-primary);padding:.5rem;border-radius:8px;cursor:pointer;border:1px solid var(--border-glass);transition:all var(--transition-fast)}.copy-btn:hover{background:var(--accent-solid);color:#fff}.stats-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(120px, 1fr));gap:.75rem;text-align:center}.stat-item{background:var(--bg-primary);padding:.75rem;border-radius:8px}.stat-item .value{font-weight:600;font-size:1.2rem;color:var(--accent-solid)}.stat-item .label{font-size:.75rem;color:var(--text-secondary)}#markdown-preview{background:var(--bg-primary);border-radius:10px;padding:1rem;min-height:200px;border:1px solid var(--border-glass)}#markdown-preview :first-child{margin-top:0}#markdown-preview :last-child{margin-bottom:0}#age-result{background:var(--bg-primary);padding:1.5rem;border-radius:10px;text-align:center;font-size:1.2rem;font-weight:600}#age-result span{color:var(--accent-solid);font-weight:700}@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes slideUp{from{transform:translateY(20px) scale(.95);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}
+        @media (max-width:768px){#main-app{grid-template-columns:1fr}.sidebar{flex-direction:row;justify-content:space-around;width:100%;height:70px;position:fixed;bottom:0;left:0;top:auto;border-top:1px solid var(--border-glass);z-index:100;padding:0;border-right:none}.nav-links{display:flex;justify-content:space-around;height:100%}.nav-link{margin-bottom:0;flex:1}.nav-link.active::before{top:0;left:50%;transform:translateX(-50%);width:40%;height:3px;border-radius:0 0 3px 3px}.sidebar-logo{display:none}.main-content{grid-column:1/2;padding:1.5rem 1.5rem 80px}.modal-content{width:95%;padding:1.5rem}.modal-header h2{font-size:1.2rem}.profile-header{flex-direction:column;align-items:center}}
+    </style>
 </head>
-<body>
-    <!-- Theme Toggle -->
-    <div class="theme-toggle">
-        <button id="themeToggle" class="theme-btn">
-            <i class="fas fa-moon"></i>
-        </button>
+<body data-theme="dark">
+    <!-- Animated Background, App Container etc. -->
+    <div class="background-shapes"><div class="shape shape1"></div><div class="shape shape2"></div></div>
+    <div id="app-container">
+        <main id="main-app" class="hidden">
+            <aside class="sidebar">
+                <div class="sidebar-logo"><i data-feather="box" style="width:32px; height:32px;"></i></div>
+                <ul class="nav-links">
+                    <li class="nav-link" data-page="dashboard"><i data-feather="home"></i></li>
+                    <li class="nav-link" data-page="tools"><i data-feather="grid"></i></li>
+                    <li class="nav-link" data-page="profile"><i data-feather="user"></i></li>
+                </ul>
+            </aside>
+            <section class="main-content" id="page-content"></section>
+        </main>
+        <div id="auth-content"></div>
     </div>
-
-    <!-- Login/Registration Screen -->
-    <div id="authScreen" class="screen active">
-        <div class="auth-container">
-            <div class="auth-header">
-                <div class="logo-container">
-                    <div class="logo">
-                        <i class="fas fa-cube"></i>
-                    </div>
-                    <h1 class="app-title">Multi Tool Pro</h1>
-                    <p class="app-subtitle">Premium Professional Toolkit</p>
-                </div>
-            </div>
-            
-            <div class="auth-form-container">
-                <div class="auth-tabs">
-                    <button class="auth-tab active" data-tab="login">Sign In</button>
-                    <button class="auth-tab" data-tab="register">Sign Up</button>
-                </div>
-                
-                <!-- Login Form -->
-                <form id="loginForm" class="auth-form active">
-                    <div class="input-group">
-                        <div class="input-container">
-                            <i class="fas fa-envelope input-icon"></i>
-                            <input type="email" placeholder="Email address" required>
-                            <div class="input-line"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="input-group">
-                        <div class="input-container">
-                            <i class="fas fa-lock input-icon"></i>
-                            <input type="password" placeholder="Password" required>
-                            <div class="input-line"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="auth-options">
-                        <label class="checkbox-container">
-                            <input type="checkbox">
-                            <span class="checkmark"></span>
-                            Remember me
-                        </label>
-                        <a href="#" class="forgot-password">Forgot password?</a>
-                    </div>
-                    
-                    <button type="submit" class="primary-btn glow-btn">
-                        <span>Sign In</span>
-                        <div class="btn-glow"></div>
-                    </button>
-                    
-                    <div class="divider">
-                        <span>or continue with</span>
-                    </div>
-                    
-                    <div class="social-auth">
-                        <button type="button" class="social-btn">
-                            <i class="fab fa-google"></i>
-                        </button>
-                        <button type="button" class="social-btn">
-                            <i class="fab fa-apple"></i>
-                        </button>
-                        <button type="button" class="social-btn">
-                            <i class="fab fa-microsoft"></i>
-                        </button>
-                    </div>
-                </form>
-                
-                <!-- Registration Form -->
-                <form id="registerForm" class="auth-form">
-                    <div class="input-group">
-                        <div class="input-container">
-                            <i class="fas fa-user input-icon"></i>
-                            <input type="text" placeholder="Full name" required>
-                            <div class="input-line"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="input-group">
-                        <div class="input-container">
-                            <i class="fas fa-envelope input-icon"></i>
-                            <input type="email" placeholder="Email address" required>
-                            <div class="input-line"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="input-group">
-                        <div class="input-container">
-                            <i class="fas fa-lock input-icon"></i>
-                            <input type="password" placeholder="Password" required>
-                            <div class="input-line"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="input-group">
-                        <div class="input-container">
-                            <i class="fas fa-lock input-icon"></i>
-                            <input type="password" placeholder="Confirm password" required>
-                            <div class="input-line"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="auth-options">
-                        <label class="checkbox-container">
-                            <input type="checkbox" required>
-                            <span class="checkmark"></span>
-                            I agree to the <a href="#">Terms & Privacy</a>
-                        </label>
-                    </div>
-                    
-                    <button type="submit" class="primary-btn glow-btn">
-                        <span>Create Account</span>
-                        <div class="btn-glow"></div>
-                    </button>
-                </form>
-            </div>
+    <div class="modal-overlay" id="tool-modal">
+        <div class="modal-content">
+            <div class="modal-header"><h2 id="modal-title">Tool Title</h2><button class="modal-close" id="modal-close-btn"><i data-feather="x"></i></button></div>
+            <div id="modal-body" class="tool-container"></div>
         </div>
     </div>
 
-    <!-- Dashboard Screen -->
-    <div id="dashboardScreen" class="screen">
-        <div class="dashboard-container">
-            <!-- Header -->
-            <header class="dashboard-header">
-                <div class="header-left">
-                    <div class="logo-mini">
-                        <i class="fas fa-cube"></i>
-                    </div>
-                    <div class="user-greeting">
-                        <h2>Good morning, Alex</h2>
-                        <p class="status-indicator">
-                            <span class="status-dot online"></span>
-                            All systems operational
-                        </p>
-                    </div>
-                </div>
-                <div class="header-right">
-                    <button class="notification-btn">
-                        <i class="fas fa-bell"></i>
-                        <span class="notification-badge">3</span>
-                    </button>
-                    <div class="user-avatar">
-                        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9InVybCgjZ3JhZGllbnQwXzEyXzMpIi8+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMTYiIHI9IjYiIGZpbGw9IndoaXRlIiBmaWxsLW9wYWNpdHk9IjAuOSIvPgo8cGF0aCBkPSJNMTAgMzJjMC02IDQtMTAgMTAtMTBzMTAgNCAxMCAxMCIgZmlsbD0id2hpdGUiIGZpbGwtb3BhY2l0eT0iMC45Ii8+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9ImdyYWRpZW50MF8xMl8zIiB4MT0iMCIgeTE9IjAiIHgyPSI0MCIgeTI9IjQwIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CjxzdG9wIHN0b3AtY29sb3I9IiM2MzY2RjEiLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjOEI1Q0Y2Ii8+CjwvbGluZWFyR3JhZGllbnQ+CjwvZGVmcz4KPHN2Zz4K" alt="User Avatar">
-                    </div>
-                </div>
-            </header>
-
-            <!-- Quick Stats -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-tools"></i>
-                    </div>
-                    <div class="stat-content">
-                        <h3>24</h3>
-                        <p>Tools Used Today</p>
-                        <div class="stat-trend positive">
-                            <i class="fas fa-arrow-up"></i>
-                            +12%
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-clock"></i>
-                    </div>
-                    <div class="stat-content">
-                        <h3>2.4h</h3>
-                        <p>Time Saved</p>
-                        <div class="stat-trend positive">
-                            <i class="fas fa-arrow-up"></i>
-                            +8%
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <div class="stat-content">
-                        <h3>98%</h3>
-                        <p>Success Rate</p>
-                        <div class="stat-trend positive">
-                            <i class="fas fa-arrow-up"></i>
-                            +2%
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Quick Actions -->
-            <div class="quick-actions">
-                <h3 class="section-title">Quick Actions</h3>
-                <div class="action-grid">
-                    <button class="action-btn" data-tool="converter">
-                        <div class="action-icon">
-                            <i class="fas fa-exchange-alt"></i>
-                        </div>
-                        <span>Converter</span>
-                    </button>
-                    <button class="action-btn" data-tool="calculator">
-                        <div class="action-icon">
-                            <i class="fas fa-calculator"></i>
-                        </div>
-                        <span>Calculator</span>
-                    </button>
-                    <button class="action-btn" data-tool="generator">
-                        <div class="action-icon">
-                            <i class="fas fa-magic"></i>
-                        </div>
-                        <span>Generator</span>
-                    </button>
-                    <button class="action-btn" data-tool="analyzer">
-                        <div class="action-icon">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                        <span>Analyzer</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Recent Activity -->
-            <div class="recent-activity">
-                <h3 class="section-title">Recent Activity</h3>
-                <div class="activity-list">
-                    <div class="activity-item">
-                        <div class="activity-icon">
-                            <i class="fas fa-file-code"></i>
-                        </div>
-                        <div class="activity-content">
-                            <h4>JSON Formatter</h4>
-                            <p>Formatted 3 JSON files</p>
-                            <span class="activity-time">2 minutes ago</span>
-                        </div>
-                        <div class="activity-status success">
-                            <i class="fas fa-check"></i>
-                        </div>
-                    </div>
-                    
-                    <div class="activity-item">
-                        <div class="activity-icon">
-                            <i class="fas fa-palette"></i>
-                        </div>
-                        <div class="activity-content">
-                            <h4>Color Picker</h4>
-                            <p>Generated color palette</p>
-                            <span class="activity-time">15 minutes ago</span>
-                        </div>
-                        <div class="activity-status success">
-                            <i class="fas fa-check"></i>
-                        </div>
-                    </div>
-                    
-                    <div class="activity-item">
-                        <div class="activity-icon">
-                            <i class="fas fa-qrcode"></i>
-                        </div>
-                        <div class="activity-content">
-                            <h4>QR Generator</h4>
-                            <p>Created 2 QR codes</p>
-                            <span class="activity-time">1 hour ago</span>
-                        </div>
-                        <div class="activity-status success">
-                            <i class="fas fa-check"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Tools Screen -->
-    <div id="toolsScreen" class="screen">
-        <div class="tools-container">
-            <header class="tools-header">
-                <button class="back-btn">
-                    <i class="fas fa-arrow-left"></i>
-                </button>
-                <h2>All Tools</h2>
-                <button class="search-btn">
-                    <i class="fas fa-search"></i>
-                </button>
-            </header>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const state = {
+                currentPage: 'login', isLoggedIn: false, theme: localStorage.getItem('theme') || 'dark', user: null,
+                tools: [ 
+                    { id: 'imageCompressor', name: 'Image Compressor', desc: 'Reduce image file size', icon: 'minimize-2' }, { id: 'jsonFormatter', name: 'JSON Formatter', desc: 'Beautify JSON code', icon: 'code' }, { id: 'passwordGenerator', name: 'Password Generator', desc: 'Create secure passwords', icon: 'key' }, { id: 'qrCodeGenerator', name: 'QR Code Generator', desc: 'Generate QR codes easily', icon: 'smartphone' }, { id: 'colorPicker', name: 'Color Picker', desc: 'Pick colors from screen', icon: 'aperture' }, { id: 'unitConverter', name: 'Unit Converter', desc: 'Convert various units', icon: 'compass' }, { id: 'loremIpsum', name: 'Lorem Ipsum Gen', desc: 'Placeholder text generator', icon: 'file-text' }, { id: 'timestampConverter', name: 'Timestamp Converter', desc: 'Epoch & readable time', icon: 'clock' },
+                    { id: 'wordCounter', name: 'Word Counter', desc: 'Count words, chars, lines', icon: 'bar-chart-2' },{ id: 'caseConverter', name: 'Case Converter', desc: 'Transform text case', icon: 'type' },{ id: 'hashGenerator', name: 'Hash Generator', desc: 'MD5 & SHA hashes', icon: 'shield' },{ id: 'urlEncoder', name: 'URL Encoder/Decoder', desc: 'Encode/decode URLs', icon: 'link' },{ id: 'markdownPreviewer', name: 'Markdown Previewer', desc: 'Real-time Markdown editor', icon: 'edit' },{ id: 'ageCalculator', name: 'Age Calculator', desc: 'Calculate your exact age', icon: 'calendar' }
+                ],
+            };
+            const mainAppEl = document.getElementById('main-app'), authContentEl = document.getElementById('auth-content'), pageContentEl = document.getElementById('page-content'), modalEl = document.getElementById('tool-modal'), modalTitleEl = document.getElementById('modal-title'), modalBodyEl = document.getElementById('modal-body');
+            const db = { getUsers: () => JSON.parse(localStorage.getItem('toolbox_users') || '[]'), saveUsers: (u) => localStorage.setItem('toolbox_users', JSON.stringify(u)), getSession: () => localStorage.getItem('toolbox_session'), saveSession: (e) => localStorage.setItem('toolbox_session', e), clearSession: () => localStorage.removeItem('toolbox_session'), };
+            const handleSignUp = (name, email, password) => { const u = db.getUsers(); if (u.find(u => u.email === email)) { showToast("This email is already registered.", 'error'); return false; } u.push({ name, email, password }); db.saveUsers(u); showToast("Account created successfully! Please log in.", 'success'); return true; };
+            const handleLogin = (email, password) => { const user = db.getUsers().find(u => u.email === email && u.password === password); if (user) { state.isLoggedIn = true; state.user = user; db.saveSession(user.email); return true; } showToast("Invalid email or password.", 'error'); return false; };
+            const handleLogout = () => { state.isLoggedIn = false; state.user = null; db.clearSession(); state.currentPage = 'login'; render(); };
+            const renderAuthScreen = (type = 'login') => { const isL = type === 'login'; return `<div class="auth-container"><div class="logo"><i data-feather="box" style="width:36px; height:36px;"></i><h1>ToolBox Pro</h1></div><p>${isL ? 'Welcome back to your productivity suite.' : 'Create an account to get started.'}</p><div class="auth-card"><h2>${isL ? 'Sign In' : 'Create Account'}</h2><form id="${type}-form">${!isL ? `<div class="input-group"><label for="name">Full Name</label><input type="text" id="name" required></div>` : ''} <div class="input-group"><label for="email">Email Address</label><input type="email" id="email" required></div> <div class="input-group"><label for="password">Password</label><input type="password" id="password" minlength="6" required></div><button type="submit" class="btn btn-primary"><span class="btn-text">${isL ? 'Sign In' : 'Create Account'}</span><div class="spinner"></div></button></form><div class="auth-switch">${isL ? "Don't have an account?" : "Already have an account?"} <a data-page="${isL ? 'signup' : 'login'}">${isL ? 'Sign Up' : 'Sign In'}</a></div></div></div>`; };
+            const renderDashboardScreen = () => `<header class="header"><h1>Welcome, ${state.user.name.split(' ')[0]}!</h1><img src="https://i.pravatar.cc/150?u=${state.user.email}" alt="User Profile" class="user-profile" data-page="profile"></header><div class="dashboard-grid"><div class="card data-card"><div class="value">${state.tools.length}</div><p>Available Tools</p></div><div class="card data-card"><div class="value">12</div><p>Active Projects</p></div><div class="card data-card"><div class="value" style="color:#4ade80;">Online</div><p>Server Status</p></div><div class="card real-time-chart-card"><h3>Real-Time API Usage</h3><p style="text-align:center;padding:2rem;font-size:1.2rem;color:var(--text-secondary)">API Hits: <strong id="api-hits" style="color:var(--accent-solid);">178</strong></p></div></div>`;
+            const renderToolsHubScreen = () => `<header class="header"><h1>Tools Hub</h1></header><div class="tools-grid">${state.tools.sort((a, b) => a.name.localeCompare(b.name)).map(t => `<div class="card tool-card" data-tool-id="${t.id}"><div class="icon-wrapper"><i data-feather="${t.icon}"></i></div><h4>${t.name}</h4><p>${t.desc}</p></div>`).join("")}</div>`;
+            const renderProfileScreen = () => `<header class="header"><h1>Profile & Settings</h1></header><div class="profile-container"><div class="card profile-header"><img src="https://i.pravatar.cc/150?u=${state.user.email}" alt="User Avatar" class="profile-avatar"><div class="profile-info"><h2>${state.user.name}</h2><p>${state.user.email}</p></div></div><div class="settings-list"><div class="card" id="theme-toggle-container"><span>Dark Mode</span><div class="theme-toggle"><div class="toggle-circle"></div></div></div><div class="card"><span>Subscription</span><span>Premium Plan</span></div><div class="card"><span>Manage Account</span><i data-feather="chevron-right"></i></div><button id="logout-btn" class="btn logout-btn">Logout</button></div></div>`;
+            const render = () => { document.documentElement.setAttribute('data-theme', state.theme); if (state.isLoggedIn) { mainAppEl.classList.remove('hidden'); authContentEl.classList.add('hidden'); document.querySelectorAll('.nav-link').forEach(l => l.classList.toggle('active', l.dataset.page === state.currentPage)); let c; switch (state.currentPage) { case 'dashboard': c = renderDashboardScreen(); break; case 'tools': c = renderToolsHubScreen(); break; case 'profile': c = renderProfileScreen(); break; default: c = renderDashboardScreen(); } pageContentEl.innerHTML = c; } else { mainAppEl.classList.add('hidden'); authContentEl.classList.remove('hidden'); authContentEl.innerHTML = renderAuthScreen(state.currentPage); } feather.replace(); };
             
-            <div class="search-bar">
-                <i class="fas fa-search search-icon"></i>
-                <input type="text" placeholder="Search tools...">
-                <div class="search-filters">
-                    <button class="filter-btn active">All</button>
-                    <button class="filter-btn">Recent</button>
-                    <button class="filter-btn">Favorites</button>
-                </div>
-            </div>
+            const toolTemplates = { imageCompressor: `<div class="tool-col"><label class="tool-label">Upload Image</label><input type=file id=img-upload class=tool-input accept=image/*></div><div class=tool-col><label class="tool-label">Quality (<span id=quality-val class=range-value>.7</span>)</label><input type=range id=quality-slider class=tool-range min=.1 max=1 step=.1 value=.7></div><div id=image-info style="font-size:.9em;color:var(--text-secondary)">Select an image.</div><a id=download-btn class="btn btn-primary" style=display:none;text-align:center;text-decoration:none>Download Compressed Image</a>`, jsonFormatter: `<div class=tool-row><div class=tool-col><label class="tool-label">Input JSON</label><textarea id=json-input class=tool-textarea placeholder="Paste JSON here..."></textarea></div><div class=tool-col><label class="tool-label">Formatted JSON</label><textarea id=json-output class=tool-textarea readonly></textarea></div></div>`, passwordGenerator: `<div class=tool-col><label class="tool-label">Generated Password</label><div class=tool-row style=gap:.5rem><input type=text id=password-output class=tool-input readonly><button class=copy-btn data-copy-target=password-output><i data-feather=copy></i></button></div></div><div class=tool-row><div class=tool-col><label class="tool-label">Length: <span id=length-val class=range-value>16</span></label><input type=range id=length-slider class=tool-range min=8 max=64 value=16></div></div><div class="tool-col password-options"><label><input type=checkbox id=p-uppercase checked> Uppercase</label><label><input type=checkbox id=p-lowercase checked> Lowercase</label><label><input type=checkbox id=p-numbers checked> Numbers</label><label><input type=checkbox id=p-symbols checked> Symbols</label></div><button id=generate-pw-btn class="btn btn-primary">Generate</button>`, qrCodeGenerator: `<div class=tool-col><label class="tool-label">Enter Text or URL</label><input type=text id=qr-input class=tool-input placeholder=https://example.com></div><div id=qr-code-container></div>`, colorPicker: `<div class=tool-row style=justify-content:center;align-items:center;gap:1.5rem><input type=color id=color-picker-input value=#818cf8 style=width:50px;height:50px;border:none;background:0 0;padding:0;border-radius:50%;cursor:pointer><div id=color-preview></div></div><div class=tool-col><label class="tool-label">HEX</label><div class=tool-row style=gap:.5rem><input type=text id=hex-output class=tool-input readonly><button class=copy-btn data-copy-target=hex-output><i data-feather=copy></i></button></div></div><div class=tool-col><label class="tool-label">RGB</label><div class=tool-row style=gap:.5rem><input type=text id=rgb-output class=tool-input readonly><button class=copy-btn data-copy-target=rgb-output><i data-feather=copy></i></button></div></div><div class=tool-col><label class="tool-label">HSL</label><div class=tool-row style=gap:.5rem><input type=text id=hsl-output class=tool-input readonly><button class=copy-btn data-copy-target=hsl-output><i data-feather=copy></i></button></div></div>`, unitConverter: `<div class=tool-col><label class="tool-label">Category</label><select id=unit-category class=tool-select><option value=length>Length</option><option value=weight>Weight</option><option value=temp>Temperature</option></select></div><div class=tool-row><div class=tool-col><label class="tool-label">From</label><input type=number id=unit-input class=tool-input value=1><select id=from-unit class=tool-select></select></div><div class=tool-col><label class="tool-label">To</label><p id=unit-output class=output-box></p><select id=to-unit class=tool-select></select></div></div>`, loremIpsum: `<div class=tool-col><label class="tool-label">Paragraphs: <span id=para-count-val class=range-value>3</span></label><input type=range id=para-count-slider class=tool-range min=1 max=10 value=3></div><button id=generate-lorem-btn class="btn btn-primary">Generate & Copy</button><div class=tool-col><label class="tool-label">Result</label><textarea id=lorem-output class=tool-textarea style=height:200px readonly></textarea></div>`, timestampConverter: `<div class=tool-col><label class="tool-label">Unix Timestamp</label><input type=number id=unix-input class=tool-input placeholder=1672531199></div><div class=tool-col><label class="tool-label">Local Time</label><input type=text id=local-output class=tool-input readonly></div><div class=tool-col><label class="tool-label">UTC Time</label><input type=text id=utc-output class=tool-input readonly></div><button id=get-current-time-btn class="btn btn-primary">Get Current Time</button>`,
+            wordCounter: `<div class=tool-col><label class=tool-label>Enter Text</label><textarea id=wc-input class=tool-textarea style="height:200px" placeholder="Start typing here..."></textarea></div><div class=stats-grid><div class=stat-item><div id=wc-words class=value>0</div><div class=label>Words</div></div><div class=stat-item><div id=wc-chars class=value>0</div><div class=label>Characters</div></div><div class=stat-item><div id=wc-lines class=value>0</div><div class=label>Lines</div></div><div class=stat-item><div id=wc-sentences class=value>0</div><div class=label>Sentences</div></div></div>`, caseConverter: `<div class=tool-col><label class=tool-label>Input</label><textarea id=cc-input class=tool-textarea></textarea></div><div class="btn-group"><button class="btn btn-secondary" data-case=upper>UPPERCASE</button><button class="btn btn-secondary" data-case=lower>lowercase</button><button class="btn btn-secondary" data-case=title>Title Case</button><button class="btn btn-secondary" data-case=sentence>Sentence case</button></div><div class=tool-col><label class=tool-label>Output</label><textarea id=cc-output class=tool-textarea readonly></textarea></div>`, hashGenerator: `<div class=tool-col><label class=tool-label>Input Text</label><textarea id=hash-input class=tool-textarea></textarea></div><div class=tool-col><label class=tool-label>Algorithm</label><select id=hash-algo class=tool-select><option value=MD5>MD5</option><option value=SHA-1>SHA-1</option><option value=SHA-256>SHA-256</option></select></div><div class=tool-col><label class=tool-label>Hash Output</label><textarea id=hash-output class=tool-textarea readonly></textarea></div>`, urlEncoder: `<div class=tool-row><div class=tool-col><label class=tool-label>Decoded URL</label><textarea id=url-decoded class=tool-textarea placeholder="https://example.com/search?q=hello world"></textarea></div><div class=tool-col><label class=tool-label>Encoded URL</label><textarea id=url-encoded class=tool-textarea readonly></textarea></div></div>`, markdownPreviewer: `<div class=tool-row><div class=tool-col><label class=tool-label>Markdown Input</label><textarea id=markdown-input class=tool-textarea style="height:300px"># Hello World\n\n- List Item 1\n- List Item 2\n\n**Bold Text**</textarea></div><div class=tool-col><label class=tool-label>HTML Preview</label><div id=markdown-preview></div></div></div>`, ageCalculator: `<div class=tool-col><label class=tool-label>Enter your Date of Birth</label><input type=date id=dob-input class=tool-input></div><div id=age-result class=output-box>Your age will be displayed here.</div>`
+            };
+
+            const initTool = {
+                imageCompressor:()=>{const e=document.getElementById("img-upload"),t=document.getElementById("quality-slider"),l=document.getElementById("quality-val"),o=document.getElementById("download-btn"),n=document.getElementById("image-info");t.addEventListener("input",()=>{l.textContent=t.value}),e.addEventListener("change",e=>{const t=e.target.files[0];if(!t)return;const l=new FileReader;l.onload=e=>{const a=new Image;a.onload=()=>{const i=document.createElement("canvas");i.width=a.width,i.height=a.height,i.getContext("2d").drawImage(a,0,0);const d=i.toDataURL(t.type,parseFloat(slider.value));n.innerHTML=`Original: ${(t.size/1024).toFixed(2)} KB | Compressed: ${(d.length*.75/1024).toFixed(2)} KB`;o.href=d;o.download=`compressed_${t.name}`;o.style.display="block"},a.src=e.target.result},l.readAsDataURL(t)})},
+                jsonFormatter:()=>{const e=document.getElementById("json-input"),t=document.getElementById("json-output");e.addEventListener("input",()=>{try{t.value=JSON.stringify(JSON.parse(e.value),null,2),t.style.borderColor="var(--border-glass)"}catch(e){t.value=e.message,t.style.borderColor="#ef4444"}})},
+                passwordGenerator:()=>{const e=document.getElementById("password-output"),t=document.getElementById("length-slider"),l=document.getElementById("length-val"),o=document.getElementById("generate-pw-btn"),n={uppercase:"ABCDEFGHIJKLMNOPQRSTUVWXYZ",lowercase:"abcdefghijklmnopqrstuvwxyz",numbers:"0123456789",symbols:"!@#$%^&*()_+-=[]{}|;:,.<>?"};const a=()=>{let a=Object.keys(n).filter(e=>document.getElementById(`p-${e}`).checked).map(e=>n[e]).join(""),d="";for(let s=0;s<t.value;++s)d+=a.charAt(Math.floor(Math.random()*a.length));e.value=d};t.addEventListener("input",()=>l.textContent=t.value),o.addEventListener("click",a),document.querySelector("[data-copy-target=password-output]").addEventListener("click",()=>copyToClipboard(e.value,"Password"));a()},
+                qrCodeGenerator:()=>{const e=document.getElementById("qr-input"),t=document.getElementById("qr-code-container");const l=()=>{const o=e.value.trim()||"ToolBox Pro";t.innerHTML="";new QRCode(t,{text:o,width:160,height:160,colorDark:"dark"===document.body.dataset.theme?"#e2e8f0":"#0f172a",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.H})};e.addEventListener("input",l);l()},
+                colorPicker:()=>{const e=document.getElementById("color-picker-input"),t=document.getElementById("color-preview"),l=document.getElementById("hex-output"),o=document.getElementById("rgb-output"),n=document.getElementById("hsl-output");const a=e=>{t.style.background=e,l.value=e.toUpperCase();let a=parseInt(e.slice(1,3),16),d=parseInt(e.slice(3,5),16),s=parseInt(e.slice(5,7),16);o.value=`rgb(${a}, ${d}, ${s})`;a/=255,d/=255,s/=255;let i,c,u=(Math.max(a,d,s)+Math.min(a,d,s))/2;if(Math.max(a,d,s)===Math.min(a,d,s))i=c=0;else{let t=Math.max(a,d,s)-Math.min(a,d,s);switch(c=u>.5?t/(2-Math.max(a,d,s)-Math.min(a,d,s)):t/(Math.max(a,d,s)+Math.min(a,d,s)),Math.max(a,d,s)){case a:i=(d-s)/t+(d<s?6:0);break;case d:i=(s-a)/t+2;break;case s:i=(a-d)/t+4}i/=6}n.value=`hsl(${(360*i).toFixed(0)}, ${(100*c).toFixed(0)}%, ${(100*u).toFixed(0)}%)`};e.addEventListener("input",()=>a(e.value));a(e.value)},
+                unitConverter:()=>{const e=document.getElementById("unit-category"),t=document.getElementById("from-unit"),l=document.getElementById("to-unit"),o=document.getElementById("unit-input"),n=document.getElementById("unit-output"),a={length:{Meter:1,Kilometer:1e3,Mile:1609.34,Foot:.3048},weight:{Gram:1,Kilogram:1e3,Pound:453.592,Ounce:28.3495},temp:{Celsius:"c",Fahrenheit:"f",Kelvin:"k"}};const d=e=>{t.innerHTML=l.innerHTML="";Object.keys(a[e]).forEach(o=>{t.add(new Option(o,a[e][o]));l.add(new Option(o,a[e][o]))});l.selectedIndex=1};const s=()=>{const a=e.value,d=parseFloat(o.value);if(isNaN(d))return n.textContent="Invalid";let s;if("temp"!==a)s=(d*parseFloat(t.value)/parseFloat(l.value)).toFixed(3);else{const e=t.value,o=l.value;s=d;"c"===e&&"f"===o?s=9*d/5+32:"f"===e&&"c"===o&&(s=5*(d-32)/9),s=s.toFixed(2)}n.textContent=s};e.addEventListener("change",()=>{d(e.value);s()});[t,l,o].forEach(e=>e.addEventListener("input",s));d("length");s()},
+                loremIpsum:()=>{const e=document.getElementById("para-count-slider"),t=document.getElementById("para-count-val"),l=document.getElementById("generate-lorem-btn"),o=document.getElementById("lorem-output"),n="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";const a=()=>{o.value=Array(parseInt(e.value)).fill(n).join("\n\n")};e.addEventListener("input",()=>{t.textContent=e.value;a()});l.addEventListener("click",()=>{a();copyToClipboard(o.value,"Lorem Ipsum Text")});a()},
+                timestampConverter:()=>{const e=document.getElementById("unix-input"),t=document.getElementById("utc-output"),l=document.getElementById("local-output");const o=()=>{const o=new Date(1e3*parseInt(e.value));if(!isNaN(o)){t.value=o.toUTCString();l.value=o.toLocaleString()}};const n=()=>{e.value=Math.floor(Date.now()/1e3);o()};e.addEventListener("input",o);document.getElementById("get-current-time-btn").addEventListener("click",n);n()},
+                wordCounter:()=>{const i=document.getElementById("wc-input"),w=document.getElementById("wc-words"),c=document.getElementById("wc-chars"),l=document.getElementById("wc-lines"),s=document.getElementById("wc-sentences");i.addEventListener("input",()=>{const t=i.value;w.textContent=t.trim()?t.trim().split(/\s+/).length:0;c.textContent=t.length;l.textContent=t?t.split("\n").length:0;s.textContent=t.match(/[\w|)][.?!](\s|$)/g)?.length||0})},
+                caseConverter:()=>{const i=document.getElementById("cc-input"),o=document.getElementById("cc-output"),b=document.querySelector("#modal-body .btn-group");b.addEventListener("click",e=>{const t=e.target.dataset.case;if(!t)return;let c=i.value;switch(t){case "upper":c=c.toUpperCase();break;case "lower":c=c.toLowerCase();break;case "title":c=c.toLowerCase().replace(/\b\w/g,char=>char.toUpperCase());break;case "sentence":c=c.toLowerCase().replace(/(^\w{1}|\.\s*\w{1})/gi,char=>char.toUpperCase());break}o.value=c})},
+                hashGenerator:()=>{const i=document.getElementById("hash-input"),a=document.getElementById("hash-algo"),o=document.getElementById("hash-output");const gen=()=>{const t=i.value;let h;switch(a.value){case"MD5":h=CryptoJS.MD5(t);break;case"SHA-1":h=CryptoJS.SHA1(t);break;case"SHA-256":h=CryptoJS.SHA256(t);break}o.value=h.toString()};i.addEventListener("input",gen);a.addEventListener("change",gen);gen()},
+                urlEncoder:()=>{const d=document.getElementById("url-decoded"),e=document.getElementById("url-encoded");d.addEventListener("input",()=>{try{e.value=encodeURIComponent(d.value)}catch(err){e.value="Error"}});e.addEventListener("input",()=>{try{d.value=decodeURIComponent(e.value)}catch(err){d.value="Invalid encoded URL"}})},
+                markdownPreviewer:()=>{const i=document.getElementById("markdown-input"),p=document.getElementById("markdown-preview");const update=()=>{p.innerHTML=marked.parse(i.value,{breaks:true})};i.addEventListener("input",update);update()},
+                ageCalculator:()=>{const i=document.getElementById("dob-input"),r=document.getElementById("age-result");i.addEventListener("change",()=>{const b=new Date(i.value),n=new Date;if(isNaN(b)||b>n){r.textContent="Please select a valid past date.";return;}let y=n.getFullYear()-b.getFullYear(),m=n.getMonth()-b.getMonth(),d=n.getDate()-b.getDate();if(d<0){m--;d+=new Date(n.getFullYear(),n.getMonth(),0).getDate()}if(m<0){y--;m+=12}r.innerHTML=`You are <span>${y}</span> years, <span>${m}</span> months, and <span>${d}</span> days old.`})}
+            };
             
-            <div class="tool-categories">
-                <div class="category">
-                    <div class="category-header">
-                        <h3>Development Tools</h3>
-                        <span class="category-count">12</span>
-                    </div>
-                    <div class="tool-grid">
-                        <div class="tool-card">
-                            <div class="tool-icon">
-                                <i class="fas fa-code"></i>
-                            </div>
-                            <h4>JSON Formatter</h4>
-                            <p>Format and validate JSON</p>
-                            <div class="tool-badge popular">Popular</div>
-                        </div>
-                        
-                        <div class="tool-card">
-                            <div class="tool-icon">
-                                <i class="fas fa-terminal"></i>
-                            </div>
-                            <h4>Base64 Encoder</h4>
-                            <p>Encode/decode Base64</p>
-                        </div>
-                        
-                        <div class="tool-card">
-                            <div class="tool-icon">
-                                <i class="fas fa-hashtag"></i>
-                            </div>
-                            <h4>Hash Generator</h4>
-                            <p>MD5, SHA1, SHA256</p>
-                        </div>
-                        
-                        <div class="tool-card">
-                            <div class="tool-icon">
-                                <i class="fas fa-regular-expression"></i>
-                            </div>
-                            <h4>RegEx Tester</h4>
-                            <p>Test regular expressions</p>
-                            <div class="tool-badge new">New</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="category">
-                    <div class="category-header">
-                        <h3>Design Tools</h3>
-                        <span class="category-count">8</span>
-                    </div>
-                    <div class="tool-grid">
-                        <div class="tool-card">
-                            <div class="tool-icon">
-                                <i class="fas fa-palette"></i>
-                            </div>
-                            <h4>Color Picker</h4>
-                            <p>Pick and generate colors</p>
-                        </div>
-                        
-                        <div class="tool-card">
-                            <div class="tool-icon">
-                                <i class="fas fa-font"></i>
-                            </div>
-                            <h4>Font Pairing</h4>
-                            <p>Find perfect font pairs</p>
-                        </div>
-                        
-                        <div class="tool-card">
-                            <div class="tool-icon">
-                                <i class="fas fa-images"></i>
-                            </div>
-                            <h4>Image Optimizer</h4>
-                            <p>Compress and resize</p>
-                        </div>
-                        
-                        <div class="tool-card">
-                            <div class="tool-icon">
-                                <i class="fas fa-crop"></i>
-                            </div>
-                            <h4>CSS Generator</h4>
-                            <p>Generate CSS snippets</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="category">
-                    <div class="category-header">
-                        <h3>Utilities</h3>
-                        <span class="category-count">15</span>
-                    </div>
-                    <div class="tool-grid">
-                        <div class="tool-card">
-                            <div class="tool-icon">
-                                <i class="fas fa-qrcode"></i>
-                            </div>
-                            <h4>QR Generator</h4>
-                            <p>Create QR codes</p>
-                            <div class="tool-badge popular">Popular</div>
-                        </div>
-                        
-                        <div class="tool-card">
-                            <div class="tool-icon">
-                                <i class="fas fa-random"></i>
-                            </div>
-                            <h4>Password Gen</h4>
-                            <p>Secure passwords</p>
-                        </div>
-                        
-                        <div class="tool-card">
-                            <div class="tool-icon">
-                                <i class="fas fa-calculator"></i>
-                            </div>
-                            <h4>Calculator</h4>
-                            <p>Advanced calculations</p>
-                        </div>
-                        
-                        <div class="tool-card">
-                            <div class="tool-icon">
-                                <i class="fas fa-exchange-alt"></i>
-                            </div>
-                            <h4>Unit Converter</h4>
-                            <p>Convert units</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Settings Screen -->
-    <div id="settingsScreen" class="screen">
-        <div class="settings-container">
-            <header class="settings-header">
-                <button class="back-btn">
-                    <i class="fas fa-arrow-left"></i>
-                </button>
-                <h2>Settings</h2>
-            </header>
-            
-            <div class="settings-content">
-                <!-- Profile Section -->
-                <div class="settings-section">
-                    <div class="section-header">
-                        <h3>Profile</h3>
-                    </div>
-                    <div class="profile-card">
-                        <div class="profile-avatar">
-                            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9InVybCgjZ3JhZGllbnQwXzEyXzMpIi8+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMTYiIHI9IjYiIGZpbGw9IndoaXRlIiBmaWxsLW9wYWNpdHk9IjAuOSIvPgo8cGF0aCBkPSJNMTAgMzJjMC02IDQtMTAgMTAtMTBzMTAgNCAxMCAxMCIgZmlsbD0id2hpdGUiIGZpbGwtb3BhY2l0eT0iMC45Ii8+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9ImdyYWRpZW50MF8xMl8zIiB4MT0iMCIgeTE9IjAiIHgyPSI0MCIgeTI9IjQwIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CjxzdG9wIHN0b3AtY29sb3I9IiM2MzY2RjEiLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjOEI1Q0Y2Ii8+CjwvbGluZWFyR3JhZGllbnQ+CjwvZGVmcz4KPHN2Zz4K" alt="Profile">
-                            <button class="edit-avatar">
-                                <i class="fas fa-camera"></i>
-                            </button>
-                        </div>
-                        <div class="profile-info">
-                            <h4>Alex Johnson</h4>
-                            <p>alex.johnson@email.com</p>
-                            <span class="profile-badge">Pro Member</span>
-                        </div>
-                        <button class="edit-profile-btn">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Preferences -->
-                <div class="settings-section">
-                    <div class="section-header">
-                        <h3>Preferences</h3>
-                    </div>
-                    <div class="settings-list">
-                        <div class="setting-item">
-                            <div class="setting-info">
-                                <i class="fas fa-palette"></i>
-                                <div>
-                                    <h4>Theme</h4>
-                                    <p>Dark mode</p>
-                                </div>
-                            </div>
-                            <div class="toggle-switch">
-                                <input type="checkbox" id="themeSwitch" checked>
-                                <label for="themeSwitch"></label>
-                            </div>
-                        </div>
-                        
-                        <div class="setting-item">
-                            <div class="setting-info">
-                                <i class="fas fa-bell"></i>
-                                <div>
-                                    <h4>Notifications</h4>
-                                    <p>Push notifications</p>
-                                </div>
-                            </div>
-                            <div class="toggle-switch">
-                                <input type="checkbox" id="notificationSwitch" checked>
-                                <label for="notificationSwitch"></label>
-                            </div>
-                        </div>
-                        
-                        <div class="setting-item">
-                            <div class="setting-info">
-                                <i class="fas fa-shield-alt"></i>
-                                <div>
-                                    <h4>Privacy Mode</h4>
-                                    <p>Enhanced security</p>
-                                </div>
-                            </div>
-                            <div class="toggle-switch">
-                                <input type="checkbox" id="privacySwitch">
-                                <label for="privacySwitch"></label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- History -->
-                <div class="settings-section">
-                    <div class="section-header">
-                        <h3>Activity History</h3>
-                        <button class="clear-history-btn">Clear All</button>
-                    </div>
-                    <div class="history-list">
-                        <div class="history-item">
-                            <div class="history-icon">
-                                <i class="fas fa-file-code"></i>
-                            </div>
-                            <div class="history-content">
-                                <h4>JSON Formatter</h4>
-                                <p>Today at 2:30 PM</p>
-                            </div>
-                            <button class="history-action">
-                                <i class="fas fa-redo"></i>
-                            </button>
-                        </div>
-                        
-                        <div class="history-item">
-                            <div class="history-icon">
-                                <i class="fas fa-palette"></i>
-                            </div>
-                            <div class="history-content">
-                                <h4>Color Picker</h4>
-                                <p>Today at 1:15 PM</p>
-                            </div>
-                            <button class="history-action">
-                                <i class="fas fa-redo"></i>
-                            </button>
-                        </div>
-                        
-                        <div class="history-item">
-                            <div class="history-icon">
-                                <i class="fas fa-qrcode"></i>
-                            </div>
-                            <div class="history-content">
-                                <h4>QR Generator</h4>
-                                <p>Yesterday at 4:45 PM</p>
-                            </div>
-                            <button class="history-action">
-                                <i class="fas fa-redo"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Account Actions -->
-                <div class="settings-section">
-                    <div class="section-header">
-                        <h3>Account</h3>
-                    </div>
-                    <div class="account-actions">
-                        <button class="account-btn">
-                            <i class="fas fa-crown"></i>
-                            <span>Upgrade to Pro</span>
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
-                        
-                        <button class="account-btn">
-                            <i class="fas fa-life-ring"></i>
-                            <span>Help & Support</span>
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
-                        
-                        <button class="account-btn">
-                            <i class="fas fa-file-alt"></i>
-                            <span>Terms & Privacy</span>
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
-                        
-                        <button class="account-btn logout">
-                            <i class="fas fa-sign-out-alt"></i>
-                            <span>Sign Out</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Bottom Navigation -->
-    <nav class="bottom-nav">
-        <button class="nav-btn active" data-screen="dashboard">
-            <i class="fas fa-home"></i>
-            <span>Home</span>
-        </button>
-        <button class="nav-btn" data-screen="tools">
-            <i class="fas fa-tools"></i>
-            <span>Tools</span>
-        </button>
-        <button class="nav-btn" data-screen="favorites">
-            <i class="fas fa-star"></i>
-            <span>Favorites</span>
-        </button>
-        <button class="nav-btn" data-screen="settings">
-            <i class="fas fa-cog"></i>
-            <span>Settings</span>
-        </button>
-    </nav>
-
-    <script src="script.js"></script>
+            document.body.addEventListener('click', e => { const target = e.target; if (target.matches('.modal-overlay') || target.closest('.modal-close')) { modalEl.classList.remove('active'); return; } const navLink = target.closest('[data-page]'); if (navLink) { const page = navLink.dataset.page; if (page === 'login' || page === 'signup') { e.preventDefault(); state.currentPage = page; render(); } else if (navLink.matches('.nav-link, .user-profile')) { state.currentPage = page; render(); } return; } const themeToggle = target.closest('#theme-toggle-container'); if (themeToggle) { state.theme = state.theme === 'light' ? 'dark' : 'light'; localStorage.setItem('theme', state.theme); render(); return; } const logoutBtn = target.closest('#logout-btn'); if (logoutBtn) { handleLogout(); return; } const toolCard = target.closest('.tool-card'); if (toolCard) { const id = toolCard.dataset.toolId, data = state.tools.find(t => t.id === id); modalTitleEl.textContent = data.name; modalBodyEl.innerHTML = toolTemplates[id]; modalEl.classList.add('active'); if (initTool[id]) initTool[id](); feather.replace(); return; } const copyBtn = target.closest('.copy-btn'); if (copyBtn) { const el = document.getElementById(copyBtn.dataset.copyTarget); if (el) copyToClipboard(el.value, modalTitleEl.textContent); return; } });
+            document.body.addEventListener('submit', e => { e.preventDefault(); const form = e.target, btn = form.querySelector('button[type="submit"]'); btn.disabled = true; btn.classList.add('loading'); setTimeout(() => { if (form.id === 'signup-form') { if (handleSignUp(form.name.value, form.email.value, form.password.value)) { state.currentPage = 'login'; render(); } } else if (form.id === 'login-form') { if (handleLogin(form.email.value, form.password.value)) { state.currentPage = 'dashboard'; render(); } } btn.disabled = false; btn.classList.remove('loading'); }, 1000); });
+            function showToast(message, type = 'success') { const t = document.createElement('div'); t.className = `toast ${type}`; t.textContent = message; document.body.appendChild(t); setTimeout(() => { t.classList.add('show'); setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300) }, 3000); }, 100) }
+            const copyToClipboard = (text, entity = "Value") => { showToast(`${entity} copied!`); navigator.clipboard.writeText(text); };
+            const initApp = () => { const sessionEmail = db.getSession(); if (sessionEmail) { const user = db.getUsers().find(u => u.email === sessionEmail); if (user) { state.isLoggedIn = true; state.user = user; state.currentPage = 'dashboard' } } render(); };
+            initApp();
+        });
+    </script>
 </body>
 </html>
