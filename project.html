@@ -1,0 +1,560 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aether Export</title>
+  <style>
+    body {
+  background: #000;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.card {
+  position: relative;
+  padding: 40px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.1);
+  overflow: hidden;
+}
+
+h2 {
+  font-size: 2.5rem;
+  margin: 0;
+  background: linear-gradient(to right, #06b6d4, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+  </style>
+</head>
+<body>
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DRS Flappy Cricket</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Teko:wght@400;600&display=swap');
+        
+        body {
+            font-family: 'Teko', sans-serif;
+            overflow: hidden;
+            touch-action: none;
+            user-select: none;
+        }
+        
+        .cricket-font {
+            font-family: 'Teko', sans-serif;
+        }
+
+        /* Scanline effect for that retro TV feel during quiz */
+        .scanlines {
+            background: linear-gradient(
+                to bottom,
+                rgba(255,255,255,0),
+                rgba(255,255,255,0) 50%,
+                rgba(0,0,0,0.1) 50%,
+                rgba(0,0,0,0.1)
+            );
+            background-size: 100% 4px;
+        }
+        
+        .modal-glass {
+            background: rgba(17, 24, 39, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        canvas {
+            image-rendering: pixelated;
+        }
+    </style>
+</head>
+<body class="bg-blue-300 h-screen w-screen flex flex-col items-center justify-center relative">
+
+    <!-- Game Container -->
+    <div id="game-container" class="relative w-full h-full max-w-4xl max-h-[90vh] bg-blue-400 overflow-hidden shadow-2xl border-4 border-white md:rounded-lg">
+        
+        <canvas id="gameCanvas" class="w-full h-full block"></canvas>
+
+        <!-- Score HUD -->
+        <div class="absolute top-4 left-4 z-10 pointer-events-none">
+            <div class="text-white text-4xl drop-shadow-md font-bold tracking-wider">
+                RUNS: <span id="scoreDisplay">0</span>
+            </div>
+            <div class="text-yellow-300 text-xl drop-shadow-md tracking-wider">
+                HIGH SCORE: <span id="highScoreDisplay">0</span>
+            </div>
+        </div>
+
+        <!-- Start Screen -->
+        <div id="startScreen" class="absolute inset-0 flex flex-col items-center justify-center bg-black/60 z-20">
+            <h1 class="text-6xl md:text-8xl text-white font-bold mb-2 tracking-widest drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)] text-center">
+                <span class="text-red-500">FLAPPY</span> CRICKET
+            </h1>
+            <p class="text-white text-2xl mb-8 tracking-wide text-center px-4">Tap, Click, or Spacebar to Bat</p>
+            <div class="bg-blue-600 p-6 rounded-lg border-2 border-white max-w-sm text-center shadow-xl transform rotate-1">
+                <p class="text-white text-xl mb-2 font-bold">THE RULES</p>
+                <p class="text-blue-100 text-lg leading-tight">Avoid the Wickets!</p>
+                <p class="text-yellow-300 text-lg mt-2 font-bold leading-tight">HIT A WICKET?</p>
+                <p class="text-blue-100 text-lg leading-tight">Answer a Cricket Trivia question to survive (DRS)!</p>
+            </div>
+            <button id="startBtn" class="mt-8 px-8 py-3 bg-red-600 hover:bg-red-700 text-white text-3xl font-bold rounded shadow-[0_4px_0_rgb(153,27,27)] active:shadow-none active:translate-y-1 transition-all">
+                PLAY BALL
+            </button>
+        </div>
+
+        <!-- Quiz Modal (DRS) -->
+        <div id="quizModal" class="hidden absolute inset-0 flex items-center justify-center z-30 scanlines">
+            <div class="modal-glass p-1 w-full max-w-lg mx-4 rounded-xl border-4 border-yellow-500 shadow-2xl transform transition-all scale-100">
+                <div class="bg-gray-900 rounded-lg p-6 relative overflow-hidden">
+                    <!-- Decor -->
+                    <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 via-white to-green-500"></div>
+                    
+                    <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
+                        <h2 class="text-3xl text-yellow-400 font-bold tracking-widest">DRS REVIEW</h2>
+                        <span class="text-red-500 font-bold text-xl animate-pulse">DECISION PENDING...</span>
+                    </div>
+
+                    <p id="quizQuestion" class="text-white text-2xl mb-6 leading-tight text-center font-sans font-light">
+                        Loading question...
+                    </p>
+
+                    <div id="quizOptions" class="grid grid-cols-1 gap-3">
+                        <!-- Options injected by JS -->
+                    </div>
+
+                    <div class="mt-4 text-center text-gray-400 text-sm">
+                        Answer correctly to reverse the decision and continue!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="gameOverScreen" class="hidden absolute inset-0 flex flex-col items-center justify-center bg-red-900/90 z-40">
+            <h2 class="text-7xl text-white font-bold mb-2 tracking-widest drop-shadow-lg">OUT!</h2>
+            <p class="text-red-200 text-3xl mb-6">Umpire's decision stands.</p>
+            
+            <div class="bg-white p-6 rounded shadow-xl text-center min-w-[200px] mb-8">
+                <p class="text-gray-600 text-xl">TOTAL RUNS</p>
+                <p id="finalScore" class="text-6xl font-bold text-gray-800">0</p>
+            </div>
+
+            <button id="restartBtn" class="px-8 py-3 bg-green-600 hover:bg-green-700 text-white text-3xl font-bold rounded shadow-[0_4px_0_rgb(21,128,61)] active:shadow-none active:translate-y-1 transition-all">
+                NEXT BATSMAN
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        // --- Game Configuration ---
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreEl = document.getElementById('scoreDisplay');
+        const highScoreEl = document.getElementById('highScoreDisplay');
+        const finalScoreEl = document.getElementById('finalScore');
+        
+        // Screens
+        const startScreen = document.getElementById('startScreen');
+        const quizModal = document.getElementById('quizModal');
+        const gameOverScreen = document.getElementById('gameOverScreen');
+
+        // Buttons
+        document.getElementById('startBtn').addEventListener('click', startGame);
+        document.getElementById('restartBtn').addEventListener('click', resetGame);
+
+        // State
+        let frames = 0;
+        let score = 0;
+        let highScore = localStorage.getItem('cricketHighScore') || 0;
+        let gameSpeed = 3; // Increased slightly for better feel
+        let isGameOver = false;
+        let isQuizActive = false;
+        let animationId;
+        
+        // Cricket Trivia Database
+        const questions = [
+            { q: "Who is known as the 'God of Cricket'?", options: ["Ricky Ponting", "Sachin Tendulkar", "Brian Lara", "Virat Kohli"], a: 1 },
+            { q: "How many balls are in one standard over?", options: ["Five", "Six", "Eight", "Ten"], a: 1 },
+            { q: "Which country won the 2019 ODI World Cup?", options: ["New Zealand", "India", "England", "Australia"], a: 2 },
+            { q: "What is the maximum number of runs you can score from a single ball (without overthrows)?", options: ["4", "6", "8", "10"], a: 1 },
+            { q: "Who has the most centuries in international cricket?", options: ["Sachin Tendulkar", "Virat Kohli", "Ricky Ponting", "Jacques Kallis"], a: 0 },
+            { q: "What is the term for a bowler taking 3 wickets in consecutive balls?", options: ["Century", "Maiden", "Hat-trick", "Doosra"], a: 2 },
+            { q: "Where is the stadium 'Lord's' located?", options: ["Melbourne", "Mumbai", "London", "Cape Town"], a: 2 },
+            { q: "What implies the signal 'T' made by the umpire?", options: ["Time Out", "Third Umpire", "Tea Break", "Tournament End"], a: 1 },
+            { q: "Which IPL team has won the most titles (as of 2024)?", options: ["CSK & MI", "KKR", "RCB", "RR"], a: 0 },
+            { q: "Who hit 6 sixes in an over in the 2007 T20 World Cup?", options: ["MS Dhoni", "Yuvraj Singh", "Chris Gayle", "Herschelle Gibbs"], a: 1 },
+            { q: "What is the length of a standard cricket pitch?", options: ["20 yards", "22 yards", "24 yards", "18 yards"], a: 1 },
+            { q: "Who is known as 'Captain Cool'?", options: ["Kane Williamson", "Steve Waugh", "MS Dhoni", "Rohit Sharma"], a: 2 },
+            { q: "Which format of cricket is played in white clothing?", options: ["T20", "ODI", "Test", "The Hundred"], a: 2 },
+            { q: "Who bowled the 'Ball of the Century' to Mike Gatting?", options: ["Muttiah Muralitharan", "Shane Warne", "Anil Kumble", "Glenn McGrath"], a: 1 },
+            { q: "How many bails are there on a set of stumps?", options: ["1", "2", "3", "4"], a: 1 }
+        ];
+
+        // --- Game Objects ---
+
+        // The Ball
+        const ball = {
+            x: 50,
+            y: 150,
+            radius: 12,
+            velocity: 0,
+            gravity: 0.25,
+            jumpStrength: -5.5,
+            rotation: 0,
+            
+            draw: function() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                this.rotation += 0.1;
+                ctx.rotate(this.rotation);
+                
+                // Ball Body (Red)
+                ctx.beginPath();
+                ctx.arc(0, 0, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = '#D32F2F'; // Cricket ball red
+                ctx.fill();
+                ctx.strokeStyle = '#8c1b1b';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                ctx.closePath();
+
+                // Seam (White stitching)
+                ctx.beginPath();
+                ctx.moveTo(-10, -5);
+                ctx.bezierCurveTo(-5, 0, 5, 0, 10, 5);
+                ctx.strokeStyle = '#FFFFFF';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([3, 2]); // Stitch effect
+                ctx.stroke();
+                ctx.setLineDash([]);
+                
+                // Shine
+                ctx.beginPath();
+                ctx.arc(-4, -4, 3, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255,255,255,0.3)';
+                ctx.fill();
+
+                ctx.restore();
+            },
+            
+            update: function() {
+                this.velocity += this.gravity;
+                this.y += this.velocity;
+                
+                // Floor collision
+                if (this.y + this.radius >= canvas.height - 20) { // -20 for ground
+                    this.y = canvas.height - 20 - this.radius;
+                    checkGameOver(null);
+                }
+                
+                // Ceiling collision
+                if (this.y - this.radius <= 0) {
+                    this.y = this.radius;
+                    this.velocity = 0;
+                }
+            },
+            
+            jump: function() {
+                this.velocity = this.jumpStrength;
+            }
+        };
+
+        // The Wickets (Pipes)
+        const pipes = {
+            items: [],
+            width: 45, // Thinner, like stumps
+            gap: 170,  // Space between top and bottom
+            dx: 3,     // Speed
+            
+            draw: function() {
+                for (let i = 0; i < this.items.length; i++) {
+                    let p = this.items[i];
+                    
+                    // Draw Wickets (Wood color)
+                    ctx.fillStyle = '#EAB308'; // Yellow/Wood
+                    ctx.strokeStyle = '#854D0E'; // Dark wood border
+                    
+                    // Top Stump
+                    ctx.fillRect(p.x, 0, this.width, p.top);
+                    ctx.strokeRect(p.x, 0, this.width, p.top);
+                    
+                    // Bottom Stump
+                    ctx.fillRect(p.x, canvas.height - p.bottom, this.width, p.bottom);
+                    ctx.strokeRect(p.x, canvas.height - p.bottom, this.width, p.bottom);
+                    
+                    // Draw Bails (simple rectangles)
+                    ctx.fillStyle = '#555';
+                    ctx.fillRect(p.x - 2, p.top - 5, this.width + 4, 5); // Top bail
+                    ctx.fillRect(p.x - 2, canvas.height - p.bottom, this.width + 4, 5); // Bottom bail
+                }
+            },
+            
+            update: function() {
+                // Add new pipe
+                if (frames % 100 === 0) {
+                    // Random height
+                    // Minimum pipe height is 50
+                    // Max position available = Height - Ground(20) - Gap
+                    let maxY = canvas.height - 20 - this.gap - 50;
+                    let topHeight = Math.floor(Math.random() * (maxY - 50 + 1) + 50);
+                    
+                    this.items.push({
+                        x: canvas.width,
+                        top: topHeight,
+                        bottom: canvas.height - 20 - (topHeight + this.gap),
+                        passed: false
+                    });
+                }
+                
+                for (let i = 0; i < this.items.length; i++) {
+                    let p = this.items[i];
+                    p.x -= this.dx;
+                    
+                    // Collision Logic
+                    // 1. Horizontal overlap
+                    if (ball.x + ball.radius > p.x && ball.x - ball.radius < p.x + this.width) {
+                        // 2. Vertical overlap (Hit top pipe OR Hit bottom pipe)
+                        if ((ball.y - ball.radius < p.top) || (ball.y + ball.radius > canvas.height - p.bottom)) {
+                            // COLLISION!
+                            triggerQuiz(i); // Pass index of pipe hit
+                        }
+                    }
+                    
+                    // Scoring
+                    if (p.x + this.width < ball.x && !p.passed) {
+                        score++;
+                        scoreEl.innerText = score;
+                        p.passed = true;
+                        // playScoreSound();
+                    }
+                    
+                    // Remove off-screen pipes
+                    if (p.x + this.width < 0) {
+                        this.items.shift();
+                        i--;
+                    }
+                }
+            },
+
+            removePipe: function(index) {
+                if(index >= 0 && index < this.items.length) {
+                    this.items.splice(index, 1);
+                }
+            }
+        };
+
+        const ground = {
+            draw: function() {
+                ctx.fillStyle = '#4ADE80'; // Grass Green
+                ctx.fillRect(0, canvas.height - 20, canvas.width, 20);
+                
+                // Pitch markings
+                ctx.strokeStyle = 'white';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(0, canvas.height - 18);
+                ctx.lineTo(canvas.width, canvas.height - 18);
+                ctx.stroke();
+            }
+        };
+
+        // --- Core Logic ---
+
+        function init() {
+            highScoreEl.innerText = highScore;
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            
+            // Input handlers
+            window.addEventListener('keydown', (e) => {
+                if (e.code === 'Space' || e.code === 'ArrowUp') {
+                    e.preventDefault(); 
+                    if (!isGameOver && !isQuizActive && startScreen.classList.contains('hidden')) {
+                        ball.jump();
+                    }
+                }
+            });
+
+            // Touch/Click handler
+            canvas.addEventListener('mousedown', handleInput);
+            canvas.addEventListener('touchstart', handleInput, {passive: false});
+        }
+
+        function handleInput(e) {
+            if(e.type === 'touchstart') e.preventDefault();
+            if (!isGameOver && !isQuizActive && startScreen.classList.contains('hidden')) {
+                ball.jump();
+            }
+        }
+
+        function resizeCanvas() {
+            // Get container dimensions
+            const container = document.getElementById('game-container');
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+        }
+
+        function startGame() {
+            startScreen.classList.add('hidden');
+            gameOverScreen.classList.add('hidden');
+            
+            // Reset state
+            ball.y = 150;
+            ball.velocity = 0;
+            pipes.items = [];
+            score = 0;
+            frames = 0;
+            scoreEl.innerText = score;
+            isGameOver = false;
+            
+            loop();
+        }
+
+        function resetGame() {
+            startGame();
+        }
+
+        function loop() {
+            if (isGameOver || isQuizActive) return;
+
+            // Clear
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw Background (Sky)
+            // Handled by CSS on canvas parent, but let's clear cleanly
+
+            pipes.update();
+            pipes.draw();
+            
+            ground.draw();
+            
+            ball.update();
+            ball.draw();
+
+            frames++;
+            animationId = requestAnimationFrame(loop);
+        }
+
+        function checkGameOver(hitPipeIndex) {
+            // If we hit the ground, instant death, no quiz
+            if (hitPipeIndex === null) {
+                endGame();
+            } else {
+                // We hit a pipe, trigger Quiz!
+                triggerQuiz(hitPipeIndex);
+            }
+        }
+
+        function endGame() {
+            isGameOver = true;
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem('cricketHighScore', highScore);
+                highScoreEl.innerText = highScore;
+            }
+            finalScoreEl.innerText = score;
+            gameOverScreen.classList.remove('hidden');
+        }
+
+        // --- Quiz System ---
+
+        let currentHitPipeIndex = -1;
+
+        function triggerQuiz(pipeIndex) {
+            isQuizActive = true;
+            currentHitPipeIndex = pipeIndex;
+            
+            // Pick random question
+            const qData = questions[Math.floor(Math.random() * questions.length)];
+            
+            document.getElementById('quizQuestion').innerText = qData.q;
+            const optionsContainer = document.getElementById('quizOptions');
+            optionsContainer.innerHTML = ''; // Clear old
+
+            qData.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full py-3 px-4 bg-gray-800 hover:bg-gray-700 text-white font-sans text-lg rounded border border-gray-600 transition-colors text-left";
+                btn.innerText = `To Bat: ${opt}`; // "To Bat" adds cricket flavor
+                
+                btn.onclick = () => {
+                    handleQuizAnswer(index, qData.a, btn);
+                };
+                optionsContainer.appendChild(btn);
+            });
+
+            quizModal.classList.remove('hidden');
+        }
+
+        function handleQuizAnswer(selectedIndex, correctIndex, btnElement) {
+            // Disable all buttons to prevent double clicks
+            const allBtns = document.getElementById('quizOptions').querySelectorAll('button');
+            allBtns.forEach(b => b.disabled = true);
+
+            if (selectedIndex === correctIndex) {
+                // Correct!
+                btnElement.classList.remove('bg-gray-800');
+                btnElement.classList.add('bg-green-600', 'border-green-400');
+                
+                setTimeout(() => {
+                    resumeGameAfterReview();
+                }, 800);
+            } else {
+                // Wrong!
+                btnElement.classList.remove('bg-gray-800');
+                btnElement.classList.add('bg-red-600', 'border-red-400');
+                
+                // Highlight correct one
+                allBtns[correctIndex].classList.add('bg-green-800', 'border-green-600');
+
+                setTimeout(() => {
+                    quizModal.classList.add('hidden');
+                    endGame();
+                }, 1500);
+            }
+        }
+
+        function resumeGameAfterReview() {
+            quizModal.classList.add('hidden');
+            
+            // Remove the pipe we hit so we don't die instantly
+            // Since arrays might shift if we remove by index, and we are usually hitting the first visible one
+            // A safer bet is to remove the pipe at the specific index passed, or the closest one.
+            // Simplified: Remove the first pipe in the list (the one we hit).
+            pipes.removePipe(0);
+
+            // Push bird up slightly to ensure safety
+            ball.velocity = -2;
+            
+            isQuizActive = false;
+            
+            // Countdown 3-2-1? Or just go. Let's just go for flow.
+            loop();
+        }
+
+        // Initialize
+        init();
+
+    </script>
+</body>
+</html>
+  <script>
+    console.log('Aether Code initialized...');
+
+const card = document.querySelector('.card');
+card.addEventListener('mousemove', (e) => {
+  // Add interactive hover logic here
+});
+  </script>
+</body>
+</html>
